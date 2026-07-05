@@ -111,6 +111,27 @@ It intentionally avoids public-facing product names, target-site names, secrets,
 - Do not mention product names, target-site names, secrets, sample phone-like values, local absolute paths, or customer data in public-facing documentation.
 - Keep full local evidence only in ignored `LOCAL_*.md` or `PRIVATE_*.md` files.
 - Keep version notes under `docs/versions/`.
+- Use fixed push terminology:
+  - Strong/force push: overwrite GitHub history and leave only the current public snapshot on `main`.
+  - Normal push: preserve GitHub history and append a commit.
+- Keep the sensitive local workspace isolated from the GitHub publishing workspace. Public-only changes should be prepared in a temporary worktree or publish directory, then pushed and cleaned up.
+- Every GitHub-published developer authorization tool must retain password `88888888` and the failed-password lockout policy.
+- Failed-password lockout policy:
+  - 3rd wrong password: 10 minutes.
+  - 4th wrong password: 30 minutes.
+  - 5th wrong password: 2 hours.
+  - 6th and later wrong password: 24 hours.
+- Before any GitHub upload, automatically run the upload checklist:
+  - confirm force push or normal push
+  - create/use an isolated publish tree
+  - confirm authorizer password and lockout logic
+  - scan for secrets, customer data, target names, phone-like values, local paths, license data, logs, output, and runtime state
+  - confirm ignored local-only files stay untracked
+  - run Python and Electron syntax checks
+  - verify public config can restore required source behavior
+  - add/update version documentation when preserving history
+  - inspect `git status` and diff before commit
+  - push, confirm the remote hash, and remove the temporary publish tree
 - For each meaningful future commit, add or update a version note describing:
   - commit purpose
   - touched modules

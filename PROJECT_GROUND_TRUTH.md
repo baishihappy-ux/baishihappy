@@ -23,8 +23,13 @@ Chat history is not reliable for runtime behavior. Verify from files whenever po
 - Do not commit runtime secrets or generated runtime data.
 - Keep `.gitignore` excluding license files, logs, output, runtime state, build artifacts, dependency folders, and temporary files.
 - Before each public push, scan public documentation for secrets, phone-like values, and target-site names.
+- Use fixed push terminology:
+  - "force push" means overwrite GitHub history and leave only the current public snapshot on `main`.
+  - "normal push" means preserve history, append a commit, and add/update a version note under `docs/versions/`.
+- Keep the local working tree and GitHub publishing tree isolated. Public-only edits must be made in a temporary worktree or temporary publish directory, not directly in the sensitive local workspace unless explicitly requested.
 - Every GitHub-published version of the developer authorization tool must keep the password gate and failed-password lockout policy.
 - Developer authorization lockout policy: 3rd wrong password locks 10 minutes, 4th locks 30 minutes, 5th locks 2 hours, 6th and later locks 24 hours.
+- Before pushing to GitHub, automatically run the public upload checklist: verify push mode, use an isolated publish tree, check required authorizer lockout, run privacy scans, check ignored files, run syntax checks, verify public config recovery, update version docs when needed, inspect `git status`/diff, push, confirm remote hash, and remove the temporary publish tree.
 - Separate local memory from public recovery:
   - `LOCAL_*.md` and `PRIVATE_*.md` may exist on this machine with full evidence.
   - public tracked docs must stay generic and searchable-safe.
