@@ -1,12 +1,51 @@
 const { app, BrowserWindow, ipcMain, clipboard } = require('electron');
 const crypto = require('crypto');
+const fs = require('fs');
 const path = require('path');
 
 const LICENSE_PREFIX = 'DF8-';
 const DEFAULT_SECRET = 'Workspace-License-Key-v1';
 const AUTHORIZE_PASSWORD = '88888888';
+const LOCK_DURATIONS_MS = {
+  3: 10 * 60 * 1000,
+  4: 30 * 60 * 1000,
+  5: 2 * 60 * 60 * 1000,
+  6: 24 * 60 * 60 * 1000
+};
 let unlocked = false;
 let mainWindow = null;
+
+function lockStatePath() {
+  return path.join(app.getPath('userData'), 'authorizer-lock.json');
+}
+
+function readLockState() {
+  try {
+    return JSON.parse(fs.readFileSync(lockStatePath(), 'utf8'));
+  } catch (_error) {
+    return { failed_attempts: 0, locked_until: 0 };
+  }
+}
+
+function writeLockState(state) {
+  fs.mkdirSync(path.dirname(lockStatePath()), { recursive: true });
+  fs.writeFileSync(lockStatePath(), JSON.stringify(state, null, 2));
+}
+
+function lockDurationFor(attempts) {
+  if (attempts >= 6) return LOCK_DURATIONS_MS[6];
+  return LOCK_DURATIONS_MS[attempts] || 0;
+}
+
+function formatRemaining(ms) {
+  const totalSeconds = Math.max(1, Math.ceil(ms / 1000));
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+  if (hours) return `${hours}h ${minutes}m`;
+  if (minutes) return `${minutes}m ${seconds}s`;
+  return `${seconds}s`;
+}
 
 function canonical(value) {
   if (Array.isArray(value)) return `[${value.map(canonical).join(',')}]`;
@@ -76,11 +115,42 @@ ipcMain.handle('license:generate', (_event, input) => {
 });
 
 ipcMain.handle('auth:unlock', (_event, password) => {
+  const now = Date.now();
+  const state = readLockState();
+  if ((state.locked_until || 0) > now) {
+    return {
+      ok: false,
+      locked: true,
+      lockedUntil: state.locked_until,
+      error: `Locked. Try again in ${formatRemaining(state.locked_until - now)}.`
+    };
+  }
+
   unlocked = String(password || '') === AUTHORIZE_PASSWORD;
-  if (unlocked && mainWindow && !mainWindow.isDestroyed()) {
+  if (!unlocked) {
+    const failedAttempts = Number(state.failed_attempts || 0) + 1;
+    const duration = lockDurationFor(failedAttempts);
+    const nextState = {
+      failed_attempts: failedAttempts,
+      locked_until: duration ? now + duration : 0
+    };
+    writeLockState(nextState);
+    if (duration) {
+      return {
+        ok: false,
+        locked: true,
+        lockedUntil: nextState.locked_until,
+        error: `Invalid password. Locked for ${formatRemaining(duration)}.`
+      };
+    }
+    return { ok: false, locked: false, error: `Invalid password. ${Math.max(0, 3 - failedAttempts)} attempt(s) before lock.` };
+  }
+
+  writeLockState({ failed_attempts: 0, locked_until: 0 });
+  if (mainWindow && !mainWindow.isDestroyed()) {
     mainWindow.loadFile(path.join(__dirname, 'renderer', 'authorizer.html'));
   }
-  return { ok: unlocked, error: unlocked ? '' : 'Invalid password.' };
+  return { ok: true, error: '' };
 });
 
 ipcMain.handle('clipboard:copy', (_event, text) => {

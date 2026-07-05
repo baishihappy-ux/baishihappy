@@ -2,6 +2,8 @@ import tkinter as tk
 from tkinter import messagebox, simpledialog
 from pathlib import Path
 import sys
+import json
+import time
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
@@ -9,14 +11,69 @@ from python.auth.license_codec import generate_authorization_code
 
 
 AUTHORIZE_PASSWORD = "88888888"
+LOCK_DURATIONS_SECONDS = {
+    3: 10 * 60,
+    4: 30 * 60,
+    5: 2 * 60 * 60,
+    6: 24 * 60 * 60,
+}
+
+
+def lock_state_path():
+    root = Path.home() / ".workspace_authorizer"
+    root.mkdir(parents=True, exist_ok=True)
+    return root / "authorizer-lock.json"
+
+
+def read_lock_state():
+    try:
+        return json.loads(lock_state_path().read_text(encoding="utf-8"))
+    except Exception:
+        return {"failed_attempts": 0, "locked_until": 0}
+
+
+def write_lock_state(state):
+    lock_state_path().write_text(json.dumps(state, indent=2), encoding="utf-8")
+
+
+def lock_duration_for(attempts):
+    if attempts >= 6:
+        return LOCK_DURATIONS_SECONDS[6]
+    return LOCK_DURATIONS_SECONDS.get(attempts, 0)
+
+
+def format_remaining(seconds):
+    seconds = max(1, int(seconds))
+    hours, rem = divmod(seconds, 3600)
+    minutes, seconds = divmod(rem, 60)
+    if hours:
+        return f"{hours}h {minutes}m"
+    if minutes:
+        return f"{minutes}m {seconds}s"
+    return f"{seconds}s"
 
 
 def require_password(root):
-    password = simpledialog.askstring("Developer Authorizer", "Password:", show="*", parent=root)
-    if password != AUTHORIZE_PASSWORD:
-        messagebox.showerror("Locked", "Invalid password.")
+    state = read_lock_state()
+    now = time.time()
+    if state.get("locked_until", 0) > now:
+        messagebox.showerror("Locked", f"Try again in {format_remaining(state['locked_until'] - now)}.")
         root.destroy()
         return False
+
+    password = simpledialog.askstring("Developer Authorizer", "Password:", show="*", parent=root)
+    if password != AUTHORIZE_PASSWORD:
+        failed_attempts = int(state.get("failed_attempts", 0)) + 1
+        duration = lock_duration_for(failed_attempts)
+        next_state = {"failed_attempts": failed_attempts, "locked_until": now + duration if duration else 0}
+        write_lock_state(next_state)
+        if duration:
+            messagebox.showerror("Locked", f"Invalid password. Locked for {format_remaining(duration)}.")
+        else:
+            messagebox.showerror("Locked", f"Invalid password. {max(0, 3 - failed_attempts)} attempt(s) before lock.")
+        root.destroy()
+        return False
+    write_lock_state({"failed_attempts": 0, "locked_until": 0})
     return True
 
 
