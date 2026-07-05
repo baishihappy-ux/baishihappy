@@ -1,0 +1,57 @@
+# Project Ground Truth
+
+This file is the persistent source of truth for this workspace.
+Read it before behavior-sensitive code changes.
+
+## Evidence Priority
+
+Use this order when deciding behavior:
+
+1. Real runtime state, logs, and output samples supplied with the workspace.
+2. `runtime/config/app_config.json`.
+3. `runtime/state/*.json`.
+4. `runtime/output/*`.
+5. Current reconstructed source code.
+6. Chat history.
+
+Chat history is not reliable for runtime behavior. Verify from files whenever possible.
+
+## Public Repository Rules
+
+- Keep `README.md` generic.
+- Do not put secrets, machine codes, license data, customer records, phone-like values, local absolute paths, or target-site names in public documentation.
+- Do not commit runtime secrets or generated runtime data.
+- Keep `.gitignore` excluding license files, logs, output, runtime state, build artifacts, dependency folders, and temporary files.
+- Before each public push, scan public documentation for secrets, phone-like values, and target-site names.
+- Separate local memory from public recovery:
+  - `LOCAL_*.md` and `PRIVATE_*.md` may exist on this machine with full evidence.
+  - public tracked docs must stay generic and searchable-safe.
+
+## Runtime Rules
+
+- `runtime/config/app_config.json` is the primary parameter source.
+- Runtime hot tuning is disabled unless explicitly re-enabled.
+- Do not infer control behavior from architecture names alone.
+- Do not invent control logic that is not visible in runtime data or current code.
+- Provider tiers must remain isolated:
+  - Tier A: stable direct provider, no control brain, no session pool.
+  - Tier B: semi-managed provider, light retry/fallback only.
+  - Tier C: unstable provider path, may use control/session feedback.
+
+## Recovery Rules
+
+- Completed records are terminal.
+- Final discard records are terminal.
+- Claimed but unfinished records are recoverable.
+- Pause stops new seed claiming while allowing active work to drain.
+- Resume clears pause state and allows new claims.
+- Unexpected-close recovery must use cursor/pending state, not only queue depth.
+
+## Codex Continuity
+
+When restoring from GitHub:
+
+1. Read this file.
+2. Read `WORKLOG.md`.
+3. Inspect relevant source files before answering behavior questions.
+4. Treat any missing runtime samples as unknown rather than guessing.

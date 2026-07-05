@@ -1,0 +1,105 @@
+{
+    "app_name":  "Workspace App",
+    "input_file":  "../input.txt",
+    "provider":  {
+                     "active":  "primary_provider",
+                     "timeout_seconds":  90,
+                     "retry_count":  1,
+                     "headers":  {
+                                     "User-Agent":  "WorkspaceClient/1.0"
+                                 },
+                     "network":  {
+                                     "proxy":  "",
+                                     "verify_ssl":  true
+                                 },
+                     "primary_provider":  {
+                                              "params":  {
+                                                             "super":  true,
+                                                             "geoCode":  "us",
+                                                             "device":  "desktop",
+                                                             "timeout":  60000,
+                                                             "output":  "raw"
+                                                         },
+                                              "session_pool":  {
+                                                                   "enabled":  true,
+                                                                   "pool_size":  10,
+                                                                   "reuse_seconds":  3600
+                                                               }
+                                          }
+                 },
+    "sources":  {
+                    "source_t":  {
+                                     "encoded_key":  "T"
+                                 },
+                    "source_f":  {
+                                     "encoded_key":  "F"
+                                 },
+                    "source_p":  {
+                                     "encoded_key":  "P"
+                                 }
+                },
+    "processing":  {
+                       "max_depth":  1,
+                       "max_related_per_seed":  100,
+                       "max_total_records":  0,
+                       "export_min_depth":  1,
+                       "thread_count":  0,
+                       "queue_poll_seconds":  0.2,
+                       "smart_session_warm_pool_enabled":  true,
+                       "smart_session_warm_pool_min_target":  0,
+                       "smart_session_warm_pool_initial_target":  0,
+                       "smart_session_warm_pool_max_target":  0,
+                       "smart_session_warm_pool_stale_ms":  300000,
+                       "smart_session_warm_pool_expire_ms":  300000,
+                       "smart_session_warm_pool_start_delay_ms":  0,
+                       "smart_session_warm_pool_preheat_workers":  0,
+                       "smart_session_stage_mixer_enabled":  true,
+                       "smart_session_stage_mixer_window_ms":  60000,
+                       "smart_session_stage_mixer_entry_per_min":  12,
+                       "smart_session_stage_mixer_resultphone_per_min":  42,
+                       "smart_session_stage_mixer_parent_per_min":  36,
+                       "smart_session_stage_mixer_associate_per_min":  90,
+                       "smart_session_stage_mixer_resultphone_do_target_ratio":  0,
+                       "smart_session_stage_mixer_parent_do_target_ratio":  0.75,
+                       "smart_session_stage_mixer_associate_do_target_ratio":  1.5,
+                       "smart_session_stage_mixer_associate_backoff_rate":  0.2,
+                       "smart_session_stage_mixer_associate_severe_rate":  0.3,
+                       "smart_session_stage_mixer_min_associate_per_min":  35,
+                       "smart_session_stage_mixer_session_idle_ttl_ms":  300000,
+                       "smart_session_stage_mixer_session_urgent_remaining_ms":  80000,
+                       "smart_session_stage_mixer_release_jitter_min_ms":  180,
+                       "smart_session_stage_mixer_release_jitter_max_ms":  500
+                   },
+    "output":  {
+                   "formats":  [
+                                   "csv",
+                                   "txt"
+                               ],
+                   "csv_file":  "output/results.csv",
+                   "txt_file":  "output/results.txt",
+                   "failed_file":  "output/failed_tasks.txt",
+                   "final_502_discarded_file":  "output/final_502_discarded.txt",
+                   "save_customer_asset_html":  false,
+                   "customer_asset_html_dir":  "HTML_results"
+               },
+    "license":  {
+                    "license_file":  "license.dat",
+                    "valid_days":  30
+                },
+    "runtime":  {
+                    "auto_start_engine":  false,
+                    "show_worker_console":  false,
+                    "hide_backend_console_in_production":  true,
+                    "smart_session_enabled":  true,
+                    "customer_mode":  true,
+                    "dev_evidence":  false,
+                    "plain_record_logging":  false,
+                    "diagnostic_mode":  false,
+                    "target_source":  "T"
+                },
+    "logging":  {
+                    "diagnostic_events_enabled":  false,
+                    "scheduler_samples_enabled":  false,
+                    "verbose_stage_events_enabled":  false
+                }
+}

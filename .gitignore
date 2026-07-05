@@ -1,0 +1,35 @@
+# Dependencies
+node_modules/
+electron/node_modules/
+__pycache__/
+*.py[cod]
+
+# Build artifacts
+build/
+dist/
+*.spec
+
+# Runtime secrets and generated data
+runtime/license.dat
+runtime/logs/
+runtime/output/
+runtime/state/
+runtime/temp/
+runtime/tmp_*.exe
+runtime/config/*.local.json
+
+# Local test/generated files
+.tmp_*/
+汇总测试/
+test_input*.txt
+
+# Local-only recovery notes. These may contain full paths, source names, and private evidence.
+LOCAL_*.md
+PRIVATE_*.md
+*_PRIVATE.md
+*_LOCAL.md
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+*.log

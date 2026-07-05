@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; media-src 'self';" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Workspace App</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <canvas id="particleCanvas" aria-hidden="true"></canvas>
+    <audio id="backgroundMusic" src="./assets/audio/scifi_canon_space_loop_90s_v3_climax_loud.wav" loop preload="auto"></audio>
+
+    <section id="licenseLayer" class="license-layer">
+      <div class="license-shell">
+        <div class="license-mark">鼎</div>
+        <div class="license-content">
+          <p class="eyebrow">AUTHORIZATION</p>
+          <h1>Workspace App</h1>
+          <p id="licenseStatusText" class="status-text">正在检测本机离线授权...</p>
+          <div class="machine-line">
+            <span>本机机器码</span>
+            <div class="machine-value-row">
+              <strong id="machineCode">检测中</strong>
+              <button id="copyMachineCode" class="line-button copy-button" type="button" disabled>复制</button>
+            </div>
+          </div>
+          <div class="machine-line">
+            <span>授权并发数</span>
+            <strong id="licenseWindowLimit">未授权</strong>
+          </div>
+          <div class="machine-line">
+            <span>当前目录</span>
+            <strong id="licenseRoot">检测中</strong>
+          </div>
+          <form id="licenseForm" class="license-form hidden">
+            <textarea id="licenseCode" rows="4" placeholder="请输入授权码"></textarea>
+            <button type="submit" class="gold-button">激活授权</button>
+          </form>
+          <button id="enterApp" class="gold-button hidden">进入主程序</button>
+          <div class="demo-panel">
+            <p class="eyebrow">LOCAL DEMO</p>
+            <p class="demo-note">本地演示仅使用 local_json fixture，不访问网络、不启动 sidecar、不接真实 provider。</p>
+            <div class="toolbar">
+              <button id="startDemo" class="line-button">运行本地演示</button>
+              <button id="refreshDemoResults" class="line-button">刷新演示结果</button>
+            </div>
+            <pre id="demoOutput">等待本地演示输出...</pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <main id="appShell" class="app-shell locked">
+      <header class="topbar">
+        <div class="brand">
+          <span class="brand-icon">鼎</span>
+          <div>
+            <strong>Workspace App</strong>
+            <small>Provider Data Console</small>
+          </div>
+        </div>
+        <nav class="nav-actions">
+          <button>关于鼎丰</button>
+          <button>鼎丰智能裂变系列</button>
+          <button>鼎丰智能天推系列</button>
+          <button>鼎丰底料池</button>
+          <button>鼎丰智能聊天翻译器</button>
+          <button>联系加盟</button>
+        </nav>
+      </header>
+
+      <section class="hero-console">
+        <div class="hero-stage" aria-label="太阳系青铜鼎飞船主视觉">
+          <canvas id="spaceHeroCanvas" aria-hidden="true"></canvas>
+          <div class="hero-stage-vignette" aria-hidden="true"></div>
+        </div>
+        <div class="control-panel">
+          <h2 id="engineState" class="hidden" aria-live="polite">授权通过，业务引擎待启动</h2>
+          <div class="metrics">
+            <div>
+              <span>授权状态</span>
+              <strong id="authState">检测中</strong>
+            </div>
+            <div>
+              <span>授权并发数</span>
+              <strong id="authLimit">未授权</strong>
+            </div>
+            <div>
+              <span>当前网络</span>
+              <strong id="networkQuality">未检测</strong>
+            </div>
+          </div>
+          <div class="target-source-control" role="radiogroup" aria-label="Target source">
+            <label class="target-option">
+              <input type="radio" name="targetSource" value="T" />
+              <span>T</span>
+            </label>
+            <label class="target-option">
+              <input type="radio" name="targetSource" value="F" checked />
+              <span>F</span>
+            </label>
+            <label class="target-option">
+              <input type="radio" name="targetSource" value="P" />
+              <span>P</span>
+            </label>
+            <button id="confirmTargetSource" class="line-button" type="button">确认</button>
+          </div>
+          <p id="targetSourceStatus" class="input-import-status">当前通道：F</p>
+          <div class="toolbar">
+            <button id="startEngine" class="gold-button">启动采集</button>
+            <button id="pauseEngine" class="line-button" type="button">暂停采集</button>
+            <button id="toggleRuntimeTuning" class="line-button" type="button">热调参关</button>
+            <button id="openRuntimeTuner" class="line-button" type="button">调参器</button>
+            <button id="openRuntimeMonitor" class="line-button" type="button">看板小窗</button>
+          </div>
+          <p id="inputImportStatus" class="input-import-status">请先导入工作号码池。</p>
+        </div>
+      </section>
+
+      <div id="appModal" class="app-modal hidden" role="dialog" aria-modal="true" aria-labelledby="appModalTitle">
+        <div class="app-modal-panel">
+          <div id="appModalIcon" class="app-modal-icon hidden" aria-hidden="true"></div>
+          <h3 id="appModalTitle">提示</h3>
+          <p id="appModalMessage"></p>
+          <div class="app-modal-actions">
+            <button id="appModalCancel" class="line-button hidden" type="button">否</button>
+            <button id="appModalClose" class="gold-button" type="button">确认</button>
+          </div>
+        </div>
+      </div>
+
+      <section class="result-section">
+        <div class="section-title">
+          <span>运行监控</span>
+        </div>
+        <div id="runtimeMetricsBoard" class="runtime-metrics-board" aria-live="polite">
+          <div class="runtime-metric-card metric-primary runtime-diagnostic-card hidden">
+            <span>分钟请求速度</span>
+            <strong id="metricRequestRate">0/min</strong>
+          </div>
+          <div class="runtime-metric-card metric-primary">
+            <span>分钟保存速度</span>
+            <strong id="metricSaveRate">0/min</strong>
+          </div>
+          <div class="runtime-metric-card metric-success">
+            <span>分钟成功访问比例</span>
+            <strong id="metricAccessSuccessRate">--</strong>
+          </div>
+          <div class="runtime-metric-card metric-risk">
+            <span>分钟502占比</span>
+            <strong id="metric502Rate">0%</strong>
+          </div>
+          <div class="runtime-metric-card">
+            <span>分钟.do在途</span>
+            <strong id="metricDoInflight">0/0</strong>
+          </div>
+          <div class="runtime-metric-card">
+            <span>实时剩余底料</span>
+            <strong id="metricRemaining">0</strong>
+          </div>
+          <div class="runtime-metric-card">
+            <span>已保存</span>
+            <strong id="metricSavedTotal">0</strong>
+          </div>
+          <div class="runtime-metric-card">
+            <span>已完成</span>
+            <strong id="metricCompletedTotal">0</strong>
+          </div>
+          <div class="runtime-metric-card metric-risk runtime-diagnostic-card hidden">
+            <span>超时预热数</span>
+            <strong id="metricWarmExpiredTotal">0</strong>
+          </div>
+          <div class="runtime-metric-card runtime-diagnostic-card hidden">
+            <span>本地等待 stage/do</span>
+            <strong id="metricLocalWaitSplit">0/0ms</strong>
+          </div>
+          <div class="runtime-metric-card runtime-diagnostic-card hidden">
+            <span>请求耗时 均/P95</span>
+            <strong id="metricRequestLatency">0/0ms</strong>
+          </div>
+          <div class="runtime-metric-card runtime-diagnostic-card hidden">
+            <span>外部耗时均值</span>
+            <strong id="metricOutboundLatency">0ms</strong>
+          </div>
+          <div class="runtime-metric-card runtime-diagnostic-card hidden">
+            <span>页耗 预热/号码</span>
+            <strong id="metricPageLatencySplit">0/0ms</strong>
+          </div>
+          <div class="runtime-metric-card metric-state">
+            <span>状态</span>
+            <strong id="metricRuntimeState">待启动</strong>
+          </div>
+          <div class="runtime-metric-card runtime-timer-card">
+            <span>运行计时</span>
+            <strong id="runtimeTimer">00:00:00</strong>
+          </div>
+          <div class="runtime-metric-card runtime-debug-card">
+            <span>调试模式</span>
+            <button id="toggleDiagnosticMode" class="line-button metric-toggle-button" type="button">调试关</button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="./renderer.js"></script>
+  </body>
+</html>
+

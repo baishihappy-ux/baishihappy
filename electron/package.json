@@ -1,0 +1,14 @@
+{
+  "name": "workspace-snapshot",
+  "version": "9.1.0-reconstructed",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "dependencies": {
+    "electron": "^31.0.0"
+  },
+  "devDependencies": {
+    "@electron/asar": "^4.2.0"
+  }
+}

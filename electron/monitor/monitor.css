@@ -1,0 +1,143 @@
+:root {
+  color-scheme: dark;
+  --bg: #050505;
+  --gold: #d7aa4a;
+  --gold-bright: #ffd978;
+  --text: #f4eddd;
+  --muted: #9b927e;
+  --danger: #ff6b6b;
+  --ok: #7ef0aa;
+  font-family: "Microsoft YaHei UI", "Microsoft YaHei", "Segoe UI", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  color: var(--text);
+  background:
+    radial-gradient(circle at 20% 10%, rgba(255, 217, 120, 0.12), transparent 34%),
+    linear-gradient(135deg, #040508 0%, #0a0d12 54%, #050505 100%);
+}
+
+.monitor-shell {
+  height: 100vh;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 10px;
+  padding: 12px;
+}
+
+.monitor-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+  min-width: 0;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(215, 170, 74, 0.25);
+}
+
+.monitor-header div {
+  min-width: 0;
+  display: grid;
+  gap: 3px;
+}
+
+.monitor-header strong {
+  color: var(--gold-bright);
+  font-size: 16px;
+  line-height: 1.1;
+}
+
+.monitor-header span,
+.monitor-header small {
+  min-width: 0;
+  color: rgba(222, 207, 158, 0.72);
+  font-size: 11px;
+  line-height: 1.2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.monitor-header small {
+  flex: 0 0 auto;
+  color: rgba(255, 217, 120, 0.78);
+}
+
+.monitor-board {
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.metric-card {
+  min-width: 0;
+  min-height: 58px;
+  display: grid;
+  align-content: center;
+  gap: 5px;
+  padding: 10px;
+  border: 1px solid rgba(215, 170, 74, 0.22);
+  border-radius: 8px;
+  background:
+    linear-gradient(145deg, rgba(255, 217, 120, 0.055), rgba(255, 255, 255, 0.015)),
+    rgba(0, 0, 0, 0.5);
+  box-shadow: inset 0 0 0 1px rgba(255, 236, 171, 0.04);
+}
+
+.metric-card span {
+  color: rgba(222, 207, 158, 0.82);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+.metric-card strong {
+  min-width: 0;
+  color: #fff0b8;
+  font-size: 24px;
+  font-weight: 800;
+  line-height: 1.05;
+  overflow-wrap: anywhere;
+}
+
+.metric-primary strong,
+.metric-timer strong {
+  color: var(--gold-bright);
+}
+
+.metric-timer strong {
+  font-family: Consolas, "Cascadia Mono", monospace;
+  letter-spacing: 0;
+}
+
+.metric-success.metric-good strong,
+.metric-risk.metric-good strong,
+.metric-state.metric-good strong {
+  color: var(--ok);
+}
+
+.metric-risk.metric-warn strong,
+.metric-state.metric-warn strong {
+  color: var(--gold-bright);
+}
+
+.metric-risk.metric-bad strong,
+.metric-state.metric-bad strong {
+  color: var(--danger);
+}
+
+@media (min-width: 560px) {
+  .monitor-board {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}

@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <title>Developer Authorizer</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <main>
+      <section class="form">
+        <header>
+          <h1>Developer Authorizer</h1>
+          <p>Generate an authorization code from customer machine code, valid days, max windows, and .do token.</p>
+        </header>
+
+        <label>Machine Code</label>
+        <input id="machine-code" spellcheck="false" autofocus>
+
+        <div class="row">
+          <div>
+            <label>Valid Days</label>
+            <input id="valid-days" type="number" value="30" min="1">
+          </div>
+          <div>
+            <label>Max Windows</label>
+            <input id="max-concurrency" type="number" value="32" min="1">
+          </div>
+        </div>
+
+        <label>.do Token</label>
+        <input id="do-token" spellcheck="false">
+
+        <div class="actions">
+          <button id="generate">Generate</button>
+          <button id="copy">Copy</button>
+        </div>
+
+        <label>Authorization Code</label>
+        <textarea id="code" readonly></textarea>
+        <p id="message"></p>
+      </section>
+    </main>
+    <script src="renderer.js"></script>
+  </body>
+</html>
