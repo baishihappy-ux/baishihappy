@@ -1,10 +1,10 @@
-<!doctype html>
+ï»¿<!doctype html>
 <html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; media-src 'self';" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Workspace App</title>
+    <title>Workspace Runtime V9.1</title>
     <link rel="stylesheet" href="./style.css" />
   </head>
   <body>
@@ -13,39 +13,39 @@
 
     <section id="licenseLayer" class="license-layer">
       <div class="license-shell">
-        <div class="license-mark">¶¦</div>
+        <div class="license-mark">é¼Ž</div>
         <div class="license-content">
-          <p class="eyebrow">AUTHORIZATION</p>
-          <h1>Workspace App</h1>
-          <p id="licenseStatusText" class="status-text">ÕýÔÚ¼ì²â±¾»úÀëÏßÊÚÈ¨...</p>
+          <p class="eyebrow">WORKSPACE AUTHORIZATION</p>
+          <h1>Workspace Runtime V9.1</h1>
+          <p id="licenseStatusText" class="status-text">æ­£åœ¨æ£€æµ‹æœ¬æœºç¦»çº¿æŽˆæƒ...</p>
           <div class="machine-line">
-            <span>±¾»ú»úÆ÷Âë</span>
+            <span>æœ¬æœºæœºå™¨ç </span>
             <div class="machine-value-row">
-              <strong id="machineCode">¼ì²âÖÐ</strong>
-              <button id="copyMachineCode" class="line-button copy-button" type="button" disabled>¸´ÖÆ</button>
+              <strong id="machineCode">æ£€æµ‹ä¸­</strong>
+              <button id="copyMachineCode" class="line-button copy-button" type="button" disabled>å¤åˆ¶</button>
             </div>
           </div>
           <div class="machine-line">
-            <span>ÊÚÈ¨²¢·¢Êý</span>
-            <strong id="licenseWindowLimit">Î´ÊÚÈ¨</strong>
+            <span>æŽˆæƒå¹¶å‘æ•°</span>
+            <strong id="licenseWindowLimit">æœªæŽˆæƒ</strong>
           </div>
           <div class="machine-line">
-            <span>µ±Ç°Ä¿Â¼</span>
-            <strong id="licenseRoot">¼ì²âÖÐ</strong>
+            <span>å½“å‰ç›®å½•</span>
+            <strong id="licenseRoot">æ£€æµ‹ä¸­</strong>
           </div>
           <form id="licenseForm" class="license-form hidden">
-            <textarea id="licenseCode" rows="4" placeholder="ÇëÊäÈëÊÚÈ¨Âë"></textarea>
-            <button type="submit" class="gold-button">¼¤»îÊÚÈ¨</button>
+            <textarea id="licenseCode" rows="4" placeholder="è¯·è¾“å…¥æŽˆæƒç "></textarea>
+            <button type="submit" class="gold-button">æ¿€æ´»æŽˆæƒ</button>
           </form>
-          <button id="enterApp" class="gold-button hidden">½øÈëÖ÷³ÌÐò</button>
+          <button id="enterApp" class="gold-button hidden">è¿›å…¥ä¸»ç¨‹åº</button>
           <div class="demo-panel">
             <p class="eyebrow">LOCAL DEMO</p>
-            <p class="demo-note">±¾µØÑÝÊ¾½öÊ¹ÓÃ local_json fixture£¬²»·ÃÎÊÍøÂç¡¢²»Æô¶¯ sidecar¡¢²»½ÓÕæÊµ provider¡£</p>
+            <p class="demo-note">æœ¬åœ°æ¼”ç¤ºä»…ä½¿ç”¨ local_json fixtureï¼Œä¸è®¿é—®ç½‘ç»œã€ä¸å¯åŠ¨ sidecarã€ä¸æŽ¥çœŸå®ž providerã€‚</p>
             <div class="toolbar">
-              <button id="startDemo" class="line-button">ÔËÐÐ±¾µØÑÝÊ¾</button>
-              <button id="refreshDemoResults" class="line-button">Ë¢ÐÂÑÝÊ¾½á¹û</button>
+              <button id="startDemo" class="line-button">è¿è¡Œæœ¬åœ°æ¼”ç¤º</button>
+              <button id="refreshDemoResults" class="line-button">åˆ·æ–°æ¼”ç¤ºç»“æžœ</button>
             </div>
-            <pre id="demoOutput">µÈ´ý±¾µØÑÝÊ¾Êä³ö...</pre>
+            <pre id="demoOutput">ç­‰å¾…æœ¬åœ°æ¼”ç¤ºè¾“å‡º...</pre>
           </div>
         </div>
       </div>
@@ -54,41 +54,41 @@
     <main id="appShell" class="app-shell locked">
       <header class="topbar">
         <div class="brand">
-          <span class="brand-icon">¶¦</span>
+          <span class="brand-icon">é¼Ž</span>
           <div>
-            <strong>Workspace App</strong>
+            <strong>Workspace Runtime V9.1</strong>
             <small>Provider Data Console</small>
           </div>
         </div>
         <nav class="nav-actions">
-          <button>¹ØÓÚ¶¦·á</button>
-          <button>¶¦·áÖÇÄÜÁÑ±äÏµÁÐ</button>
-          <button>¶¦·áÖÇÄÜÌìÍÆÏµÁÐ</button>
-          <button>¶¦·áµ×ÁÏ³Ø</button>
-          <button>¶¦·áÖÇÄÜÁÄÌì·­ÒëÆ÷</button>
-          <button>ÁªÏµ¼ÓÃË</button>
+          <button>About Workspace</button>
+          <button>Workspace Runtime Series</button>
+          <button>Workspace Toolkit Series</button>
+          <button>Workspace Input Pool</button>
+          <button>Workspace Translator</button>
+          <button>è”ç³»åŠ ç›Ÿ</button>
         </nav>
       </header>
 
       <section class="hero-console">
-        <div class="hero-stage" aria-label="Ì«ÑôÏµÇàÍ­¶¦·É´¬Ö÷ÊÓ¾õ">
+        <div class="hero-stage" aria-label="å¤ªé˜³ç³»é’é“œé¼Žé£žèˆ¹ä¸»è§†è§‰">
           <canvas id="spaceHeroCanvas" aria-hidden="true"></canvas>
           <div class="hero-stage-vignette" aria-hidden="true"></div>
         </div>
         <div class="control-panel">
-          <h2 id="engineState" class="hidden" aria-live="polite">ÊÚÈ¨Í¨¹ý£¬ÒµÎñÒýÇæ´ýÆô¶¯</h2>
+          <h2 id="engineState" class="hidden" aria-live="polite">æŽˆæƒé€šè¿‡ï¼Œä¸šåŠ¡å¼•æ“Žå¾…å¯åŠ¨</h2>
           <div class="metrics">
             <div>
-              <span>ÊÚÈ¨×´Ì¬</span>
-              <strong id="authState">¼ì²âÖÐ</strong>
+              <span>æŽˆæƒçŠ¶æ€</span>
+              <strong id="authState">æ£€æµ‹ä¸­</strong>
             </div>
             <div>
-              <span>ÊÚÈ¨²¢·¢Êý</span>
-              <strong id="authLimit">Î´ÊÚÈ¨</strong>
+              <span>æŽˆæƒå¹¶å‘æ•°</span>
+              <strong id="authLimit">æœªæŽˆæƒ</strong>
             </div>
             <div>
-              <span>µ±Ç°ÍøÂç</span>
-              <strong id="networkQuality">Î´¼ì²â</strong>
+              <span>å½“å‰ç½‘ç»œ</span>
+              <strong id="networkQuality">æœªæ£€æµ‹</strong>
             </div>
           </div>
           <div class="target-source-control" role="radiogroup" aria-label="Target source">
@@ -104,100 +104,106 @@
               <input type="radio" name="targetSource" value="P" />
               <span>P</span>
             </label>
-            <button id="confirmTargetSource" class="line-button" type="button">È·ÈÏ</button>
+            <button id="confirmTargetSource" class="line-button" type="button">ç¡®è®¤</button>
           </div>
-          <p id="targetSourceStatus" class="input-import-status">µ±Ç°Í¨µÀ£ºF</p>
+          <p id="targetSourceStatus" class="input-import-status">å½“å‰é€šé“ï¼šF</p>
           <div class="toolbar">
-            <button id="startEngine" class="gold-button">Æô¶¯²É¼¯</button>
-            <button id="pauseEngine" class="line-button" type="button">ÔÝÍ£²É¼¯</button>
-            <button id="toggleRuntimeTuning" class="line-button" type="button">ÈÈµ÷²Î¹Ø</button>
-            <button id="openRuntimeTuner" class="line-button" type="button">µ÷²ÎÆ÷</button>
-            <button id="openRuntimeMonitor" class="line-button" type="button">¿´°åÐ¡´°</button>
+            <button id="startEngine" class="gold-button">å¯åŠ¨é‡‡é›†</button>
+            <button id="pauseEngine" class="line-button" type="button">æš‚åœé‡‡é›†</button>
+            <button id="openRuntimeMonitor" class="line-button" type="button">çœ‹æ¿å°çª—</button>
           </div>
-          <p id="inputImportStatus" class="input-import-status">ÇëÏÈµ¼Èë¹¤×÷ºÅÂë³Ø¡£</p>
+          <p id="inputImportStatus" class="input-import-status">è¯·å…ˆå¯¼å…¥å·¥ä½œå·ç æ± ã€‚</p>
         </div>
       </section>
 
       <div id="appModal" class="app-modal hidden" role="dialog" aria-modal="true" aria-labelledby="appModalTitle">
         <div class="app-modal-panel">
           <div id="appModalIcon" class="app-modal-icon hidden" aria-hidden="true"></div>
-          <h3 id="appModalTitle">ÌáÊ¾</h3>
+          <h3 id="appModalTitle">æç¤º</h3>
           <p id="appModalMessage"></p>
           <div class="app-modal-actions">
-            <button id="appModalCancel" class="line-button hidden" type="button">·ñ</button>
-            <button id="appModalClose" class="gold-button" type="button">È·ÈÏ</button>
+            <button id="appModalCancel" class="line-button hidden" type="button">å¦</button>
+            <button id="appModalClose" class="gold-button" type="button">ç¡®è®¤</button>
           </div>
         </div>
       </div>
 
       <section class="result-section">
         <div class="section-title">
-          <span>ÔËÐÐ¼à¿Ø</span>
+          <span>è¿è¡Œç›‘æŽ§</span>
         </div>
         <div id="runtimeMetricsBoard" class="runtime-metrics-board" aria-live="polite">
           <div class="runtime-metric-card metric-primary runtime-diagnostic-card hidden">
-            <span>·ÖÖÓÇëÇóËÙ¶È</span>
+            <span>åˆ†é’Ÿè¯·æ±‚é€Ÿåº¦</span>
             <strong id="metricRequestRate">0/min</strong>
           </div>
           <div class="runtime-metric-card metric-primary">
-            <span>·ÖÖÓ±£´æËÙ¶È</span>
+            <span>åˆ†é’Ÿä¿å­˜é€Ÿåº¦</span>
             <strong id="metricSaveRate">0/min</strong>
           </div>
           <div class="runtime-metric-card metric-success">
-            <span>·ÖÖÓ³É¹¦·ÃÎÊ±ÈÀý</span>
+            <span>åˆ†é’ŸæˆåŠŸè®¿é—®æ¯”ä¾‹</span>
             <strong id="metricAccessSuccessRate">--</strong>
           </div>
           <div class="runtime-metric-card metric-risk">
-            <span>·ÖÖÓ502Õ¼±È</span>
+            <span>åˆ†é’Ÿ502å æ¯”</span>
             <strong id="metric502Rate">0%</strong>
           </div>
           <div class="runtime-metric-card">
-            <span>·ÖÖÓ.doÔÚÍ¾</span>
+            <span>åˆ†é’Ÿ.doåœ¨é€”</span>
             <strong id="metricDoInflight">0/0</strong>
           </div>
           <div class="runtime-metric-card">
-            <span>ÊµÊ±Ê£Óàµ×ÁÏ</span>
+            <span>å®žæ—¶å‰©ä½™åº•æ–™</span>
             <strong id="metricRemaining">0</strong>
           </div>
           <div class="runtime-metric-card">
-            <span>ÒÑ±£´æ</span>
+            <span>å·²ä¿å­˜</span>
             <strong id="metricSavedTotal">0</strong>
           </div>
           <div class="runtime-metric-card">
-            <span>ÒÑÍê³É</span>
+            <span>å·²å®Œæˆ</span>
             <strong id="metricCompletedTotal">0</strong>
           </div>
+          <div class="runtime-metric-card metric-primary">
+            <span>Î </span>
+            <strong id="metricCreditCostTotal">0</strong>
+          </div>
+          <div class="runtime-metric-card">
+            <span>502åˆ·</span>
+            <strong id="metric502RetryTotal">0/0</strong>
+          </div>
           <div class="runtime-metric-card metric-risk runtime-diagnostic-card hidden">
-            <span>³¬Ê±Ô¤ÈÈÊý</span>
+            <span>è¶…æ—¶é¢„çƒ­æ•°</span>
             <strong id="metricWarmExpiredTotal">0</strong>
           </div>
           <div class="runtime-metric-card runtime-diagnostic-card hidden">
-            <span>±¾µØµÈ´ý stage/do</span>
+            <span>æœ¬åœ°ç­‰å¾… stage/do</span>
             <strong id="metricLocalWaitSplit">0/0ms</strong>
           </div>
           <div class="runtime-metric-card runtime-diagnostic-card hidden">
-            <span>ÇëÇóºÄÊ± ¾ù/P95</span>
+            <span>è¯·æ±‚è€—æ—¶ å‡/P95</span>
             <strong id="metricRequestLatency">0/0ms</strong>
           </div>
           <div class="runtime-metric-card runtime-diagnostic-card hidden">
-            <span>Íâ²¿ºÄÊ±¾ùÖµ</span>
+            <span>å¤–éƒ¨è€—æ—¶å‡å€¼</span>
             <strong id="metricOutboundLatency">0ms</strong>
           </div>
           <div class="runtime-metric-card runtime-diagnostic-card hidden">
-            <span>Ò³ºÄ Ô¤ÈÈ/ºÅÂë</span>
+            <span>é¡µè€— é¢„çƒ­/å·ç </span>
             <strong id="metricPageLatencySplit">0/0ms</strong>
           </div>
           <div class="runtime-metric-card metric-state">
-            <span>×´Ì¬</span>
-            <strong id="metricRuntimeState">´ýÆô¶¯</strong>
+            <span>çŠ¶æ€</span>
+            <strong id="metricRuntimeState">å¾…å¯åŠ¨</strong>
           </div>
           <div class="runtime-metric-card runtime-timer-card">
-            <span>ÔËÐÐ¼ÆÊ±</span>
+            <span>è¿è¡Œè®¡æ—¶</span>
             <strong id="runtimeTimer">00:00:00</strong>
           </div>
           <div class="runtime-metric-card runtime-debug-card">
-            <span>µ÷ÊÔÄ£Ê½</span>
-            <button id="toggleDiagnosticMode" class="line-button metric-toggle-button" type="button">µ÷ÊÔ¹Ø</button>
+            <span>è°ƒè¯•æ¨¡å¼</span>
+            <button id="toggleDiagnosticMode" class="line-button metric-toggle-button" type="button">è°ƒè¯•å…³</button>
           </div>
         </div>
       </section>
@@ -206,4 +212,6 @@
     <script src="./renderer.js"></script>
   </body>
 </html>
+
+
 

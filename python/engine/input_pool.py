@@ -1,4 +1,4 @@
-import time
+﻿import time
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -8,8 +8,8 @@ from python.utils.phone import normalize_phone
 from python.utils.runtime_state import read_json, write_json
 
 
-SOURCE_A_NAME = "号码补齐父级input"
-SOURCE_B_NAME = "裂变关联人父级input"
+SOURCE_A_NAME = "鍙风爜琛ラ綈鐖剁骇input"
+SOURCE_B_NAME = "瑁傚彉鍏宠仈浜虹埗绾nput"
 
 
 class InputPool:
@@ -209,8 +209,8 @@ class InputPool:
         })
 
     def _discover_sources(self):
-        a_path = self.root / "号码补齐父级input.txt"
-        b_path = self.root / "裂变关联人父级input.txt"
+        a_path = self.root / "鍙风爜琛ラ綈鐖剁骇input.txt"
+        b_path = self.root / "瑁傚彉鍏宠仈浜虹埗绾nput.txt"
         if self.target_source == "T" and (a_path.exists() or b_path.exists()):
             sources = []
             if a_path.exists():
@@ -330,3 +330,5 @@ def _iso_now(local=True):
     dt = datetime.now() if local else datetime.now(timezone.utc)
     value = dt.replace(microsecond=0).isoformat()
     return value.replace("+00:00", "Z")
+
+

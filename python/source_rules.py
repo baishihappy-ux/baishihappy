@@ -1,4 +1,4 @@
-from python.parser.source_profiles import PROFILES, build_entry_url
+﻿from python.parser.source_profiles import PROFILES, build_entry_url
 
 
 SOURCE_ALIASES = {
@@ -22,3 +22,5 @@ def get_source_rule(config: dict, source: str) -> dict:
 
 def build_phone_search_url(config: dict, source: str, phone: str) -> str:
     return build_entry_url(config, (source or "T").upper(), phone)
+
+

@@ -1,4 +1,4 @@
-import base64
+﻿import base64
 import hashlib
 import hmac
 import json
@@ -60,3 +60,5 @@ def decode_authorization_code(code: str) -> dict:
     if not verify_payload(payload, envelope.get("s", "")):
         raise ValueError("authorization signature verification failed")
     return payload
+
+

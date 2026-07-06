@@ -1,4 +1,4 @@
-# Project Ground Truth
+﻿# Project Ground Truth
 
 This file is the persistent source of truth for this workspace.
 Read it before behavior-sensitive code changes.
@@ -28,7 +28,9 @@ Chat history is not reliable for runtime behavior. Verify from files whenever po
   - "normal push" means preserve history, append a commit, and add/update a version note under `docs/versions/`.
 - Keep the local working tree and GitHub publishing tree isolated. Public-only edits must be made in a temporary worktree or temporary publish directory, not directly in the sensitive local workspace unless explicitly requested.
 - Every GitHub-published version of the developer authorization tool must keep the password gate and failed-password lockout policy.
+- Every GitHub-published version must use the small Python native developer authorization tool as the developer authorizer. Do not publish or rely on the Electron developer authorizer.
 - Developer authorization lockout policy: 3rd wrong password locks 10 minutes, 4th locks 30 minutes, 5th locks 2 hours, 6th and later locks 24 hours.
+- Public GitHub snapshots are generic editions. They must not contain product-specific branding strings, product-specific English identifiers, product-specific Chinese names, or product logo assets in Electron UI, authorization UI, docs, package metadata, filenames, buttons, icons, titles, or recovery notes.
 - Before pushing to GitHub, automatically run the public upload checklist: verify push mode, use an isolated publish tree, check required authorizer lockout, run privacy scans, check ignored files, run syntax checks, verify public config recovery, update version docs when needed, inspect `git status`/diff, push, confirm remote hash, and remove the temporary publish tree.
 - Separate local memory from public recovery:
   - `LOCAL_*.md` and `PRIVATE_*.md` may exist on this machine with full evidence.
@@ -62,3 +64,5 @@ When restoring from GitHub:
 2. Read `WORKLOG.md`.
 3. Inspect relevant source files before answering behavior questions.
 4. Treat any missing runtime samples as unknown rather than guessing.
+
+

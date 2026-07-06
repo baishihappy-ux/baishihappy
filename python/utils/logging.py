@@ -1,4 +1,4 @@
-import logging
+﻿import logging
 from pathlib import Path
 
 
@@ -15,3 +15,5 @@ def configure_logging(log_dir: Path, name="workspace"):
     logger.addHandler(file_handler)
     logger.addHandler(console_handler)
     return logger
+
+

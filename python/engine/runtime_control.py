@@ -1,4 +1,4 @@
-import os
+﻿import os
 import random
 import threading
 import time
@@ -289,7 +289,7 @@ class RuntimeControl:
         now = time.time()
         recent = [(ts, code, ok) for ts, code, ok in self.status_window if now - ts <= 30]
         if self.consecutive_502 >= 12:
-            self._open_circuit_locked("连续502触发熔断")
+            self._open_circuit_locked("杩炵画502瑙﹀彂鐔旀柇")
             return
         if not recent:
             return
@@ -368,3 +368,5 @@ def _p95(values):
         return 0
     ordered = sorted(values)
     return int(ordered[min(len(ordered) - 1, int(len(ordered) * 0.95))])
+
+

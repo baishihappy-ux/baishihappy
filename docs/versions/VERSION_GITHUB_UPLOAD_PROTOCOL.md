@@ -1,4 +1,4 @@
-# Version: GitHub Upload Protocol
+﻿# Version: GitHub Upload Protocol
 
 ## Purpose
 
@@ -22,3 +22,5 @@ Record the accepted GitHub publishing rules and the verified developer authorize
 
 After cloning from GitHub, read `PROJECT_GROUND_TRUTH.md` and `WORKLOG.md` before any future upload.
 Every GitHub-published authorizer must retain the password gate and lockout policy.
+
+

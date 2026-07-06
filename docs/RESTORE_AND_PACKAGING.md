@@ -1,4 +1,4 @@
-# Restore And Packaging Guide
+﻿# Restore And Packaging Guide
 
 This guide is for restoring the workspace from the public repository on a new machine.
 It intentionally avoids secrets, customer data, local absolute paths, and target-source names.
@@ -19,7 +19,7 @@ These files define the current behavior rules, public repository rules, and reco
 - Git.
 - Python 3.9+.
 - Node.js and npm.
-- Optional: PyInstaller, only if building the Python/Tk developer authorizer executable.
+- PyInstaller, for building the small Python developer authorizer executable.
 
 ## Clone And Prepare
 
@@ -43,10 +43,8 @@ It must not implement provider routing, parsing, scheduling, or authorization lo
 
 ## Run The Developer Authorizer From Source
 
-Use the Electron installed under `electron/node_modules`:
-
 ```powershell
-.\electron\node_modules\.bin\electron.cmd .\tools\authorizer_electron
+python .\tools\developer_authorizer.py
 ```
 
 The developer authorizer must open with a password gate before showing the authorization generator.
@@ -62,17 +60,11 @@ Required behavior:
 
 ## Build Or Refresh Developer Authorizer
 
-If an Electron distribution template already exists, refresh its app payload:
-
-```powershell
-.\electron\node_modules\.bin\asar.cmd pack .\tools\authorizer_electron .\dist\DeveloperAuthorizer\resources\app.asar
-```
-
-If building the Python/Tk fallback authorizer:
+The developer authorizer publishing standard is the small Python native Windows tool, not Electron.
 
 ```powershell
 python -m pip install pyinstaller
-pyinstaller DeveloperAuthorizer.spec
+.\scripts\build_developer_authorizer.ps1
 ```
 
 Large executable artifacts should not be committed to normal Git history. If a downloadable binary
@@ -108,3 +100,5 @@ Before any GitHub upload:
 
 The public repository should be enough for Codex to recover the source workspace and rebuild tools.
 Sensitive runtime evidence may exist locally, but it must stay outside the public repository.
+
+

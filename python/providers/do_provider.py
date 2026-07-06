@@ -1,4 +1,4 @@
-from urllib.parse import urlencode
+﻿from urllib.parse import urlencode
 
 from python.providers.base_provider import BaseProvider, ProviderResponse, ProviderTier
 from python.providers.provider_shim import normalize_exception, normalize_http_response
@@ -28,6 +28,16 @@ class DoProvider(BaseProvider):
         if not self.enable_network:
             html = f"<html><body data-provider='do-dry'><a href='{target_url}'>dry run</a></body></html>"
             return ProviderResponse(ok=True, status_code=200, text=html, url=target_url, metadata={"dry_run": True, "provider_url": provider_url, "direct_stable_api": True})
+        token = self.config.get("provider", {}).get("primary_provider", {}).get("token") or self.config.get("provider", {}).get("token") or ""
+        if not token:
+            return ProviderResponse(
+                ok=False,
+                status_code=401,
+                text="",
+                url=target_url,
+                error="provider token missing",
+                metadata={"provider_url": provider_url, "direct_stable_api": True},
+            )
         try:
             response = self.network_client.get(provider_url)
         except Exception as exc:
@@ -36,3 +46,5 @@ class DoProvider(BaseProvider):
         normalized.metadata["provider_url"] = provider_url
         normalized.metadata["direct_stable_api"] = True
         return normalized
+
+

@@ -1,4 +1,4 @@
-from dataclasses import dataclass, field
+﻿from dataclasses import dataclass, field
 import time
 import uuid
 
@@ -127,3 +127,5 @@ class SessionPool:
         for session in self.sessions:
             if session.state != SessionState.DEAD and now - session.created_at > self.reuse_seconds:
                 session.state = SessionState.DEAD
+
+

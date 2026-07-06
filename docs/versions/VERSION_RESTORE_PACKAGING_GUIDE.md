@@ -1,4 +1,4 @@
-# Version: Restore And Packaging Guide
+﻿# Version: Restore And Packaging Guide
 
 ## Purpose
 
@@ -9,7 +9,7 @@ Document how to restore the source workspace on a new machine and package the de
 - Added `docs/RESTORE_AND_PACKAGING.md`.
 - Documented source restore steps.
 - Documented client UI source launch.
-- Documented developer authorizer source launch.
+- Documented small Python developer authorizer source launch.
 - Documented developer authorizer lockout requirements.
 - Documented why large executable artifacts should be distributed as release attachments rather than committed to Git history.
 - Documented the public upload checklist.
@@ -22,3 +22,5 @@ Document how to restore the source workspace on a new machine and package the de
 ## Restore Notes
 
 On a new machine, read `PROJECT_GROUND_TRUTH.md`, `WORKLOG.md`, and `docs/RESTORE_AND_PACKAGING.md` before packaging.
+
+

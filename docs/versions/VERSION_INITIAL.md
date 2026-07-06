@@ -1,4 +1,4 @@
-# Version: Initial Recovery Snapshot
+﻿# Version: Initial Recovery Snapshot
 
 ## Purpose
 
@@ -33,3 +33,5 @@ Initial public recovery snapshot of the reconstructed workspace.
 ## Restore Notes
 
 Clone the repository, restore local runtime secrets outside git, then read `PROJECT_GROUND_TRUTH.md` and `WORKLOG.md` before making behavior-sensitive changes.
+
+

@@ -1,4 +1,4 @@
-import json
+﻿import json
 from pathlib import Path
 
 from python.utils.paths import config_path, runtime_root
@@ -57,7 +57,7 @@ def resolve_input_file(root: Path, config: dict, override=None) -> Path:
     runtime = config.get("runtime", {})
     if runtime.get("target_source") == "T":
         package_root = runtime_root(root).parent
-        for name in ["号码补齐父级input.txt", "裂变关联人父级input.txt", "input.txt"]:
+        for name in ["鍙风爜琛ラ綈鐖剁骇input.txt", "瑁傚彉鍏宠仈浜虹埗绾nput.txt", "input.txt"]:
             candidate = package_root / name
             if candidate.exists() and candidate.stat().st_size > 0:
                 return candidate.resolve()
@@ -71,3 +71,5 @@ def resolve_input_file(root: Path, config: dict, override=None) -> Path:
         if package_candidate.exists():
             return package_candidate.resolve()
     return resolved
+
+

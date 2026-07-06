@@ -1,4 +1,4 @@
-from python.providers.base_provider import BaseProvider, ProviderResponse, ProviderTier
+﻿from python.providers.base_provider import BaseProvider, ProviderResponse, ProviderTier
 from python.providers.provider_shim import normalize_exception, normalize_http_response
 
 
@@ -29,3 +29,5 @@ class ZenRowsProvider(SemiManagedHttpProvider):
 
 class ScrapFlyProvider(SemiManagedHttpProvider):
     alias = "scrapfly"
+
+

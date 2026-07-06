@@ -1,4 +1,4 @@
-import json
+﻿import json
 import time
 from pathlib import Path
 
@@ -68,3 +68,5 @@ def apply_license_to_config(runtime_root: Path, config: dict) -> dict:
         provider["token"] = payload["do_token"]
         provider.setdefault("primary_provider", {})["token"] = payload["do_token"]
     return config
+
+

@@ -1,4 +1,4 @@
-from pathlib import Path
+﻿from pathlib import Path
 
 
 def resolve_root(root=None) -> Path:
@@ -28,3 +28,5 @@ def ensure_runtime_dirs(root: Path) -> dict:
     for path in paths.values():
         path.mkdir(parents=True, exist_ok=True)
     return paths
+
+

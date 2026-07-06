@@ -1,4 +1,4 @@
-import threading
+﻿import threading
 
 from python.network.http_client import HttpClient
 from python.providers.base_provider import ProviderTier
@@ -142,3 +142,5 @@ class ProviderManager:
         if not candidates:
             return self.active_alias
         return max(candidates, key=lambda name: candidates[name])
+
+

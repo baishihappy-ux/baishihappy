@@ -1,4 +1,4 @@
-def _s(values):
+﻿def _s(values):
     return "".join(chr(value) for value in values)
 
 
@@ -29,3 +29,5 @@ ENCODED_SOURCES = {
 
 def encoded_source_config(source: str) -> dict:
     return dict(ENCODED_SOURCES.get((source or "").upper(), {}))
+
+

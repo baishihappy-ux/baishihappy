@@ -1,4 +1,4 @@
-from enum import Enum
+﻿from enum import Enum
 
 
 class SessionState(str, Enum):
@@ -6,3 +6,5 @@ class SessionState(str, Enum):
     BUSY = "BUSY"
     DEAD = "DEAD"
     WARMING = "WARMING"
+
+

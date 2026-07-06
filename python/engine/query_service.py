@@ -1,4 +1,4 @@
-import json
+﻿import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
@@ -40,3 +40,5 @@ def serve(root: Path, host="127.0.0.1", port=8765, provider=None, enable_network
             self.wfile.write(data)
 
     HTTPServer((host, int(port)), Handler).serve_forever()
+
+

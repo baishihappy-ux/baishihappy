@@ -1,62 +1,32 @@
-<!doctype html>
-<html lang="zh-CN">
+﻿<!doctype html>
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:;" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Run Monitor</title>
+    <title>Runtime Board</title>
     <link rel="stylesheet" href="./monitor.css" />
   </head>
   <body>
     <main class="monitor-shell">
       <header class="monitor-header">
         <div>
-          <strong>Run Monitor</strong>
-          <span id="monitorRoot">当前实例</span>
+          <strong>Runtime Board</strong>
+          <span id="monitorRoot">Current instance</span>
         </div>
-        <small id="monitorUpdated">等待刷新</small>
+        <small id="monitorUpdated">Waiting</small>
       </header>
       <section class="monitor-board" aria-live="polite">
-        <div class="metric-card metric-primary">
-          <span>分钟请求速度</span>
-          <strong id="metricRequestRate">0/min</strong>
-        </div>
-        <div class="metric-card metric-primary">
-          <span>分钟保存速度</span>
-          <strong id="metricSaveRate">0/min</strong>
-        </div>
-        <div class="metric-card metric-success">
-          <span>分钟成功访问比例</span>
-          <strong id="metricAccessSuccessRate">--</strong>
-        </div>
-        <div class="metric-card metric-risk">
-          <span>分钟502占比</span>
-          <strong id="metric502Rate">0%</strong>
-        </div>
-        <div class="metric-card">
-          <span>分钟.do在�?/span>
-          <strong id="metricDoInflight">0/0</strong>
-        </div>
-        <div class="metric-card">
-          <span>实时剩余底料</span>
-          <strong id="metricRemaining">0</strong>
-        </div>
-        <div class="metric-card">
-          <span>已保�?/span>
-          <strong id="metricSavedTotal">0</strong>
-        </div>
-        <div class="metric-card">
-          <span>已完�?/span>
-          <strong id="metricCompletedTotal">0</strong>
-        </div>
-        <div class="metric-card metric-state">
-          <span>状�?/span>
-          <strong id="metricRuntimeState">待启�?/strong>
-        </div>
-        <div class="metric-card metric-timer">
-          <span>运行计时</span>
-          <strong id="runtimeTimer">00:00:00</strong>
-        </div>
+        <div class="metric-card metric-primary"><span>Request rate</span><strong id="metricRequestRate">0/min</strong></div>
+        <div class="metric-card metric-primary"><span>Save rate</span><strong id="metricSaveRate">0/min</strong></div>
+        <div class="metric-card metric-success"><span>Success ratio</span><strong id="metricAccessSuccessRate">--</strong></div>
+        <div class="metric-card metric-risk"><span>502 ratio</span><strong id="metric502Rate">0%</strong></div>
+        <div class="metric-card"><span>In-flight</span><strong id="metricDoInflight">0/0</strong></div>
+        <div class="metric-card"><span>Remaining</span><strong id="metricRemaining">0</strong></div>
+        <div class="metric-card"><span>Saved</span><strong id="metricSavedTotal">0</strong></div>
+        <div class="metric-card"><span>Completed</span><strong id="metricCompletedTotal">0</strong></div>
+        <div class="metric-card metric-state"><span>Status</span><strong id="metricRuntimeState">Idle</strong></div>
+        <div class="metric-card metric-timer"><span>Elapsed</span><strong id="runtimeTimer">00:00:00</strong></div>
       </section>
     </main>
     <script src="./monitor.js"></script>

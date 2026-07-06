@@ -1,4 +1,4 @@
-from python.providers.base_provider import BaseProvider, ProviderResponse, ProviderTier
+﻿from python.providers.base_provider import BaseProvider, ProviderResponse, ProviderTier
 from python.providers.provider_shim import normalize_exception, normalize_http_response
 
 
@@ -17,3 +17,5 @@ class UnstableHttpProvider(BaseProvider):
         except Exception as exc:
             return normalize_exception(exc, task.url, self.alias)
         return normalize_http_response(response, task.url, self.alias)
+
+

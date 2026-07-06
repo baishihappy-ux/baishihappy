@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+﻿from dataclasses import dataclass
 from enum import Enum
 
 
@@ -33,3 +33,5 @@ class BaseProvider:
 
     def fetch(self, task, session=None) -> ProviderResponse:
         raise NotImplementedError
+
+

@@ -1,4 +1,4 @@
-from dataclasses import dataclass, field
+﻿from dataclasses import dataclass, field
 from enum import Enum
 from typing import Optional
 import time
@@ -27,3 +27,5 @@ class Task:
     attempts: int = 0
     not_before: float = 0.0
     created_at: float = field(default_factory=time.time)
+
+

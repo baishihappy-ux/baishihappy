@@ -1,4 +1,4 @@
-import json
+﻿import json
 
 from python.challenge.detector import detect_challenge
 from python.providers.base_provider import ProviderResponse
@@ -75,3 +75,5 @@ def _safe_headers(headers: dict):
         else:
             safe[key] = value
     return safe
+
+

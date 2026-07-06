@@ -1,4 +1,4 @@
-from python.providers.base_provider import BaseProvider, ProviderResponse, ProviderTier
+﻿from python.providers.base_provider import BaseProvider, ProviderResponse, ProviderTier
 
 
 class LocalFixtureProvider(BaseProvider):
@@ -13,3 +13,5 @@ class LocalFixtureProvider(BaseProvider):
             url=task.url or "",
             metadata={"fixture": True},
         )
+
+

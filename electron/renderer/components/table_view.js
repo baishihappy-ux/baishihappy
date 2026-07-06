@@ -1,4 +1,4 @@
-export function tableView(columns, rows) {
+﻿export function tableView(columns, rows) {
   const table = document.createElement('table');
   table.className = 'table';
   const thead = document.createElement('thead');
@@ -24,3 +24,5 @@ export function tableView(columns, rows) {
   table.append(thead, tbody);
   return table;
 }
+
+

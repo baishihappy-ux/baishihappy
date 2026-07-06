@@ -1,4 +1,4 @@
-import re
+﻿import re
 
 
 def digits_only(value: str) -> str:
@@ -27,3 +27,5 @@ def redact_text(value: str, config: dict = None) -> str:
     if config and allow_plain_record_logging(config):
         return str(value or "")
     return re.sub(r"(?:\+?1[\s.-]?)?\(?([2-9]\d{2})\)?[\s.-]?(\d{3})[\s.-]?(\d{4})", lambda m: f"***{m.group(3)}", str(value or ""))
+
+

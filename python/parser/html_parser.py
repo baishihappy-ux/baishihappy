@@ -1,4 +1,4 @@
-import re
+﻿import re
 from urllib.parse import urljoin
 
 from bs4 import BeautifulSoup
@@ -12,37 +12,37 @@ RESULT_FIELDS = [
 ]
 
 STATE_NAMES = {
-    "AL": "阿拉巴马州", "AK": "阿拉斯加州", "AZ": "亚利桑那州", "AR": "阿肯色州",
-    "CA": "加利福尼亚州", "CO": "科罗拉多州", "CT": "康涅狄格州", "DE": "特拉华州",
-    "FL": "佛罗里达州", "GA": "佐治亚州", "HI": "夏威夷州", "ID": "爱达荷州",
-    "IL": "伊利诺伊州", "IN": "印第安纳州", "IA": "艾奥瓦州", "KS": "堪萨斯州",
-    "KY": "肯塔基州", "LA": "路易斯安那州", "ME": "缅因州", "MD": "马里兰州",
-    "MA": "马萨诸塞州", "MI": "密歇根州", "MN": "明尼苏达州", "MS": "密西西比州",
-    "MO": "密苏里州", "MT": "蒙大拿州", "NE": "内布拉斯加州", "NV": "内华达州",
-    "NH": "新罕布什尔州", "NJ": "新泽西州", "NM": "新墨西哥州", "NY": "纽约州",
-    "NC": "北卡罗来纳州", "ND": "北达科他州", "OH": "俄亥俄州", "OK": "俄克拉荷马州",
-    "OR": "俄勒冈州", "PA": "宾夕法尼亚州", "RI": "罗得岛州", "SC": "南卡罗来纳州",
-    "SD": "南达科他州", "TN": "田纳西州", "TX": "得克萨斯州", "UT": "犹他州",
-    "VT": "佛蒙特州", "VA": "弗吉尼亚州", "WA": "华盛顿州", "WV": "西弗吉尼亚州",
-    "WI": "威斯康星州", "WY": "怀俄明州", "DC": "哥伦比亚特区",
+    "AL": "闃挎媺宸撮┈宸?, "AK": "闃挎媺鏂姞宸?, "AZ": "浜氬埄妗戦偅宸?, "AR": "闃胯偗鑹插窞",
+    "CA": "鍔犲埄绂忓凹浜氬窞", "CO": "绉戠綏鎷夊宸?, "CT": "搴锋秴鐙勬牸宸?, "DE": "鐗规媺鍗庡窞",
+    "FL": "浣涚綏閲岃揪宸?, "GA": "浣愭不浜氬窞", "HI": "澶忓▉澶峰窞", "ID": "鐖辫揪鑽峰窞",
+    "IL": "浼婂埄璇轰紛宸?, "IN": "鍗扮瀹夌撼宸?, "IA": "鑹惧ゥ鐡﹀窞", "KS": "鍫惃鏂窞",
+    "KY": "鑲鍩哄窞", "LA": "璺槗鏂畨閭ｅ窞", "ME": "缂呭洜宸?, "MD": "椹噷鍏板窞",
+    "MA": "椹惃璇稿宸?, "MI": "瀵嗘瓏鏍瑰窞", "MN": "鏄庡凹鑻忚揪宸?, "MS": "瀵嗚タ瑗挎瘮宸?,
+    "MO": "瀵嗚嫃閲屽窞", "MT": "钂欏ぇ鎷垮窞", "NE": "鍐呭竷鎷夋柉鍔犲窞", "NV": "鍐呭崕杈惧窞",
+    "NH": "鏂扮綍甯冧粈灏斿窞", "NJ": "鏂版辰瑗垮窞", "NM": "鏂板ⅷ瑗垮摜宸?, "NY": "绾界害宸?,
+    "NC": "鍖楀崱缃楁潵绾冲窞", "ND": "鍖楄揪绉戜粬宸?, "OH": "淇勪亥淇勫窞", "OK": "淇勫厠鎷夎嵎椹窞",
+    "OR": "淇勫嫆鍐堝窞", "PA": "瀹惧娉曞凹浜氬窞", "RI": "缃楀緱宀涘窞", "SC": "鍗楀崱缃楁潵绾冲窞",
+    "SD": "鍗楄揪绉戜粬宸?, "TN": "鐢扮撼瑗垮窞", "TX": "寰楀厠钀ㄦ柉宸?, "UT": "鐘逛粬宸?,
+    "VT": "浣涜挋鐗瑰窞", "VA": "寮楀悏灏间簹宸?, "WA": "鍗庣洓椤垮窞", "WV": "瑗垮紬鍚夊凹浜氬窞",
+    "WI": "濞佹柉搴锋槦宸?, "WY": "鎬€淇勬槑宸?, "DC": "鍝ヤ鸡姣斾簹鐗瑰尯",
 }
 
 JOB_TITLE_CN = [
-    (r"president|ceo|chief executive officer", "总裁"),
-    (r"cfo|chief financial officer", "财务总监"),
-    (r"coo|chief operating officer", "运营总监"),
-    (r"vice president", "副总裁"),
-    (r"owner|business owner|founder|co-founder", "业主"),
-    (r"director", "总监"),
-    (r"manager", "经理"),
-    (r"supervisor", "主管"),
-    (r"sales", "销售代表"),
-    (r"teacher|professor", "教师"),
-    (r"nurse|medical assistant", "医护"),
-    (r"attorney|lawyer", "律师"),
-    (r"engineer", "工程师"),
-    (r"technician", "技术员"),
-    (r"consultant", "顾问"),
+    (r"president|ceo|chief executive officer", "鎬昏"),
+    (r"cfo|chief financial officer", "璐㈠姟鎬荤洃"),
+    (r"coo|chief operating officer", "杩愯惀鎬荤洃"),
+    (r"vice president", "鍓€昏"),
+    (r"owner|business owner|founder|co-founder", "涓氫富"),
+    (r"director", "鎬荤洃"),
+    (r"manager", "缁忕悊"),
+    (r"supervisor", "涓荤"),
+    (r"sales", "閿€鍞唬琛?),
+    (r"teacher|professor", "鏁欏笀"),
+    (r"nurse|medical assistant", "鍖绘姢"),
+    (r"attorney|lawyer", "寰嬪笀"),
+    (r"engineer", "宸ョ▼甯?),
+    (r"technician", "鎶€鏈憳"),
+    (r"consultant", "椤鹃棶"),
 ]
 
 
@@ -101,8 +101,8 @@ def extract_record(html: str, source: str, stage: str, seed_phone: str = "", par
     text = _clean_text(soup.get_text(" ", strip=True))
     record["phone"] = record.get("phone") or _first_phone(text) or seed_phone or parent_phone
     record["parent_phone"] = parent_phone or seed_phone or record["phone"]
-    record["depth"] = "本级" if stage in {"entry", "resultphone"} else "父级" if stage == "parent" else "关联"
-    record["source"] = parent_phone or seed_phone or ("补齐底料库" if record["depth"] == "本级" else source)
+    record["depth"] = "鏈骇" if stage in {"entry", "resultphone"} else "鐖剁骇" if stage == "parent" else "鍏宠仈"
+    record["source"] = parent_phone or seed_phone or ("琛ラ綈搴曟枡搴? if record["depth"] == "鏈骇" else source)
     record["equity_percent"] = record.get("equity_percent") or _calc_equity_percent(record.get("estimated_equity"), record.get("property_value"))
     record["gender"], record["male_probability"] = _guess_gender_with_probability(record.get("name", ""), record.get("gender", ""), record.get("male_probability", ""))
     return {field: record.get(field, "") for field in RESULT_FIELDS}
@@ -267,10 +267,10 @@ def _extract_fast_people_search_marital_status(soup):
     spouse_anchor = section.select_one("a[href]") if section else None
     spouse = _clean_text(spouse_anchor.get_text(" ", strip=True) if spouse_anchor else "")
     if re.search(r"\bnot\s+likely\b|can\s+not\s+find\s+any\s+public\s+records", text, re.I):
-        return "", "未找到已婚记录"
+        return "", "鏈壘鍒板凡濠氳褰?
     if re.search(r"\blikely\s+married\b|\bcurrently\s+married\b", text, re.I):
-        return spouse, "已婚"
-    return spouse, "已婚" if spouse else ""
+        return spouse, "宸插"
+    return spouse, "宸插" if spouse else ""
 
 
 def _extract_fast_people_search_employment(soup):
@@ -295,16 +295,16 @@ def _extract_spouse_and_marital_status(soup, description=""):
     section = soup.select_one("#marital_status_section")
     text = _clean_text((section.get_text(" ", strip=True) if section else "") + " " + description)
     for pattern in [
-        r"Spouse\s*[:：]\s*([A-Z][A-Za-z\s.'-]+)",
+        r"Spouse\s*[:锛歖\s*([A-Z][A-Za-z\s.'-]+)",
         r"Married\s+to\s+([A-Z][A-Za-z\s.'-]+)",
         r"spouse\s+is\s+([A-Z][A-Za-z\s.'-]+)",
         r"\b(?:[A-Z][A-Za-z.'-]+\s+)?is\s+married\s+to\s+([A-Z][A-Za-z\s.'-]+?)(?:\.|,|;|\s+and\s)",
     ]:
         value = _match(text, pattern)
         if value:
-            return value, "已婚"
+            return value, "宸插"
     if re.search(r"not\s+indicate.+currently\s+married|not\s+likely|not\s+married", text, re.I):
-        return "", "未找到已婚记录"
+        return "", "鏈壘鍒板凡濠氳褰?
     return "", ""
 
 
@@ -317,8 +317,8 @@ def _extract_current_employment(soup):
     job_title = ""
     for dd in section.find_all("dd"):
         text = _clean_text(dd.get_text(" ", strip=True).replace("&nbsp;", " "))
-        if re.search(r"^(Job Title|Title|职称)\s*[:：]", text, re.I):
-            job_title = re.sub(r"^(Job Title|Title|职称)\s*[:：]\s*", "", text, flags=re.I)
+        if re.search(r"^(Job Title|Title|鑱岀О)\s*[:锛歖", text, re.I):
+            job_title = re.sub(r"^(Job Title|Title|鑱岀О)\s*[:锛歖\s*", "", text, flags=re.I)
     return company, job_title
 
 
@@ -330,7 +330,7 @@ def _extract_education(soup):
     school = _clean_text(first_dl.find("dt").get_text(" ", strip=True)) if first_dl and first_dl.find("dt") else ""
     values = [_clean_text(dd.get_text(" ", strip=True)) for dd in section.find_all("dd")]
     major = values[0] if values else ""
-    years = next((m.group(0) for value in values for m in [re.search(r"\b\d{4}\s*[-–]\s*\d{4}\b", value)] if m), "")
+    years = next((m.group(0) for value in values for m in [re.search(r"\b\d{4}\s*[-鈥揮\s*\d{4}\b", value)] if m), "")
     return school, major, years
 
 
@@ -393,7 +393,7 @@ def _get_value_from_text_lines(container, label):
     lines = [_clean_text(line) for line in container.get_text("\n", strip=True).splitlines() if _clean_text(line)]
     for index, line in enumerate(lines):
         if _label_key(line).startswith(key):
-            parts = re.split(r"[:：]", line, 1)
+            parts = re.split(r"[:锛歖", line, 1)
             if len(parts) == 2 and parts[1].strip():
                 return parts[1].strip()
             if index + 1 < len(lines):
@@ -534,9 +534,9 @@ def _is_tmobile_carrier(carrier):
 def _translate_occupancy(value):
     raw = str(value or "")
     if re.search(r"Owner Occupied|owner|homeowner", raw, re.I):
-        return "业主自住"
+        return "涓氫富鑷綇"
     if re.search(r"Non-Owner|Renter|Tenant|Vacant", raw, re.I):
-        return "非业主自住"
+        return "闈炰笟涓昏嚜浣?
     return raw
 
 
@@ -547,7 +547,7 @@ def _translate_job_title(value):
     for pattern, cn in JOB_TITLE_CN:
         if re.search(pattern, raw, re.I):
             return cn
-    return "其他职位"
+    return "鍏朵粬鑱屼綅"
 
 
 def _translate_major(value):
@@ -555,18 +555,18 @@ def _translate_major(value):
     if not raw:
         return ""
     if re.search(r"Communication|Media", raw, re.I):
-        return "传媒"
+        return "浼犲獟"
     if re.search(r"Business|Management|Accounting|Finance|Marketing|Economics", raw, re.I):
-        return "商科"
+        return "鍟嗙"
     if re.search(r"Computer|Information Technology|Data Science|Engineering", raw, re.I):
-        return "理工科"
+        return "鐞嗗伐绉?
     if re.search(r"Nursing|Healthcare|Public Health", raw, re.I):
-        return "医护"
+        return "鍖绘姢"
     if re.search(r"Education", raw, re.I):
-        return "教育"
+        return "鏁欒偛"
     if re.search(r"Criminal Justice|Political Science", raw, re.I):
-        return "法律政治"
-    return "其他专业"
+        return "娉曞緥鏀挎不"
+    return "鍏朵粬涓撲笟"
 
 
 def _calc_equity_percent(equity, value):
@@ -595,9 +595,9 @@ def _guess_gender_with_probability(name, gender="", probability=""):
     male_names = {"john", "michael", "robert", "william", "david", "james", "richard", "thomas", "joseph", "charles", "kevin", "paul", "brian", "jeffrey", "gregory"}
     female_names = {"mary", "patricia", "jennifer", "linda", "elizabeth", "barbara", "susan", "jessica", "sarah", "karen", "dawn", "debra"}
     if first in male_names:
-        return "男", "100"
+        return "鐢?, "100"
     if first in female_names:
-        return "女", "100"
+        return "濂?, "100"
     return gender or "", probability or ""
 
 
@@ -608,3 +608,5 @@ def _clean_text(value):
 def _match(text, pattern):
     match = re.search(pattern, text or "", re.I)
     return match.group(1).strip() if match else ""
+
+

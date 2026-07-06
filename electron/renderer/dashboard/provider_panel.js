@@ -1,4 +1,4 @@
-import { tableView } from '../components/table_view.js';
+﻿import { tableView } from '../components/table_view.js';
 import { getProvider } from '../services/runtime_api.js';
 
 const providers = [
@@ -35,3 +35,5 @@ export function renderProviderPanel(container, snapshot) {
   );
   container.append(title, active, flags, table);
 }
+
+

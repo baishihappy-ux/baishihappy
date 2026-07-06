@@ -1,4 +1,4 @@
-import re
+﻿import re
 
 
 def normalize_phone(value: str) -> str:
@@ -15,3 +15,5 @@ def unique_phones(lines):
         if phone and phone not in seen:
             seen.add(phone)
             yield phone
+
+

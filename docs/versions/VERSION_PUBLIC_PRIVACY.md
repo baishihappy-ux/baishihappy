@@ -1,4 +1,4 @@
-# Version: Public Privacy Cleanup
+﻿# Version: Public Privacy Cleanup
 
 ## Purpose
 
@@ -22,3 +22,5 @@ Keep the public repository useful for recovery while avoiding searchable operati
 ## Restore Notes
 
 After cloning from the public repository, restore local runtime config/secrets from private backup files before live network use.
+
+

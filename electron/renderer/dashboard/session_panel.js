@@ -1,4 +1,4 @@
-import { chartView } from '../components/chart_view.js';
+﻿import { chartView } from '../components/chart_view.js';
 import { tableView } from '../components/table_view.js';
 import { getSession } from '../services/runtime_api.js';
 
@@ -30,3 +30,5 @@ export function renderSessionPanel(container, snapshot) {
   );
   container.append(title, chart, table);
 }
+
+

@@ -1,4 +1,4 @@
-:root {
+﻿:root {
   color-scheme: dark;
   --ui-scale: 1;
   --bg: #050505;
@@ -91,7 +91,7 @@ button {
   color: var(--gold-bright);
   font-size: 0;
   font-weight: 800;
-  background-image: url("./assets/newlogo.png");
+  background-image: url("./assets/brand_mark.png");
   background-position: center;
   background-repeat: no-repeat;
   background-size: min(150px, 78%) auto;
@@ -287,7 +287,7 @@ textarea:focus {
   color: var(--gold-bright);
   font-size: 0;
   font-weight: 800;
-  background-image: url("./assets/newlogo.png");
+  background-image: url("./assets/brand_mark.png");
   background-position: center;
   background-repeat: no-repeat;
   background-size: contain;
@@ -661,7 +661,7 @@ textarea:focus {
   border: 0;
   border-radius: 0;
   background: transparent;
-  background-image: url("./assets/newlogo.png");
+  background-image: url("./assets/brand_mark.png");
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
@@ -1168,3 +1168,5 @@ pre {
     line-height: 1.55;
   }
 }
+
+

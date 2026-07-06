@@ -1,4 +1,4 @@
-import { logStream } from '../components/log_stream.js';
+﻿import { logStream } from '../components/log_stream.js';
 
 function formatEvent(event) {
   if (event.raw) return event.raw;
@@ -21,3 +21,5 @@ export function renderLogsPanel(container, snapshot) {
   const logs = logStream(snapshot.logs);
   container.append(title, eventTitle, events, logTitle, logs);
 }
+
+

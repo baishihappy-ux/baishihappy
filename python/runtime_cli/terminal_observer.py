@@ -1,4 +1,4 @@
-import time
+﻿import time
 from pathlib import Path
 
 from python.engine.status import run_status
@@ -19,3 +19,5 @@ def observe(root=".", refresh_seconds=1.0, log_lines=20, once=False):
         if once:
             return payload
         time.sleep(float(refresh_seconds or 1.0))
+
+

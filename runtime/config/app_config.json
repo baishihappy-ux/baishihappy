@@ -1,4 +1,4 @@
-{
+﻿{
     "app_name":  "Workspace App",
     "input_file":  "../input.txt",
     "provider":  {
@@ -103,3 +103,5 @@
                     "verbose_stage_events_enabled":  false
                 }
 }
+
+

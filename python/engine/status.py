@@ -1,4 +1,4 @@
-import json
+﻿import json
 import time
 from datetime import datetime, timezone
 from pathlib import Path
@@ -114,3 +114,5 @@ def resume(root: Path):
 
 def _iso_now():
     return datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+
+

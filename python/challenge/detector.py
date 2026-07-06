@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+﻿from dataclasses import dataclass
 import re
 
 
@@ -41,3 +41,5 @@ def detect_challenge(status_code: int = 0, text: str = "", headers: dict = None)
         if re.search(pattern, body, re.I):
             return ChallengeFinding(True, kind, f"challenge detected: {kind}")
     return ChallengeFinding(False)
+
+

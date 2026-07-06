@@ -1,4 +1,4 @@
-import { renderOverview } from './dashboard/overview.js';
+﻿import { renderOverview } from './dashboard/overview.js';
 import { renderProviderPanel } from './dashboard/provider_panel.js';
 import { renderSessionPanel } from './dashboard/session_panel.js';
 import { renderSchedulerPanel } from './dashboard/scheduler_panel.js';
@@ -61,14 +61,14 @@ async function checkLicense() {
     await refreshProvider();
     await refreshLogs();
   } else {
-    showLicense(payload.reason || '未授权');
+    showLicense(payload.reason || '鏈巿鏉?);
   }
 }
 
 async function activateLicense() {
   const code = nodes.licenseCode.value.trim();
   if (!code) {
-    nodes.licenseMessage.textContent = '请输入授权码';
+    nodes.licenseMessage.textContent = '璇疯緭鍏ユ巿鏉冪爜';
     return;
   }
   nodes.activateLicense.disabled = true;
@@ -78,13 +78,13 @@ async function activateLicense() {
   try {
     payload = JSON.parse(result.out || '{}');
   } catch {
-    payload = { ok: false, reason: result.err || '激活失败' };
+    payload = { ok: false, reason: result.err || '婵€娲诲け璐? };
   }
   if (payload.ok) {
-    nodes.licenseMessage.textContent = '授权成功';
+    nodes.licenseMessage.textContent = '鎺堟潈鎴愬姛';
     await checkLicense();
   } else {
-    nodes.licenseMessage.textContent = payload.reason || '授权失败';
+    nodes.licenseMessage.textContent = payload.reason || '鎺堟潈澶辫触';
   }
 }
 
@@ -116,7 +116,7 @@ function startDashboardLoops() {
 
 nodes.copyMachine.addEventListener('click', async () => {
   await window.t1Runtime.copy_text(nodes.machineCode.value);
-  nodes.licenseMessage.textContent = '机器码已复制';
+  nodes.licenseMessage.textContent = '鏈哄櫒鐮佸凡澶嶅埗';
 });
 
 nodes.activateLicense.addEventListener('click', activateLicense);
@@ -132,3 +132,5 @@ document.querySelectorAll('[data-command]').forEach((button) => {
 });
 
 await checkLicense();
+
+

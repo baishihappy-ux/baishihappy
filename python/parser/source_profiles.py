@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+﻿from dataclasses import dataclass
 
 from python.parser.encoded_sources import encoded_source_config
 
@@ -30,3 +30,5 @@ def build_entry_url(config: dict, source: str, phone: str) -> str:
     source_cfg = profile.from_config(config)
     template = source_cfg.get("input_url_template") or "{phone_digits}"
     return template.format(phone_digits=phone, record_id=phone)
+
+

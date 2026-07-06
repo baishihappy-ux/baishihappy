@@ -1,4 +1,4 @@
-from pathlib import Path
+﻿from pathlib import Path
 
 from python.engine.status import run_status
 from python.utils.paths import ensure_runtime_dirs
@@ -30,3 +30,5 @@ def _line_count(path: Path) -> int:
     if not path.exists():
         return 0
     return len([line for line in path.read_text(encoding="utf-8", errors="ignore").splitlines() if line.strip()])
+
+

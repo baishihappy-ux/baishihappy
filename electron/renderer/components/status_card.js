@@ -1,4 +1,4 @@
-export function statusCard(label, value, tone = '') {
+﻿export function statusCard(label, value, tone = '') {
   const card = document.createElement('div');
   card.className = `status-card ${tone}`.trim();
   const labelNode = document.createElement('div');
@@ -10,3 +10,5 @@ export function statusCard(label, value, tone = '') {
   card.append(labelNode, valueNode);
   return card;
 }
+
+

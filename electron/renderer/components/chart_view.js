@@ -1,4 +1,4 @@
-export function chartView(items) {
+﻿export function chartView(items) {
   const wrap = document.createElement('div');
   items.forEach((item) => {
     const row = document.createElement('div');
@@ -18,3 +18,5 @@ export function chartView(items) {
   });
   return wrap;
 }
+
+

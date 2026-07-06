@@ -1,4 +1,4 @@
-:root {
+﻿:root {
   color-scheme: dark;
   --bg: #050505;
   --gold: #d7aa4a;
@@ -141,3 +141,5 @@ body {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
+
+

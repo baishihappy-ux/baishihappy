@@ -1,4 +1,4 @@
-import time
+﻿import time
 import threading
 from pathlib import Path
 
@@ -92,8 +92,6 @@ class EngineRunner:
                 self.runtime_control.heartbeat(processed=stats["processed"], remaining_work=self.remaining_input_count(), active_workers=stats["active_workers"])
                 self.runtime_control.update_ramp()
                 if self.runtime_control.circuit_open:
-                    self.stop_event.set()
-                if not self.scheduler.has_pending() and stats["active_workers"] == 0:
                     self.stop_event.set()
                 self.refresh_control(active_workers=self.runtime_control.current_inflight())
                 update_status(
@@ -391,3 +389,5 @@ class EngineRunner:
             self.provider_router.apply_control_signal(self.control_signal)
             write_json(self.paths["state"] / "control_brain.json", self.brain.snapshot())
             return self.control_signal
+
+

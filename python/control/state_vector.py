@@ -1,4 +1,4 @@
-from dataclasses import asdict, dataclass
+﻿from dataclasses import asdict, dataclass
 import time
 
 
@@ -38,3 +38,5 @@ class SystemStateVector:
 
     def to_dict(self):
         return asdict(self)
+
+

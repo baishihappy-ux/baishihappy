@@ -1,4 +1,4 @@
-from dataclasses import asdict, dataclass
+﻿from dataclasses import asdict, dataclass
 
 
 @dataclass
@@ -14,3 +14,5 @@ class ControlSignal:
 
     def to_dict(self):
         return asdict(self)
+
+

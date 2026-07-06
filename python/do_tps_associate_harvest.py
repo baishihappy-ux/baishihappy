@@ -1,4 +1,4 @@
-from pathlib import Path
+﻿from pathlib import Path
 
 from python.engine.runner import EngineRunner
 from python.parser.html_parser import extract_links
@@ -25,3 +25,5 @@ def run_harvest(root: Path, args):
 
 def build_search_url(config: dict, phone: str, source="T"):
     return build_phone_search_url(config, source, normalize_phone(phone))
+
+

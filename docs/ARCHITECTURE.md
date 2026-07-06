@@ -1,4 +1,4 @@
-# Architecture Notes
+﻿# Architecture Notes
 
 This document is intentionally generic so the public repository can be used as a recovery snapshot without exposing customer data, target-site names, secrets, or operational identifiers.
 
@@ -76,3 +76,5 @@ After cloning:
 3. Restore runtime secrets locally.
 4. Install dependencies as needed.
 5. Run syntax/compile checks before making behavioral changes.
+
+

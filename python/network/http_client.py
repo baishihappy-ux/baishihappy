@@ -1,4 +1,4 @@
-try:
+﻿try:
     import requests
 except Exception:  # pragma: no cover
     requests = None
@@ -17,3 +17,5 @@ class HttpClient:
         if requests is None:
             raise RuntimeError("requests is required for live network mode")
         return requests.get(url, timeout=self.timeout, headers=self.headers, proxies=self.proxies, verify=self.verify)
+
+

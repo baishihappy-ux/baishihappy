@@ -1,4 +1,4 @@
-{
+﻿{
   "name": "workspace-snapshot",
   "version": "9.1.0-reconstructed",
   "main": "main.js",
@@ -12,3 +12,5 @@
     "@electron/asar": "^4.2.0"
   }
 }
+
+

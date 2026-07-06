@@ -1,4 +1,4 @@
-import { ipcClient } from './ipc_client.js';
+﻿import { ipcClient } from './ipc_client.js';
 
 export async function readRuntimeSnapshot() {
   const [statusPayload, logs, events] = await Promise.all([
@@ -53,3 +53,5 @@ export function getScheduler(status, controlBrain) {
     dispatchRate: status.provider_request_rate_per_minute ?? status.claim_rate_per_minute ?? null
   };
 }
+
+

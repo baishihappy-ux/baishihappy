@@ -1,4 +1,4 @@
-export const ipcClient = {
+﻿export const ipcClient = {
   getStatus() {
     return window.t1Runtime.get_status();
   },
@@ -12,3 +12,5 @@ export const ipcClient = {
     return window.t1Runtime.send_command(command);
   }
 };
+
+

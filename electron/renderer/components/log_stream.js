@@ -1,4 +1,4 @@
-function isFailureLine(line) {
+﻿function isFailureLine(line) {
   return /401|502|503|504|timeout|fail|error/i.test(line);
 }
 
@@ -20,3 +20,5 @@ export function logStream(lines) {
   });
   return wrap;
 }
+
+

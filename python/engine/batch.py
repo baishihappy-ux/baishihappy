@@ -1,4 +1,4 @@
-import json
+﻿import json
 from datetime import datetime
 from pathlib import Path
 
@@ -12,7 +12,7 @@ def discover_instances(batch_root: Path, pattern="*"):
 
 
 def batch_distribute(batch_root: Path, pattern="*", input_dir=None, input_file_name="input.txt", no_dedupe=False):
-    source_dir = Path(input_dir) if input_dir else batch_root / "自动分发"
+    source_dir = Path(input_dir) if input_dir else batch_root / "鑷姩鍒嗗彂"
     rows = []
     if source_dir.exists():
         for path in source_dir.glob("*.txt"):
@@ -27,7 +27,7 @@ def batch_distribute(batch_root: Path, pattern="*", input_dir=None, input_file_n
     return {"ok": True, "instances": len(instances), "rows": len(phones), "source_dir": str(source_dir)}
 
 
-def recover_remaining_inputs(batch_root: Path, output_dir_name="汇总"):
+def recover_remaining_inputs(batch_root: Path, output_dir_name="姹囨€?):
     instances = discover_instances(batch_root)
     recovered = []
     recovered_a = []
@@ -76,9 +76,9 @@ def recover_remaining_inputs(batch_root: Path, output_dir_name="汇总"):
     out_dir = batch_root / output_dir_name
     out_dir.mkdir(parents=True, exist_ok=True)
     stamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    out_file = out_dir / f"回收底料_{stamp}.txt"
-    out_a = out_dir / f"号码补齐父级input_暂停关闭未完成回收_{stamp}.txt"
-    out_b = out_dir / f"裂变关联人父级input_暂停关闭未完成回收_{stamp}.txt"
+    out_file = out_dir / f"鍥炴敹搴曟枡_{stamp}.txt"
+    out_a = out_dir / f"鍙风爜琛ラ綈鐖剁骇input_鏆傚仠鍏抽棴鏈畬鎴愬洖鏀禵{stamp}.txt"
+    out_b = out_dir / f"瑁傚彉鍏宠仈浜虹埗绾nput_鏆傚仠鍏抽棴鏈畬鎴愬洖鏀禵{stamp}.txt"
     out_file.write_text("\n".join(recovered), encoding="utf-8")
     out_a.write_text("\n".join(recovered_a), encoding="utf-8")
     out_b.write_text("\n".join(recovered_b), encoding="utf-8")
@@ -95,7 +95,7 @@ def recover_remaining_inputs(batch_root: Path, output_dir_name="汇总"):
         "t_dual_b_recovered_unique_rows": len(recovered_b),
         "sources": sources,
     }
-    (batch_root / "自动回收未领取底料记录.json").write_text(json.dumps(record, ensure_ascii=False, indent=2), encoding="utf-8")
+    (batch_root / "鑷姩鍥炴敹鏈鍙栧簳鏂欒褰?json").write_text(json.dumps(record, ensure_ascii=False, indent=2), encoding="utf-8")
     return record
 
 
@@ -103,8 +103,8 @@ def _recover_dual_instance(instance: Path):
     state = instance / "runtime" / "state"
     cursor_payload = _read_json(state / "t_dual_input_cursor.json")
     pending_payload = _read_json(state / "t_dual_input_pending.json")
-    a_file = _resolve_dual_path(instance, cursor_payload.get("a_input_file"), "号码补齐父级input.txt")
-    b_file = _resolve_dual_path(instance, cursor_payload.get("b_input_file"), "裂变关联人父级input.txt")
+    a_file = _resolve_dual_path(instance, cursor_payload.get("a_input_file"), "鍙风爜琛ラ綈鐖剁骇input.txt")
+    b_file = _resolve_dual_path(instance, cursor_payload.get("b_input_file"), "瑁傚彉鍏宠仈浜虹埗绾nput.txt")
     a_phones = list(unique_phones(a_file.read_text(encoding="utf-8", errors="ignore").splitlines())) if a_file.exists() else []
     b_phones = list(unique_phones(b_file.read_text(encoding="utf-8", errors="ignore").splitlines())) if b_file.exists() else []
     a_cursor = int(cursor_payload.get("a_cursor") or 0)
@@ -143,3 +143,5 @@ def _read_json(path: Path):
         return json.loads(path.read_text(encoding="utf-8"))
     except Exception:
         return {}
+
+
