@@ -54,6 +54,7 @@ def build_parser():
     run.add_argument("--thread-count", type=int)
     run.add_argument("--max-total-records", type=int)
     run.add_argument("--target-source", choices=["T", "F", "P"])
+    run.add_argument("--enable-network", action="store_true")
     q = sub.add_parser("query-once")
     q.add_argument("--root", default=".")
     q.add_argument("--url")

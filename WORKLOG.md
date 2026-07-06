@@ -111,8 +111,43 @@ It intentionally avoids public-facing product names, target-site names, secrets,
 - Do not mention product names, target-site names, secrets, sample phone-like values, local absolute paths, or customer data in public-facing documentation.
 - Keep full local evidence only in ignored `LOCAL_*.md` or `PRIVATE_*.md` files.
 - Keep version notes under `docs/versions/`.
+- Use fixed push terminology:
+  - Strong/force push: overwrite GitHub history and leave only the current public snapshot on `main`.
+  - Normal push: preserve GitHub history and append a commit.
+- Keep the sensitive local workspace isolated from the GitHub publishing workspace. Public-only changes should be prepared in a temporary worktree or publish directory, then pushed and cleaned up.
+- Every GitHub-published developer authorization tool must retain password `88888888` and the failed-password lockout policy.
+- The developer authorization tool standard is a small Python native Windows tool. The Electron developer authorizer is not the publishing standard because it creates very large runtime bundles.
+- Public GitHub snapshots are generic recovery editions. They must not include product-specific branding strings, product-specific Chinese names, product-specific English identifiers, or product logo assets anywhere in UI, docs, package metadata, filenames, buttons, icons, titles, or generated recovery notes.
+- Failed-password lockout policy:
+  - 3rd wrong password: 10 minutes.
+  - 4th wrong password: 30 minutes.
+  - 5th wrong password: 2 hours.
+  - 6th and later wrong password: 24 hours.
+- Before any GitHub upload, automatically run the upload checklist:
+  - confirm force push or normal push
+  - create/use an isolated publish tree
+  - confirm authorizer password and lockout logic
+  - scan for secrets, customer data, target names, phone-like values, local paths, license data, logs, output, and runtime state
+  - confirm ignored local-only files stay untracked
+  - run Python and Electron syntax checks
+  - verify public config can restore required source behavior
+  - add/update version documentation when preserving history
+  - inspect `git status` and diff before commit
+  - push, confirm the remote hash, and remove the temporary publish tree
 - For each meaningful future commit, add or update a version note describing:
   - commit purpose
   - touched modules
   - verification performed
   - restore notes
+
+## V9.1.1 Local Restore Point
+
+- Reconnected the packaged client UI to the current source engine authorization path.
+- Restored the black/gold runtime dashboard client UI while keeping the developer authorization tool separate.
+- Removed the hot-tuning client and backend IPC path from the active client.
+- Fixed authorization field normalization for `valid`, `max_instances`, and `remaining_days`.
+- Made packaged client starts use live provider mode rather than dry-run mode.
+- Added current-source engine packaging with `scripts/build_engine.ps1`.
+- Fixed runtime JSON writes to use per-file locking and atomic replacement.
+- Fixed retry scheduling so retry tasks are not skipped by an early empty-queue stop.
+- Rebuilt and replaced the current-source engine in the local validation customer package.

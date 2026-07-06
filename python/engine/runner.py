@@ -93,8 +93,6 @@ class EngineRunner:
                 self.runtime_control.update_ramp()
                 if self.runtime_control.circuit_open:
                     self.stop_event.set()
-                if not self.scheduler.has_pending() and stats["active_workers"] == 0:
-                    self.stop_event.set()
                 self.refresh_control(active_workers=self.runtime_control.current_inflight())
                 update_status(
                     self.paths["state"],

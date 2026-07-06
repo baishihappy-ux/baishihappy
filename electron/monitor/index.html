@@ -4,14 +4,14 @@
     <meta charset="UTF-8" />
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:;" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Run Monitor</title>
+    <title>鼎丰运行看板</title>
     <link rel="stylesheet" href="./monitor.css" />
   </head>
   <body>
     <main class="monitor-shell">
       <header class="monitor-header">
         <div>
-          <strong>Run Monitor</strong>
+          <strong>鼎丰运行看板</strong>
           <span id="monitorRoot">当前实例</span>
         </div>
         <small id="monitorUpdated">等待刷新</small>
@@ -30,11 +30,11 @@
           <strong id="metricAccessSuccessRate">--</strong>
         </div>
         <div class="metric-card metric-risk">
-          <span>分钟502占比</span>
+          <span>分钟 502 占比</span>
           <strong id="metric502Rate">0%</strong>
         </div>
         <div class="metric-card">
-          <span>分钟.do在�?/span>
+          <span>分钟 .do 在途</span>
           <strong id="metricDoInflight">0/0</strong>
         </div>
         <div class="metric-card">
@@ -42,16 +42,16 @@
           <strong id="metricRemaining">0</strong>
         </div>
         <div class="metric-card">
-          <span>已保�?/span>
+          <span>已保存</span>
           <strong id="metricSavedTotal">0</strong>
         </div>
         <div class="metric-card">
-          <span>已完�?/span>
+          <span>已完成</span>
           <strong id="metricCompletedTotal">0</strong>
         </div>
         <div class="metric-card metric-state">
-          <span>状�?/span>
-          <strong id="metricRuntimeState">待启�?/strong>
+          <span>状态</span>
+          <strong id="metricRuntimeState">待启动</strong>
         </div>
         <div class="metric-card metric-timer">
           <span>运行计时</span>
