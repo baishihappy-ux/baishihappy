@@ -3,6 +3,8 @@ from urllib.parse import urljoin
 
 from bs4 import BeautifulSoup
 
+from python.utils.gender_lookup import lookup_gender
+
 
 RESULT_FIELDS = [
     "phone", "phone_carrier", "phone_type", "name", "age", "gender", "male_probability",
@@ -50,6 +52,9 @@ def extract_links(html: str, base_url: str, source_cfg: dict) -> dict:
     soup = BeautifulSoup(html or "", "html.parser")
     detail_links = []
     related_links = []
+    source = str(source_cfg.get("encoded_key") or source_cfg.get("source") or "").upper()
+    is_t_detail = source == "T" and _is_true_people_search_detail_page(soup)
+    is_p_detail = source == "P" and _is_people_search_now_detail_page(soup)
     for selector in [
         source_cfg.get("search_result_detail_link_selector"),
         "a[href*='/find/person/']",
@@ -58,6 +63,10 @@ def extract_links(html: str, base_url: str, source_cfg: dict) -> dict:
         "a[href*=\"/name/\"]",
     ]:
         if not selector:
+            continue
+        if is_t_detail and "/find/person/" in selector:
+            continue
+        if is_p_detail and "/name/" in selector:
             continue
         for item in soup.select(selector):
             href = item.get("href") or item.get("data-link")
@@ -86,7 +95,21 @@ def extract_links(html: str, base_url: str, source_cfg: dict) -> dict:
     return {
         "detail_links": list(dict.fromkeys(detail_links)),
         "related_links": list(dict.fromkeys(related_links)),
+        "detail_page": is_t_detail or is_p_detail or _is_fast_people_search_detail_page(soup),
+        "listing_page": bool(detail_links) and not (is_t_detail or is_p_detail or _is_fast_people_search_detail_page(soup)),
     }
+
+
+def _is_true_people_search_detail_page(soup):
+    return bool(soup.select_one("h1#details-header, h1.oh1")) and bool(soup.select_one('a[href^="/find/phone/"]'))
+
+
+def _is_people_search_now_detail_page(soup):
+    return bool(soup.select_one(".result-full-person-name"))
+
+
+def _is_fast_people_search_detail_page(soup):
+    return bool(soup.select_one("#phone_number_section, #current_address_section"))
 
 
 def extract_record(html: str, source: str, stage: str, seed_phone: str = "", parent_phone: str = "") -> dict:
@@ -591,13 +614,16 @@ def _money_to_float(value):
 def _guess_gender_with_probability(name, gender="", probability=""):
     if gender and probability:
         return gender, probability
+    mapped_gender, mapped_probability = lookup_gender(name)
+    if mapped_gender:
+        return mapped_gender, mapped_probability
     first = (name or "").split(" ")[0].lower()
     male_names = {"john", "michael", "robert", "william", "david", "james", "richard", "thomas", "joseph", "charles", "kevin", "paul", "brian", "jeffrey", "gregory"}
     female_names = {"mary", "patricia", "jennifer", "linda", "elizabeth", "barbara", "susan", "jessica", "sarah", "karen", "dawn", "debra"}
     if first in male_names:
-        return "男", "100"
+        return "M", "100"
     if first in female_names:
-        return "女", "100"
+        return "F", "0"
     return gender or "", probability or ""
 
 

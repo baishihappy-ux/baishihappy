@@ -302,7 +302,15 @@ class EngineRunner:
             profile = PROFILES.get(task.target_source)
             source_cfg = profile.from_config(self.config) if profile else {}
             links = extract_links(response.text, source_cfg.get("detail_url_base", response.url), source_cfg)
+            if links.get("listing_page"):
+                submitted = self.enqueue_related(task, links)
+                if submitted:
+                    append_event(self.paths["state"], "listing_page_queued", task_id=task.id, phone=task.phone, detail_links=len(links["detail_links"]))
+                    return "queued"
+                return self.handle_failure(task, "listing page did not enqueue a detail task", False)
             record = extract_record(response.text, task.target_source, task.stage.value, seed_phone=task.seed_phone or task.phone, parent_phone=task.phone)
+            if not record.get("name") and not links["detail_links"] and not links["related_links"]:
+                return self.handle_failure(task, "no parseable record or links", False)
             record.update({
                 "phone": task.phone,
                 "stage": task.stage.value,
@@ -346,12 +354,16 @@ class EngineRunner:
     def enqueue_related(self, task: Task, links: dict):
         max_depth = int(self.config.get("processing", {}).get("max_depth", 1))
         if task.depth >= max_depth:
-            return
+            return 0
+        submitted = 0
         for url in links["detail_links"][:1]:
             self.scheduler.submit(Task(phone=task.phone, stage=TaskStage.PARENT, target_source=task.target_source, url=url, depth=task.depth + 1, seed_phone=task.seed_phone))
+            submitted += 1
         max_related = int(self.config.get("processing", {}).get("max_related_per_seed", 100))
         for url in links["related_links"][:max_related]:
             self.scheduler.submit(Task(phone=task.phone, stage=TaskStage.ASSOCIATE, target_source=task.target_source, url=url, depth=task.depth + 1, seed_phone=task.seed_phone))
+            submitted += 1
+        return submitted
 
     def handle_failure(self, task, reason: str, final_502: bool):
         retry_count = self.provider_router.retry_count()

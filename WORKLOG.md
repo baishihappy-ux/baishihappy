@@ -151,3 +151,11 @@ It intentionally avoids public-facing product names, target-site names, secrets,
 - Fixed runtime JSON writes to use per-file locking and atomic replacement.
 - Fixed retry scheduling so retry tasks are not skipped by an early empty-queue stop.
 - Rebuilt and replaced the current-source engine in the local validation customer package.
+
+## V9.1.2 Local Follow-up
+
+- Fixed direct script execution for the Python engine entrypoint and runtime analyzer CLI.
+- Rebuilt and replaced the customer package engine after the CLI entrypoint fix.
+- Calibrated T/P offline HTML handling: phone-search listing pages now queue detail links without writing result rows, while detail and associate pages remain exportable records.
+- Added fast local first-name gender lookup using `_gender_map.js`: returns `M/100` or `F/0` without per-record SSA count aggregation.
+- Engine packaging now bundles `_gender_map.js` under the packaged engine internal directory so every customer package carries the gender lookup data.

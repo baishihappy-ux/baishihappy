@@ -1,4 +1,10 @@
+import argparse
+import json
+import sys
 from pathlib import Path
+
+if __package__ in {None, ""}:
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from python.engine.status import run_status
 from python.utils.paths import ensure_runtime_dirs
@@ -30,3 +36,14 @@ def _line_count(path: Path) -> int:
     if not path.exists():
         return 0
     return len([line for line in path.read_text(encoding="utf-8", errors="ignore").splitlines() if line.strip()])
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description="Analyze runtime output and status.")
+    parser.add_argument("--runtime-root", "--root", dest="root", default=".")
+    args = parser.parse_args(argv)
+    print(json.dumps(analyze_run(args.root), ensure_ascii=False, indent=2))
+
+
+if __name__ == "__main__":
+    main()
