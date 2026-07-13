@@ -2,10 +2,15 @@ def _s(values):
     return "".join(chr(value) for value in values)
 
 
+_T_BASE = _s([104, 116, 116, 112, 115, 58, 47, 47, 119, 119, 119, 46, 116, 114, 117, 101, 112, 101, 111, 112, 108, 101, 115, 101, 97, 114, 99, 104, 46, 99, 111, 109])
+
+
 ENCODED_SOURCES = {
     "T": {
-        "input_url_template": _s([104, 116, 116, 112, 115, 58, 47, 47, 119, 119, 119, 46, 116, 114, 117, 101, 112, 101, 111, 112, 108, 101, 115, 101, 97, 114, 99, 104, 46, 99, 111, 109, 47, 114, 101, 115, 117, 108, 116, 112, 104, 111, 110, 101, 63, 112, 104, 111, 110, 101, 110, 111, 61, 123, 112, 104, 111, 110, 101, 95, 100, 105, 103, 105, 116, 115, 125]),
-        "detail_url_base": _s([104, 116, 116, 112, 115, 58, 47, 47, 119, 119, 119, 46, 116, 114, 117, 101, 112, 101, 111, 112, 108, 101, 115, 101, 97, 114, 99, 104, 46, 99, 111, 109]),
+        "input_url_template": _T_BASE + "/resultphone?phoneno={phone_digits}",
+        "detail_url_base": _T_BASE,
+        "entry_home_url": _T_BASE + "/",
+        "entry_removal_url": _T_BASE + "/removal",
         "search_result_detail_link_selector": "a[href*='/find/person/']",
         "related_section_selectors": [
             'a[data-link-to-more="associate"][href]',

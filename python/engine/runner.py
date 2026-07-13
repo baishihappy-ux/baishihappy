@@ -7,6 +7,7 @@ from python.auth.license import apply_license_to_config
 from python.engine.config import load_config, resolve_input_file
 from python.engine.input_pool import InputPool
 from python.engine.runtime_control import RuntimeControl
+from python.engine.t_entry_plan import TEntryPlanner
 from python.export.writers import ResultWriters
 from python.parser.html_parser import extract_links, extract_record
 from python.parser.source_profiles import PROFILES
@@ -40,6 +41,7 @@ class EngineRunner:
         self.control_signal = self.brain.generate_signal() if self.brain else None
         self.static_concurrency = int(self.config.get("processing", {}).get("thread_count") or self.config.get("runtime", {}).get("authorized_concurrency", 32) or 32)
         self.runtime_control = RuntimeControl(runtime_root(root), self.paths["state"], self.config, getattr(args, "instance_id", "") or "")
+        self.t_entry_planner = TEntryPlanner(self.config) if self.config.get("runtime", {}).get("target_source", "T") == "T" else None
         self.saved = 0
         self.failed = 0
         self.processed = 0
@@ -196,6 +198,7 @@ class EngineRunner:
 
     def status_fields(self, stats=None, alive_workers=0):
         stats = stats or self.stats_snapshot()
+        entry_plan = self.t_entry_planner.snapshot() if self.t_entry_planner else {}
         remaining = self.remaining_input_count()
         active = stats["active_workers"]
         completed = self.completed_input_count()
@@ -229,6 +232,10 @@ class EngineRunner:
             "scheduler_do_inflight_target": self.runtime_control.do_target,
             "scheduler_do_inflight_current": self.runtime_control.current_inflight(),
             "worker_state_counts": {"active": active, "idle_or_waiting": max(0, alive_workers - active)},
+            "t_entry_plan_ready": bool(entry_plan.get("ready")),
+            "t_entry_plan_nominal_removal_weight_pct": entry_plan.get("nominal_removal_weight_pct", 0.0),
+            "t_entry_plan_expected_long_run_removal_pct": entry_plan.get("expected_long_run_removal_pct", 0.0),
+            "t_entry_plan_selection_count": entry_plan.get("selection_count", 0),
         }
 
     def pool_snapshot(self):

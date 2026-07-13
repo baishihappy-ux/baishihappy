@@ -9,13 +9,17 @@ class DoProvider(BaseProvider):
     tier = ProviderTier.STABLE_API
     default_endpoint = "".join(chr(code) for code in [104, 116, 116, 112, 115, 58, 47, 47, 97, 112, 105, 46, 115, 99, 114, 97, 112, 101, 46, 100, 111, 47])
 
-    def build_provider_url(self, target_url: str) -> str:
+    def build_provider_url(self, target_url: str, session_id=0, referer="") -> str:
         provider_cfg = self.config.get("provider", {}).get("primary_provider", {})
         params = dict(provider_cfg.get("params", {}))
         token = provider_cfg.get("token") or self.config.get("provider", {}).get("token") or ""
         if token:
             params["token"] = token
         params["url"] = target_url
+        if session_id:
+            params["sessionId"] = int(session_id)
+        if referer:
+            params["extraHeaders"] = True
         endpoint = provider_cfg.get("endpoint") or self.config.get("provider", {}).get("endpoint") or self.default_endpoint
         separator = "&" if "?" in endpoint else "?"
         return endpoint + separator + urlencode(params)
@@ -24,10 +28,13 @@ class DoProvider(BaseProvider):
         target_url = task.url
         if not target_url:
             return ProviderResponse(ok=False, error="task has no url")
-        provider_url = self.build_provider_url(target_url)
+        session_id = getattr(task, "session_id", 0) or 0
+        referer = str(getattr(task, "referer", "") or "")
+        provider_url = self.build_provider_url(target_url, session_id=session_id, referer=referer)
+        request_headers = {"sd-Referer": referer} if referer else {}
         if not self.enable_network:
             html = f"<html><body data-provider='do-dry'><a href='{target_url}'>dry run</a></body></html>"
-            return ProviderResponse(ok=True, status_code=200, text=html, url=target_url, metadata={"dry_run": True, "provider_url": provider_url, "direct_stable_api": True})
+            return ProviderResponse(ok=True, status_code=200, text=html, url=target_url, metadata={"dry_run": True, "provider_url": provider_url, "request_headers": request_headers, "direct_stable_api": True})
         token = self.config.get("provider", {}).get("primary_provider", {}).get("token") or self.config.get("provider", {}).get("token") or ""
         if not token:
             return ProviderResponse(
@@ -39,7 +46,7 @@ class DoProvider(BaseProvider):
                 metadata={"provider_url": provider_url, "direct_stable_api": True},
             )
         try:
-            response = self.network_client.get(provider_url)
+            response = self.network_client.get(provider_url, headers=request_headers)
         except Exception as exc:
             return normalize_exception(exc, target_url, self.alias)
         normalized = normalize_http_response(response, target_url, self.alias)

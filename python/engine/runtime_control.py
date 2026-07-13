@@ -84,11 +84,21 @@ class RuntimeControl:
         self.status_elapsed_window = deque()
         self.stage_wait_window = deque()
         self.do_wait_window = deque()
+        self.session_last_request = {}
+        self.session_urgent_bypass_count = 0
         self.consecutive_502 = 0
         self.inflight_current = 0
         self.inflight_peak = 0
         self.do_wait_count = 0
         self.do_wait_ms = 0
+        session_idle_ttl_ms = int(self.processing.get("smart_session_stage_mixer_session_idle_ttl_ms", 300000) or 300000)
+        urgent_remaining_ms = int(self.processing.get("smart_session_stage_mixer_session_urgent_remaining_ms", 80000) or 80000)
+        self.session_idle_ttl_seconds = max(1.0, session_idle_ttl_ms / 1000.0)
+        self.session_urgent_remaining_seconds = max(0.0, urgent_remaining_ms / 1000.0)
+        self.session_urgent_idle_seconds = max(
+            0.0,
+            self.session_idle_ttl_seconds - self.session_urgent_remaining_seconds,
+        )
         self.request_count_total = 0
         self.error_502_count = 0
         self.timeout_count = 0
@@ -142,7 +152,7 @@ class RuntimeControl:
         append_event(self.state_dir, "run_resumed")
         return True
 
-    def wait_for_release(self, stage: TaskStage):
+    def wait_for_release(self, stage: TaskStage, session_id=0):
         self.wait_if_paused()
         started_wait = time.time()
         while True:
@@ -150,11 +160,27 @@ class RuntimeControl:
                 if self.circuit_open:
                     return False
                 self._trim_windows_locked()
-                delay = max(self._stage_delay_locked(stage), self._inflight_delay_locked())
+                stage_limit = self._stage_per_min(stage)
+                urgent = self._session_urgent_locked(session_id, time.time())
+                stage_delay = self._stage_delay_locked(stage, urgent=urgent)
+                delay = max(stage_delay, self._inflight_delay_locked())
                 if delay <= 0:
+                    urgent_bypass = bool(urgent and stage_limit > 0 and len(self.stage_releases[stage]) >= stage_limit)
                     self.stage_releases[stage].append(time.time())
                     self.inflight_current += 1
                     self.inflight_peak = max(self.inflight_peak, self.inflight_current)
+                    if session_id:
+                        self.session_last_request[int(session_id)] = time.time()
+                    if urgent_bypass:
+                        self.session_urgent_bypass_count += 1
+                        append_event(
+                            self.state_dir,
+                            "stage_mixer_urgent_bypass",
+                            stage=stage.value,
+                            session_id=int(session_id),
+                            stage_limit_per_min=stage_limit,
+                            stage_starts_in_window=len(self.stage_releases[stage]),
+                        )
                     self._write_gate_status_locked(stage)
                     break
                 self.gate_changed.wait(timeout=min(delay, 0.5))
@@ -248,6 +274,11 @@ class RuntimeControl:
                 "provider_elapsed_p95_ms": _p95(elapsed_values),
                 "provider_stage_wait_avg_ms": int(_avg(stage_wait_values) * 1000),
                 "provider_do_wait_avg_ms": int(_avg(do_wait_values) * 1000),
+                "session_urgent_bypass_count": self.session_urgent_bypass_count,
+                "session_urgent_active_count": sum(
+                    1 for session_id, last_request in self.session_last_request.items()
+                    if self._session_urgent_locked(session_id, now)
+                ),
                 "provider_outbound_elapsed_avg_ms": _avg(elapsed_values),
                 "provider_warmup_elapsed_avg_ms": 0,
                 "provider_resultphone_elapsed_avg_ms": _avg(elapsed_values),
@@ -302,7 +333,7 @@ class RuntimeControl:
             self.gear = "BRAKE"
             append_event(self.state_dir, "scheduler_brake", failure_density=density, old_target=old_target, do_inflight_target=self.do_target)
 
-    def _stage_delay_locked(self, stage: TaskStage):
+    def _stage_delay_locked(self, stage: TaskStage, urgent=False):
         per_min = self._stage_per_min(stage)
         if per_min <= 0:
             return 0.0
@@ -310,9 +341,22 @@ class RuntimeControl:
         now = time.time()
         while window and now - window[0] >= 60.0:
             window.popleft()
-        if len(window) < per_min:
+        if len(window) < per_min or urgent:
             return 0.0
         return max(0.0, 60.0 - (now - window[0]))
+
+    def _session_urgent_locked(self, session_id, now=None):
+        try:
+            session_id = int(session_id or 0)
+        except (TypeError, ValueError):
+            return False
+        if session_id <= 0:
+            return False
+        last_request = self.session_last_request.get(session_id)
+        if last_request is None:
+            return False
+        now = time.time() if now is None else now
+        return now - last_request >= self.session_urgent_idle_seconds
 
     def _sleep_release_jitter(self):
         jitter_min = int(self.processing.get("smart_session_stage_mixer_release_jitter_min_ms", 0) or 0)

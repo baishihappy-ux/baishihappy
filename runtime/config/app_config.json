@@ -45,7 +45,7 @@
                        "export_min_depth":  1,
                        "thread_count":  0,
                        "queue_poll_seconds":  0.2,
-                       "smart_session_warm_pool_enabled":  true,
+                       "smart_session_warm_pool_enabled":  false,
                        "smart_session_warm_pool_min_target":  0,
                        "smart_session_warm_pool_initial_target":  0,
                        "smart_session_warm_pool_max_target":  0,
@@ -68,7 +68,8 @@
                        "smart_session_stage_mixer_session_idle_ttl_ms":  300000,
                        "smart_session_stage_mixer_session_urgent_remaining_ms":  80000,
                        "smart_session_stage_mixer_release_jitter_min_ms":  180,
-                       "smart_session_stage_mixer_release_jitter_max_ms":  500
+                       "smart_session_stage_mixer_release_jitter_max_ms":  500,
+                       "smart_session_t_entry_removal_weight_pct":  10.0
                    },
     "output":  {
                    "formats":  [

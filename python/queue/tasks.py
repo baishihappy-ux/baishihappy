@@ -23,6 +23,12 @@ class Task:
     line_number: int = 0
     source_bucket: str = ""
     source_name: str = ""
+    session_id: int = 0
+    chain_id: str = ""
+    referer: str = ""
+    entry_referer_key: str = ""
+    entry_kind: str = ""
+    remaining_associate_urls: list = field(default_factory=list)
     id: str = field(default_factory=lambda: uuid.uuid4().hex)
     attempts: int = 0
     not_before: float = 0.0

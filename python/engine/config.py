@@ -18,8 +18,18 @@ DEFAULT_CONFIG = {
             "session_pool": {"enabled": True, "pool_size": 10, "reuse_seconds": 3600},
         },
     },
-    "sources": {},
-    "processing": {"max_depth": 1, "max_total_records": 0, "queue_poll_seconds": 0.2, "thread_count": 0},
+    "sources": {
+        "source_t": {"encoded_key": "T"},
+        "source_f": {"encoded_key": "F"},
+        "source_p": {"encoded_key": "P"},
+    },
+    "processing": {
+        "max_depth": 1,
+        "max_total_records": 0,
+        "queue_poll_seconds": 0.2,
+        "thread_count": 0,
+        "smart_session_t_entry_removal_weight_pct": 5.0,
+    },
     "output": {
         "formats": ["csv", "txt"],
         "csv_file": "output/results.csv",

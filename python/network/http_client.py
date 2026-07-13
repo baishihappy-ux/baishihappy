@@ -13,7 +13,9 @@ class HttpClient:
         self.proxies = {"http": proxy, "https": proxy} if proxy else None
         self.verify = bool(network.get("verify_ssl", True))
 
-    def get(self, url: str):
+    def get(self, url: str, headers=None):
         if requests is None:
             raise RuntimeError("requests is required for live network mode")
-        return requests.get(url, timeout=self.timeout, headers=self.headers, proxies=self.proxies, verify=self.verify)
+        request_headers = dict(self.headers or {})
+        request_headers.update(dict(headers or {}))
+        return requests.get(url, timeout=self.timeout, headers=request_headers, proxies=self.proxies, verify=self.verify)
