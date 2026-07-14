@@ -431,10 +431,15 @@ class EngineRunner:
         if not self.input_pool or not self.session_lanes:
             return False
         lane = self.session_lanes.by_session_id(task.session_id)
-        if not lane or lane.reuse_pattern.exhausted:
+        if not lane:
+            return False
+        if lane.reuse_pattern.exhausted:
+            self.session_lanes.mark_dead(lane, "reuse pattern exhausted")
+            self._queue_replacement_entry()
             return False
         item = self.input_pool.claim_next_item()
         if not item:
+            self.session_lanes.mark_dead(lane, "no remaining input")
             return False
         kind = lane.reuse_pattern.next_kind()
         self.scheduler.submit(Task(phone=item["phone"], stage=TaskStage.RESULTPHONE, target_source="T",
@@ -443,6 +448,13 @@ class EngineRunner:
             session_id=task.session_id, chain_id=task.chain_id, referer=last_url,
             reuse_kind=kind, last_success_url=last_url,
             not_before=time.time() + self._delay("smart_session_cooldown_next_parent_min_ms", "smart_session_cooldown_next_parent_max_ms")))
+        return True
+
+    def _queue_replacement_entry(self):
+        if not self.input_pool or self.input_pool.remaining_count() <= 0:
+            return False
+        self.scheduler.submit(Task(phone="", stage=TaskStage.ENTRY, target_source="T",
+                                   is_session_bootstrap=True, terminal_on_success=False))
         return True
 
     def handle_failure(self, task, reason: str, final_502: bool):
@@ -458,6 +470,7 @@ class EngineRunner:
         else:
             if final_502 and self.session_lanes and task.session_id:
                 self.session_lanes.mark_dead_by_session(task.session_id, "final 502 after retries")
+                self._queue_replacement_entry()
             with self.stats_lock:
                 self.failed += 1
             self.writers.write_failure(task, reason, final_502=final_502)

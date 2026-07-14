@@ -55,7 +55,7 @@ class InputPool:
         if self.target_source == "T":
             lane_count = int(self.config.get("processing", {}).get("smart_session_session_lane_max", 32) or 32)
             for _ in range(min(max(1, lane_count), len(self.items))):
-                scheduler.submit(Task(stage=TaskStage.ENTRY, target_source="T", is_session_bootstrap=True, terminal_on_success=False))
+                scheduler.submit(Task(phone="", stage=TaskStage.ENTRY, target_source="T", is_session_bootstrap=True, terminal_on_success=False))
                 count += 1
             self.write_all_state()
             return count

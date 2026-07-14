@@ -15,6 +15,9 @@ class FakeInputPool:
         self.claim_count += 1
         return self.items.pop(0) if self.items else None
 
+    def remaining_count(self):
+        return len(self.items)
+
 
 class FakeScheduler:
     def __init__(self):
@@ -65,6 +68,19 @@ class T1ReuseDispatchTests(unittest.TestCase):
 
         self.assertFalse(runner._schedule_next_lane_phone(current, "https://target.invalid/resultphone/last"))
         self.assertEqual(0, runner.input_pool.claim_count)
+        self.assertEqual(1, len(runner.scheduler.tasks))
+        replacement = runner.scheduler.tasks[0]
+        self.assertEqual(TaskStage.ENTRY, replacement.stage)
+        self.assertTrue(replacement.is_session_bootstrap)
+
+    def test_no_replacement_entry_when_input_is_empty(self):
+        runner, lane = make_runner("ABB", [])
+        for _ in range(3):
+            lane.reuse_pattern.next_kind()
+        current = Task(phone="2025550105", stage=TaskStage.RESULTPHONE, target_source="T",
+                       session_id=lane.session_id, chain_id=lane.chain_id, reuse_kind="B")
+
+        self.assertFalse(runner._schedule_next_lane_phone(current, "https://target.invalid/resultphone/last"))
         self.assertEqual([], runner.scheduler.tasks)
 
 
