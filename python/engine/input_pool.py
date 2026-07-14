@@ -31,6 +31,7 @@ class InputPool:
         self.claimed = {}
         self.completed = set()
         self.recovered_502 = set()
+        self.recycled_502 = set()
         self.failed = set()
         self.cursor_by_source = {"A": 0, "B": 0, self.target_source: 0}
         self.sources = []
@@ -113,6 +114,10 @@ class InputPool:
     def mark_recovered_502(self, task):
         self._mark_terminal(task, self.recovered_502, remove_from=(self.failed,))
 
+    def mark_recycled_502(self, task):
+        """Search-only 502: preserve outside the source pool for later recovery."""
+        self._mark_terminal(task, self.recycled_502, remove_from=(self.failed, self.recovered_502))
+
     def mark_failed(self, task):
         self._mark_terminal(task, self.failed)
 
@@ -124,7 +129,7 @@ class InputPool:
         return {item["key"] for item in self.items}
 
     def terminal_keys(self):
-        return self.completed | self.recovered_502 | self.failed
+        return self.completed | self.recovered_502 | self.recycled_502 | self.failed
 
     def terminal_count(self):
         return len(self.terminal_keys())
@@ -159,6 +164,8 @@ class InputPool:
             "recovered_502_count": len(self.recovered_502),
             "recovered_502_phones": sorted(self._phones_for_keys(self.recovered_502)),
             "recovered_502_keys": sorted(self.recovered_502),
+            "recycled_502_count": len(self.recycled_502),
+            "recycled_502_keys": sorted(self.recycled_502),
             "failed_count": len(self.failed),
             "failed_phones": sorted(self._phones_for_keys(self.failed)),
             "failed_keys": sorted(self.failed),
@@ -269,6 +276,7 @@ class InputPool:
             return
         self.completed = self._keys_from_state(state, "completed")
         self.recovered_502 = self._keys_from_state(state, "recovered_502")
+        self.recycled_502 = self._keys_from_state(state, "recycled_502")
         self.failed = self._keys_from_state(state, "failed")
 
     def _load_claims(self):

@@ -159,10 +159,12 @@ class EngineRunner:
             self.mark_worker_active(1)
             try:
                 outcome = self.process_task(task)
-                if outcome in {"success", "failed", "final_502_recovered"}:
+                if outcome in {"success", "failed", "final_502_recovered", "final_502_recycled"}:
                     self.complete_work()
                 if self.input_pool and outcome == "success":
                     self.input_pool.mark_completed(task)
+                elif self.input_pool and outcome == "final_502_recycled":
+                    self.input_pool.mark_recycled_502(task)
                 elif self.input_pool and outcome == "final_502_recovered":
                     self.input_pool.mark_recovered_502(task)
                 elif self.input_pool and outcome == "failed":
@@ -433,6 +435,8 @@ class EngineRunner:
             self.writers.write_failure(task, reason, final_502=final_502)
             event_name = "task_final_502_recovered" if final_502 else "task_failed"
             append_event(self.paths["state"], event_name, task_id=task.id, phone=task.phone, reason=reason)
+            if final_502 and task.stage == TaskStage.RESULTPHONE:
+                return "final_502_recycled"
             return "final_502_recovered" if final_502 else "failed"
 
     def refresh_control(self, active_workers=0):
