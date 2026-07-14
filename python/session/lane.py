@@ -157,6 +157,10 @@ class SessionLaneManager:
                 "idle_ttl_seconds": self.idle_ttl_seconds,
             }
 
+    def by_session_id(self, session_id):
+        with self.lock:
+            return next((lane for lane in self.lanes.values() if lane.session_id == int(session_id)), None)
+
     def _require_live(self, lane):
         if lane is None or lane.lane_id not in self.lanes:
             raise KeyError("unknown session lane")

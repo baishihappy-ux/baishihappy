@@ -341,6 +341,10 @@ class EngineRunner:
                     reuse_kind=reuse_kind, last_success_url=response.url,
                     not_before=time.time() + delay, terminal_on_success=True))
                 return "queued"
+            if task.stage == TaskStage.RESULTPHONE and task.reuse_kind == "B":
+                # Search-only slot: deliberately do not follow detail/associate links.
+                self._schedule_next_lane_phone(task, response.url)
+                return "success"
             profile = PROFILES.get(task.target_source)
             source_cfg = profile.from_config(self.config) if profile else {}
             links = extract_links(response.text, source_cfg.get("detail_url_base", response.url), source_cfg)
@@ -420,6 +424,24 @@ class EngineRunner:
         cfg = self.config.get("processing", {})
         low, high = int(cfg.get(low_key, 0) or 0), int(cfg.get(high_key, 0) or 0)
         return random.randint(min(low, high), max(low, high)) / 1000.0
+
+    def _schedule_next_lane_phone(self, task, last_url):
+        if not self.input_pool or not self.session_lanes:
+            return False
+        lane = self.session_lanes.by_session_id(task.session_id)
+        if not lane or lane.reuse_pattern.exhausted:
+            return False
+        item = self.input_pool.claim_next_item()
+        if not item:
+            return False
+        kind = lane.reuse_pattern.next_kind()
+        self.scheduler.submit(Task(phone=item["phone"], stage=TaskStage.RESULTPHONE, target_source="T",
+            url=build_entry_url(self.config, "T", item["phone"]), seed_phone=item["phone"],
+            line_number=item["line_number"], source_bucket=item["source"], source_name=item["source_name"],
+            session_id=task.session_id, chain_id=task.chain_id, referer=last_url,
+            reuse_kind=kind, last_success_url=last_url,
+            not_before=time.time() + self._delay("smart_session_cooldown_next_parent_min_ms", "smart_session_cooldown_next_parent_max_ms")))
+        return True
 
     def handle_failure(self, task, reason: str, final_502: bool):
         retry_count = int(self.config.get("processing", {}).get("smart_session_502_retry_count", 2) or 2) if final_502 else self.provider_router.retry_count()
