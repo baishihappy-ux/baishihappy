@@ -39,7 +39,7 @@
                                  }
                 },
     "processing":  {
-                       "max_depth":  1,
+                       "max_depth":  2,
                        "max_related_per_seed":  100,
                        "max_total_records":  0,
                        "export_min_depth":  1,
@@ -69,7 +69,19 @@
                        "smart_session_stage_mixer_session_urgent_remaining_ms":  80000,
                        "smart_session_stage_mixer_release_jitter_min_ms":  180,
                        "smart_session_stage_mixer_release_jitter_max_ms":  500,
-                       "smart_session_t_entry_removal_weight_pct":  10.0
+                       "smart_session_t_entry_removal_weight_pct":  10.0,
+                       "smart_session_session_lane_max":  32,
+                       "smart_session_502_retry_count":  2,
+                       "smart_session_cooldown_entry_result_min_ms":  4000,
+                       "smart_session_cooldown_entry_result_max_ms":  7000,
+                       "smart_session_cooldown_result_parent_min_ms":  2000,
+                       "smart_session_cooldown_result_parent_max_ms":  4000,
+                       "smart_session_cooldown_parent_associate_min_ms":  7000,
+                       "smart_session_cooldown_parent_associate_max_ms":  13000,
+                       "smart_session_cooldown_between_associates_min_ms":  4500,
+                       "smart_session_cooldown_between_associates_max_ms":  10000,
+                       "smart_session_cooldown_next_parent_min_ms":  15000,
+                       "smart_session_cooldown_next_parent_max_ms":  30000
                    },
     "output":  {
                    "formats":  [
