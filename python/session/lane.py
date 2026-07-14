@@ -161,6 +161,12 @@ class SessionLaneManager:
         with self.lock:
             return next((lane for lane in self.lanes.values() if lane.session_id == int(session_id)), None)
 
+    def mark_dead_by_session(self, session_id, reason=""):
+        lane = self.by_session_id(session_id)
+        if lane:
+            self.mark_dead(lane, reason)
+        return lane
+
     def _require_live(self, lane):
         if lane is None or lane.lane_id not in self.lanes:
             raise KeyError("unknown session lane")

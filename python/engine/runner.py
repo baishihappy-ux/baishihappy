@@ -383,6 +383,8 @@ class EngineRunner:
             if self.session_pool_enabled:
                 with self.session_lock:
                     self.pool.release(session, ok=True, chain_ok=True)
+            if not submitted and task.stage in {TaskStage.PARENT, TaskStage.ASSOCIATE}:
+                self._schedule_next_lane_phone(task, task.url or task.referer)
             return "queued" if submitted else "success"
         except Exception as exc:
             self.provider_router.record_result(provider_alias, type("Response", (), {"ok": False, "status_code": 0})())
@@ -454,6 +456,8 @@ class EngineRunner:
             append_event(self.paths["state"], "task_retried", task_id=task.id, phone=task.phone, reason=reason, status="502" if final_502 else "")
             return "retry"
         else:
+            if final_502 and self.session_lanes and task.session_id:
+                self.session_lanes.mark_dead_by_session(task.session_id, "final 502 after retries")
             with self.stats_lock:
                 self.failed += 1
             self.writers.write_failure(task, reason, final_502=final_502)
