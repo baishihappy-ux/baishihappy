@@ -40,6 +40,7 @@ DEFAULT_CONFIG = {
         "smart_session_cooldown_between_associates_max_ms": 10000,
         "smart_session_cooldown_next_parent_min_ms": 15000,
         "smart_session_cooldown_next_parent_max_ms": 30000,
+        "smart_session_502_retry_count": 2,
     },
     "output": {
         "formats": ["csv", "txt"],

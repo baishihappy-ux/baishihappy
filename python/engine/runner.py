@@ -418,7 +418,7 @@ class EngineRunner:
         return random.randint(min(low, high), max(low, high)) / 1000.0
 
     def handle_failure(self, task, reason: str, final_502: bool):
-        retry_count = self.provider_router.retry_count()
+        retry_count = int(self.config.get("processing", {}).get("smart_session_502_retry_count", 2) or 2) if final_502 else self.provider_router.retry_count()
         if task.attempts < retry_count:
             task.attempts += 1
             self.writers.write_retry_failure(task, reason, task.attempts)

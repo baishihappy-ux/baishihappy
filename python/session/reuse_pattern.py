@@ -23,6 +23,7 @@ class SessionReusePattern:
         return self.index
 
     def next_kind(self):
+        """Claim the next mode only when a new parent phone is actually needed."""
         if self.exhausted:
             return None
         kind = self.pattern[self.index]
