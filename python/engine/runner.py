@@ -332,11 +332,13 @@ class EngineRunner:
                     self.session_lanes.mark_dead(lane, "no input")
                     return "success"
                 delay = self._delay("smart_session_cooldown_entry_result_min_ms", "smart_session_cooldown_entry_result_max_ms")
+                reuse_kind = lane.reuse_pattern.next_kind()
                 self.scheduler.submit(Task(
                     phone=item["phone"], stage=TaskStage.RESULTPHONE, target_source="T",
                     url=build_entry_url(self.config, "T", item["phone"]), seed_phone=item["phone"],
                     line_number=item["line_number"], source_bucket=item["source"], source_name=item["source_name"],
                     session_id=task.session_id, chain_id=task.chain_id, referer=response.url,
+                    reuse_kind=reuse_kind, last_success_url=response.url,
                     not_before=time.time() + delay, terminal_on_success=True))
                 return "queued"
             profile = PROFILES.get(task.target_source)

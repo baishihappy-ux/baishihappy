@@ -28,6 +28,8 @@ class Task:
     referer: str = ""
     entry_referer_key: str = ""
     entry_kind: str = ""
+    reuse_kind: str = ""
+    last_success_url: str = ""
     remaining_associate_urls: list = field(default_factory=list)
     is_session_bootstrap: bool = False
     terminal_on_success: bool = True

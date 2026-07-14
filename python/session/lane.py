@@ -4,6 +4,7 @@ import time
 import uuid
 from dataclasses import dataclass, field
 from enum import Enum
+from python.session.reuse_pattern import SessionReusePattern
 
 
 SESSION_ID_MAX = 1_000_000
@@ -54,6 +55,8 @@ class SessionLane:
     next_ready_at: float = 0.0
     last_stage: str = ""
     parent_count: int = 0
+    reuse_pattern: SessionReusePattern = field(default_factory=SessionReusePattern, repr=False)
+    last_success_url: str = ""
 
 
 class SessionLaneManager:
