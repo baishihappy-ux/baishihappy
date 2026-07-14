@@ -1,5 +1,6 @@
 import time
 import threading
+import random
 from pathlib import Path
 
 from python.control.brain import FeedbackLoopEngine
@@ -10,11 +11,12 @@ from python.engine.runtime_control import RuntimeControl
 from python.engine.t_entry_plan import TEntryPlanner
 from python.export.writers import ResultWriters
 from python.parser.html_parser import extract_links, extract_record
-from python.parser.source_profiles import PROFILES
+from python.parser.source_profiles import PROFILES, build_entry_url
 from python.providers.provider_manager import ProviderManager
 from python.queue.scheduler import StageScheduler
 from python.queue.tasks import Task, TaskStage
 from python.session.pool import SessionPool
+from python.session.lane import SessionLaneManager
 from python.utils.paths import ensure_runtime_dirs, runtime_root
 from python.utils.runtime_state import append_event, update_status, write_json
 
@@ -42,6 +44,12 @@ class EngineRunner:
         self.static_concurrency = int(self.config.get("processing", {}).get("thread_count") or self.config.get("runtime", {}).get("authorized_concurrency", 32) or 32)
         self.runtime_control = RuntimeControl(runtime_root(root), self.paths["state"], self.config, getattr(args, "instance_id", "") or "")
         self.t_entry_planner = TEntryPlanner(self.config) if self.config.get("runtime", {}).get("target_source", "T") == "T" else None
+        proc = self.config.get("processing", {})
+        self.session_lanes = SessionLaneManager(
+            max_lanes=int(proc.get("smart_session_session_lane_max", 32) or 32),
+            idle_ttl_ms=int(proc.get("session_idle_ttl_ms", 300000) or 300000),
+            urgent_remaining_ms=int(proc.get("session_urgent_remaining_ms", 80000) or 80000),
+        ) if self.t_entry_planner else None
         self.saved = 0
         self.failed = 0
         self.processed = 0
@@ -145,7 +153,7 @@ class EngineRunner:
                 continue
             if self.input_pool:
                 self.input_pool.mark_claimed(task)
-            if not self.runtime_control.wait_for_release(task.stage):
+            if not self.runtime_control.wait_for_release(task.stage, session_id=task.session_id):
                 self.unreserve_work(max_total)
                 return
             self.mark_worker_active(1)
@@ -259,6 +267,15 @@ class EngineRunner:
         return self.input_pool.remaining_count()
 
     def process_task(self, task: Task):
+        if task.is_session_bootstrap and task.stage == TaskStage.ENTRY:
+            if not self.session_lanes:
+                return self.handle_failure(task, "T session lanes unavailable", False)
+            lane = self.session_lanes.create()
+            task.session_id, task.chain_id = lane.session_id, lane.chain_id
+            plan = self.t_entry_planner.choose()
+            task.url, task.referer = plan.entry_url, plan.referer
+            task.entry_referer_key, task.entry_kind = plan.referer_key, plan.kind
+            self.session_lanes.begin_entry(lane)
         with self.control_lock:
             control_signal = self.control_signal
         if control_signal and task.depth > control_signal.chain_length_limit:
@@ -306,6 +323,20 @@ class EngineRunner:
                         with self.session_lock:
                             self.pool.release(session, ok=False, fatal=response.status_code in {401, 403}, chain_ok=chain_ok)
                     return outcome
+            if task.is_session_bootstrap:
+                self.session_lanes.entry_succeeded(lane)
+                item = self.input_pool.claim_next_item() if self.input_pool else None
+                if not item:
+                    self.session_lanes.mark_dead(lane, "no input")
+                    return "success"
+                delay = self._delay("smart_session_cooldown_entry_result_min_ms", "smart_session_cooldown_entry_result_max_ms")
+                self.scheduler.submit(Task(
+                    phone=item["phone"], stage=TaskStage.RESULTPHONE, target_source="T",
+                    url=build_entry_url(self.config, "T", item["phone"]), seed_phone=item["phone"],
+                    line_number=item["line_number"], source_bucket=item["source"], source_name=item["source_name"],
+                    session_id=task.session_id, chain_id=task.chain_id, referer=response.url,
+                    not_before=time.time() + delay, terminal_on_success=True))
+                return "queued"
             profile = PROFILES.get(task.target_source)
             source_cfg = profile.from_config(self.config) if profile else {}
             links = extract_links(response.text, source_cfg.get("detail_url_base", response.url), source_cfg)
@@ -326,15 +357,15 @@ class EngineRunner:
                 "detail_links": len(links["detail_links"]),
                 "related_links": len(links["related_links"]),
                 "provider": provider_alias,
-                "session_id": session.id if session else "",
-                "chain_id": session.chain_id if session else "",
+                "session_id": task.session_id or (session.id if session else ""),
+                "chain_id": task.chain_id or (session.chain_id if session else ""),
                 "ts": int(time.time()),
             })
             self.writers.write_result(record)
             with self.stats_lock:
                 self.saved += 1
             self.runtime_control.record_save()
-            self.enqueue_related(task, links)
+            submitted = self.enqueue_related(task, links)
             if self.brain:
                 with self.control_lock:
                     self.brain.record("task_success", provider=provider_alias, phone=task.phone)
@@ -344,7 +375,7 @@ class EngineRunner:
             if self.session_pool_enabled:
                 with self.session_lock:
                     self.pool.release(session, ok=True, chain_ok=True)
-            return "success"
+            return "queued" if submitted else "success"
         except Exception as exc:
             self.provider_router.record_result(provider_alias, type("Response", (), {"ok": False, "status_code": 0})())
             self.runtime_control.record_request(0, False)
@@ -363,14 +394,28 @@ class EngineRunner:
         if task.depth >= max_depth:
             return 0
         submitted = 0
-        for url in links["detail_links"][:1]:
-            self.scheduler.submit(Task(phone=task.phone, stage=TaskStage.PARENT, target_source=task.target_source, url=url, depth=task.depth + 1, seed_phone=task.seed_phone))
-            submitted += 1
-        max_related = int(self.config.get("processing", {}).get("max_related_per_seed", 100))
-        for url in links["related_links"][:max_related]:
-            self.scheduler.submit(Task(phone=task.phone, stage=TaskStage.ASSOCIATE, target_source=task.target_source, url=url, depth=task.depth + 1, seed_phone=task.seed_phone))
-            submitted += 1
+        common = dict(phone=task.phone, target_source=task.target_source, depth=task.depth + 1,
+                      seed_phone=task.seed_phone, session_id=task.session_id, chain_id=task.chain_id)
+        if task.stage == TaskStage.RESULTPHONE and links["detail_links"]:
+            self.scheduler.submit(Task(stage=TaskStage.PARENT, url=links["detail_links"][0], referer=task.url,
+                                        not_before=time.time() + self._delay("smart_session_cooldown_result_parent_min_ms", "smart_session_cooldown_result_parent_max_ms"), **common))
+            return 1
+        if task.stage == TaskStage.PARENT and links["related_links"]:
+            urls = links["related_links"][:int(self.config.get("processing", {}).get("max_related_per_seed", 100))]
+            self.scheduler.submit(Task(stage=TaskStage.ASSOCIATE, url=urls[0], referer=task.url,
+                                        remaining_associate_urls=urls[1:], not_before=time.time() + self._delay("smart_session_cooldown_parent_associate_min_ms", "smart_session_cooldown_parent_associate_max_ms"), **common))
+            return 1
+        if task.stage == TaskStage.ASSOCIATE and task.remaining_associate_urls:
+            urls = task.remaining_associate_urls
+            self.scheduler.submit(Task(stage=TaskStage.ASSOCIATE, url=urls[0], referer=task.referer,
+                                        remaining_associate_urls=urls[1:], not_before=time.time() + self._delay("smart_session_cooldown_between_associates_min_ms", "smart_session_cooldown_between_associates_max_ms"), **common))
+            return 1
         return submitted
+
+    def _delay(self, low_key, high_key):
+        cfg = self.config.get("processing", {})
+        low, high = int(cfg.get(low_key, 0) or 0), int(cfg.get(high_key, 0) or 0)
+        return random.randint(min(low, high), max(low, high)) / 1000.0
 
     def handle_failure(self, task, reason: str, final_502: bool):
         retry_count = self.provider_router.retry_count()

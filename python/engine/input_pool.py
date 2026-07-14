@@ -1,4 +1,5 @@
 import time
+import threading
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -33,6 +34,8 @@ class InputPool:
         self.failed = set()
         self.cursor_by_source = {"A": 0, "B": 0, self.target_source: 0}
         self.sources = []
+        self.lock = threading.RLock()
+        self.reserved_keys = set()
 
     def load(self):
         self.sources = self._discover_sources()
@@ -48,6 +51,13 @@ class InputPool:
 
     def seed_scheduler(self, scheduler):
         count = 0
+        if self.target_source == "T":
+            lane_count = int(self.config.get("processing", {}).get("smart_session_session_lane_max", 32) or 32)
+            for _ in range(min(max(1, lane_count), len(self.items))):
+                scheduler.submit(Task(stage=TaskStage.ENTRY, target_source="T", is_session_bootstrap=True, terminal_on_success=False))
+                count += 1
+            self.write_all_state()
+            return count
         for item in self.items:
             if item["key"] in self.terminal_keys():
                 continue
@@ -86,6 +96,16 @@ class InputPool:
         }
         self.write_claims()
         self.write_dual_pending()
+
+    def claim_next_item(self):
+        with self.lock:
+            terminal = self.terminal_keys()
+            for item in self.items:
+                if item["key"] in terminal or item["key"] in self.reserved_keys or item["key"] in self.claimed:
+                    continue
+                self.reserved_keys.add(item["key"])
+                return dict(item)
+            return None
 
     def mark_completed(self, task):
         self._mark_terminal(task, self.completed, remove_from=(self.recovered_502, self.failed))
@@ -275,6 +295,7 @@ class InputPool:
         if key not in self.item_keys():
             return
         target_set.add(key)
+        self.reserved_keys.discard(key)
         for other in remove_from:
             other.discard(key)
         self.claimed.pop(key, None)

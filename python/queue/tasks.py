@@ -29,6 +29,8 @@ class Task:
     entry_referer_key: str = ""
     entry_kind: str = ""
     remaining_associate_urls: list = field(default_factory=list)
+    is_session_bootstrap: bool = False
+    terminal_on_success: bool = True
     id: str = field(default_factory=lambda: uuid.uuid4().hex)
     attempts: int = 0
     not_before: float = 0.0
