@@ -26,6 +26,7 @@ class InputPool:
         self.dual_cursor_path = state_dir / "t_dual_input_cursor.json"
         self.dual_pending_path = state_dir / "t_dual_input_pending.json"
         self.dual_summary_path = state_dir / "t_dual_input_summary.json"
+        self.recycled_502_path = state_dir / "t_recycled_502.json"
         self.items = []
         self.phones = []
         self.claimed = {}
@@ -153,6 +154,7 @@ class InputPool:
         self.write_dual_cursor()
         self.write_dual_pending()
         self.write_dual_summary()
+        self.write_recycled_502()
 
     def write_cursor(self):
         write_json(self.cursor_path, {
@@ -233,6 +235,15 @@ class InputPool:
             "b_remaining": self._source_remaining("B"),
             "total_available": self.remaining_count(),
             "last_finished": self._last_finished_phone(),
+        })
+
+    def write_recycled_502(self):
+        write_json(self.recycled_502_path, {
+            "updated_at": _iso_now(local=False),
+            "count": len(self.recycled_502),
+            "keys": sorted(self.recycled_502),
+            "phones": sorted(self._phones_for_keys(self.recycled_502)),
+            "policy": "search_page_final_502_not_consumed",
         })
 
     def _discover_sources(self):
