@@ -29,7 +29,7 @@ DEFAULT_CONFIG = {
         "queue_poll_seconds": 0.2,
         "thread_count": 0,
         "smart_session_t_entry_removal_weight_pct": 5.0,
-        "smart_session_session_lane_max": 32,
+        "smart_session_session_lane_max": 160,
         "smart_session_cooldown_entry_result_min_ms": 4000,
         "smart_session_cooldown_entry_result_max_ms": 7000,
         "smart_session_cooldown_result_parent_min_ms": 2000,
@@ -50,7 +50,13 @@ DEFAULT_CONFIG = {
         "final_502_discarded_file": "output/final_502_discarded.txt",
     },
     "license": {"license_file": "license.dat", "valid_days": 30},
-    "runtime": {"smart_session_enabled": True, "target_source": "T", "customer_mode": True},
+    "runtime": {
+        "smart_session_enabled": True,
+        "target_source": "T",
+        "customer_mode": True,
+        "do_inflight_target": 32,
+        "do_inflight_hard_limit": 32,
+    },
     "logging": {},
 }
 

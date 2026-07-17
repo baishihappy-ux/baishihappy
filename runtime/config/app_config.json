@@ -70,7 +70,7 @@
                        "smart_session_stage_mixer_release_jitter_min_ms":  180,
                        "smart_session_stage_mixer_release_jitter_max_ms":  500,
                        "smart_session_t_entry_removal_weight_pct":  10.0,
-                       "smart_session_session_lane_max":  32,
+                       "smart_session_session_lane_max":  160,
                        "smart_session_502_retry_count":  2,
                        "smart_session_cooldown_entry_result_min_ms":  4000,
                        "smart_session_cooldown_entry_result_max_ms":  7000,
@@ -108,7 +108,9 @@
                     "dev_evidence":  false,
                     "plain_record_logging":  false,
                     "diagnostic_mode":  false,
-                    "target_source":  "T"
+                    "target_source":  "T",
+                    "do_inflight_target":  32,
+                    "do_inflight_hard_limit":  32
                 },
     "logging":  {
                     "diagnostic_events_enabled":  false,

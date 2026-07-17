@@ -54,7 +54,7 @@ class InputPool:
     def seed_scheduler(self, scheduler):
         count = 0
         if self.target_source == "T":
-            lane_count = int(self.config.get("processing", {}).get("smart_session_session_lane_max", 32) or 32)
+            lane_count = int(self.config.get("processing", {}).get("smart_session_session_lane_max", 160) or 160)
             for _ in range(min(max(1, lane_count), len(self.items))):
                 scheduler.submit(Task(phone="", stage=TaskStage.ENTRY, target_source="T", is_session_bootstrap=True, terminal_on_success=False))
                 count += 1

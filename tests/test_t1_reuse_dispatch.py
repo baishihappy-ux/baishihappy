@@ -42,6 +42,37 @@ def make_runner(pattern, items):
 
 
 class T1ReuseDispatchTests(unittest.TestCase):
+    def test_associate_siblings_keep_depth_identity_and_parent_referer(self):
+        runner = EngineRunner.__new__(EngineRunner)
+        runner.config = {"processing": {"max_depth": 2, "max_related_per_seed": 10,
+            "smart_session_cooldown_parent_associate_min_ms": 0,
+            "smart_session_cooldown_parent_associate_max_ms": 0,
+            "smart_session_cooldown_between_associates_min_ms": 0,
+            "smart_session_cooldown_between_associates_max_ms": 0}}
+        runner.scheduler = FakeScheduler()
+        parent = Task(phone="2025550100", stage=TaskStage.PARENT, target_source="T", depth=1,
+                      url="https://target.invalid/parent", seed_phone="2025550100",
+                      line_number=7, source_bucket="A", source_name="input-a",
+                      session_id=123, chain_id="chain", reuse_kind="A")
+        links = {"detail_links": [], "related_links": [
+            "https://target.invalid/a", "https://target.invalid/b", "https://target.invalid/c"]}
+
+        self.assertEqual(1, runner.enqueue_related(parent, links))
+        first = runner.scheduler.tasks.pop()
+        self.assertEqual(2, first.depth)
+        self.assertEqual("A", first.source_bucket)
+        self.assertEqual(7, first.line_number)
+        self.assertEqual("https://target.invalid/parent", first.referer)
+        self.assertEqual(2, len(first.remaining_associate_urls))
+
+        self.assertEqual(1, runner.enqueue_related(first, {"detail_links": [], "related_links": []}))
+        second = runner.scheduler.tasks.pop()
+        self.assertEqual(2, second.depth)
+        self.assertEqual("A", second.source_bucket)
+        self.assertEqual(7, second.line_number)
+        self.assertEqual("https://target.invalid/parent", second.referer)
+        self.assertEqual(["https://target.invalid/c"], second.remaining_associate_urls)
+
     def test_claims_lazily_and_reuses_identity_and_last_success_url(self):
         item = {"phone": "2025550102", "line_number": 2, "source": "A", "source_name": "input-a"}
         runner, lane = make_runner("ABB", [item])

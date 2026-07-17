@@ -46,7 +46,7 @@ class EngineRunner:
         self.t_entry_planner = TEntryPlanner(self.config) if self.config.get("runtime", {}).get("target_source", "T") == "T" else None
         proc = self.config.get("processing", {})
         self.session_lanes = SessionLaneManager(
-            max_lanes=int(proc.get("smart_session_session_lane_max", 32) or 32),
+            max_lanes=int(proc.get("smart_session_session_lane_max", 160) or 160),
             idle_ttl_ms=int(proc.get("session_idle_ttl_ms", 300000) or 300000),
             urgent_remaining_ms=int(proc.get("session_urgent_remaining_ms", 80000) or 80000),
         ) if self.t_entry_planner else None
@@ -401,24 +401,29 @@ class EngineRunner:
 
     def enqueue_related(self, task: Task, links: dict):
         max_depth = int(self.config.get("processing", {}).get("max_depth", 1))
+        submitted = 0
+        identity = dict(phone=task.phone, target_source=task.target_source,
+                        seed_phone=task.seed_phone, session_id=task.session_id, chain_id=task.chain_id,
+                        line_number=task.line_number, source_bucket=task.source_bucket,
+                        source_name=task.source_name, reuse_kind=task.reuse_kind,
+                        last_success_url=task.last_success_url)
+        if task.stage == TaskStage.ASSOCIATE and task.remaining_associate_urls:
+            urls = task.remaining_associate_urls
+            self.scheduler.submit(Task(stage=TaskStage.ASSOCIATE, url=urls[0], referer=task.referer,
+                                        depth=task.depth, remaining_associate_urls=urls[1:],
+                                        not_before=time.time() + self._delay("smart_session_cooldown_between_associates_min_ms", "smart_session_cooldown_between_associates_max_ms"), **identity))
+            return 1
         if task.depth >= max_depth:
             return 0
-        submitted = 0
-        common = dict(phone=task.phone, target_source=task.target_source, depth=task.depth + 1,
-                      seed_phone=task.seed_phone, session_id=task.session_id, chain_id=task.chain_id)
         if task.stage == TaskStage.RESULTPHONE and links["detail_links"]:
             self.scheduler.submit(Task(stage=TaskStage.PARENT, url=links["detail_links"][0], referer=task.url,
-                                        not_before=time.time() + self._delay("smart_session_cooldown_result_parent_min_ms", "smart_session_cooldown_result_parent_max_ms"), **common))
+                                        depth=task.depth + 1, not_before=time.time() + self._delay("smart_session_cooldown_result_parent_min_ms", "smart_session_cooldown_result_parent_max_ms"), **identity))
             return 1
         if task.stage == TaskStage.PARENT and links["related_links"]:
             urls = links["related_links"][:int(self.config.get("processing", {}).get("max_related_per_seed", 100))]
             self.scheduler.submit(Task(stage=TaskStage.ASSOCIATE, url=urls[0], referer=task.url,
-                                        remaining_associate_urls=urls[1:], not_before=time.time() + self._delay("smart_session_cooldown_parent_associate_min_ms", "smart_session_cooldown_parent_associate_max_ms"), **common))
-            return 1
-        if task.stage == TaskStage.ASSOCIATE and task.remaining_associate_urls:
-            urls = task.remaining_associate_urls
-            self.scheduler.submit(Task(stage=TaskStage.ASSOCIATE, url=urls[0], referer=task.referer,
-                                        remaining_associate_urls=urls[1:], not_before=time.time() + self._delay("smart_session_cooldown_between_associates_min_ms", "smart_session_cooldown_between_associates_max_ms"), **common))
+                                        depth=task.depth + 1, remaining_associate_urls=urls[1:],
+                                        not_before=time.time() + self._delay("smart_session_cooldown_parent_associate_min_ms", "smart_session_cooldown_parent_associate_max_ms"), **identity))
             return 1
         return submitted
 
