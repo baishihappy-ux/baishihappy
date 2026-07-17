@@ -73,6 +73,20 @@ class T1ReuseDispatchTests(unittest.TestCase):
         self.assertEqual("https://target.invalid/parent", second.referer)
         self.assertEqual(["https://target.invalid/c"], second.remaining_associate_urls)
 
+    def test_parent_without_associates_uses_parent_url_for_next_pattern_slot(self):
+        item = {"phone": "2025550112", "line_number": 12, "source": "B", "source_name": "input-b"}
+        runner, lane = make_runner("ABB", [item])
+        lane.reuse_pattern.next_kind()  # current A
+        parent = Task(phone="2025550111", stage=TaskStage.PARENT, target_source="T", depth=1,
+                      url="https://target.invalid/parent/no-associates", session_id=lane.session_id,
+                      chain_id=lane.chain_id, reuse_kind="A")
+
+        self.assertEqual(0, runner.enqueue_related(parent, {"detail_links": [], "related_links": []}))
+        self.assertTrue(runner._schedule_next_lane_phone(parent, parent.url))
+        next_task = runner.scheduler.tasks[0]
+        self.assertEqual("B", next_task.reuse_kind)
+        self.assertEqual(parent.url, next_task.referer)
+
     def test_claims_lazily_and_reuses_identity_and_last_success_url(self):
         item = {"phone": "2025550102", "line_number": 2, "source": "A", "source_name": "input-a"}
         runner, lane = make_runner("ABB", [item])

@@ -4,6 +4,7 @@ import unittest
 from pathlib import Path
 
 from python.engine.input_pool import InputPool
+from python.engine.runner import EngineRunner
 from python.queue.tasks import Task, TaskStage
 
 
@@ -42,6 +43,14 @@ class T1502RecycleTests(unittest.TestCase):
 
             self.assertEqual({"T:2025550102"}, pool.recovered_502)
             self.assertEqual(set(), pool.recycled_502)
+
+    def test_parent_detail_502_is_recycled_not_discarded(self):
+        task = Task(phone="2025550103", stage=TaskStage.PARENT, target_source="T")
+        self.assertEqual("final_502_recycled", EngineRunner._final_502_outcome(task))
+
+    def test_only_associate_502_is_discarded(self):
+        task = Task(phone="2025550104", stage=TaskStage.ASSOCIATE, target_source="T")
+        self.assertEqual("final_502_recovered", EngineRunner._final_502_outcome(task))
 
 
 if __name__ == "__main__":

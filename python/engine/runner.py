@@ -481,9 +481,13 @@ class EngineRunner:
             self.writers.write_failure(task, reason, final_502=final_502)
             event_name = "task_final_502_recovered" if final_502 else "task_failed"
             append_event(self.paths["state"], event_name, task_id=task.id, phone=task.phone, reason=reason)
-            if final_502 and task.stage == TaskStage.RESULTPHONE:
-                return "final_502_recycled"
-            return "final_502_recovered" if final_502 else "failed"
+            return self._final_502_outcome(task) if final_502 else "failed"
+
+    @staticmethod
+    def _final_502_outcome(task):
+        if task.stage in {TaskStage.RESULTPHONE, TaskStage.PARENT}:
+            return "final_502_recycled"
+        return "final_502_recovered"
 
     def refresh_control(self, active_workers=0):
         with self.control_lock:
