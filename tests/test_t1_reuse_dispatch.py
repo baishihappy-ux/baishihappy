@@ -103,6 +103,19 @@ class T1ReuseDispatchTests(unittest.TestCase):
         self.assertEqual(lane.chain_id, next_task.chain_id)
         self.assertEqual("https://target.invalid/associate/c", next_task.referer)
 
+    def test_b_to_a_uses_previous_search_url_as_referer(self):
+        item = {"phone": "2025550122", "line_number": 22, "source": "B", "source_name": "input-b"}
+        runner, lane = make_runner("BAB", [item])
+        self.assertEqual("B", lane.reuse_pattern.next_kind())
+        current = Task(phone="2025550121", stage=TaskStage.RESULTPHONE, target_source="T",
+                       session_id=lane.session_id, chain_id=lane.chain_id, reuse_kind="B")
+        search_url = "https://target.invalid/resultphone/2025550121"
+
+        self.assertTrue(runner._schedule_next_lane_phone(current, search_url))
+        next_task = runner.scheduler.tasks[0]
+        self.assertEqual("A", next_task.reuse_kind)
+        self.assertEqual(search_url, next_task.referer)
+
     def test_exhausted_pattern_does_not_claim_another_phone(self):
         item = {"phone": "2025550104", "line_number": 4, "source": "A", "source_name": "input-a"}
         runner, lane = make_runner("BBA", [item])
