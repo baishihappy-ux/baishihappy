@@ -48,6 +48,7 @@ DEFAULT_CONFIG = {
         "txt_file": "output/results.txt",
         "failed_file": "output/failed_tasks.txt",
         "final_502_discarded_file": "output/final_502_discarded.txt",
+        "interrupted_unused_file": "output/中断未使用.txt",
     },
     "license": {"license_file": "license.dat", "valid_days": 30},
     "runtime": {

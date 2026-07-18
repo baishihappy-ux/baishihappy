@@ -31,6 +31,7 @@ class Task:
     reuse_kind: str = ""
     last_success_url: str = ""
     remaining_associate_urls: list = field(default_factory=list)
+    associate_index: int = 0
     is_session_bootstrap: bool = False
     terminal_on_success: bool = True
     id: str = field(default_factory=lambda: uuid.uuid4().hex)

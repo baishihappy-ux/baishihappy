@@ -7,6 +7,7 @@ from python.parser.source_profiles import build_entry_url
 from python.queue.tasks import Task, TaskStage
 from python.utils.phone import normalize_phone
 from python.utils.runtime_state import read_json, write_json
+from python.utils.paths import runtime_root
 
 
 SOURCE_A_NAME = "号码补齐父级input"
@@ -27,6 +28,9 @@ class InputPool:
         self.dual_pending_path = state_dir / "t_dual_input_pending.json"
         self.dual_summary_path = state_dir / "t_dual_input_summary.json"
         self.recycled_502_path = state_dir / "t_recycled_502.json"
+        self.progress_path = state_dir / "t_interruption_progress.json"
+        self.interrupted_path = state_dir / "t_interrupted_unused.json"
+        self.interrupted_txt_path = runtime_root(root) / config.get("output", {}).get("interrupted_unused_file", "output/中断未使用.txt")
         self.items = []
         self.phones = []
         self.claimed = {}
@@ -34,6 +38,8 @@ class InputPool:
         self.recovered_502 = set()
         self.recycled_502 = set()
         self.failed = set()
+        self.interrupted_unused = set()
+        self.progress = {}
         self.cursor_by_source = {"A": 0, "B": 0, self.target_source: 0}
         self.sources = []
         self.lock = threading.RLock()
@@ -46,7 +52,9 @@ class InputPool:
             self.items.extend(self._read_source_items(source))
         self.phones = [item["phone"] for item in self.items]
         self._load_terminal_state()
+        self.progress = (read_json(self.progress_path, {}) or {}).get("items", {}) or {}
         self._load_claims()
+        self._recover_interrupted_claims()
         self._refresh_cursors()
         self.write_all_state()
         return self
@@ -95,9 +103,22 @@ class InputPool:
             "worker_id": 0,
             "claimed_at": _iso_now(),
             "run_id": self.config.get("runtime", {}).get("run_id", ""),
+            "reuse_kind": task.reuse_kind,
         }
         self.write_claims()
         self.write_dual_pending()
+        self.mark_progress(task, "CLAIMED")
+
+    def mark_progress(self, task, marker):
+        key = self.task_key(task)
+        if key not in self.item_keys():
+            return
+        self.progress[key] = {
+            "phone": task.phone, "source": task.source_bucket or self.target_source,
+            "source_name": task.source_name, "line_number": int(task.line_number or 0),
+            "reuse_kind": task.reuse_kind, "marker": marker, "updated_at": _iso_now(local=False),
+        }
+        write_json(self.progress_path, {"items": self.progress, "updated_at": time.time()})
 
     def claim_next_item(self):
         with self.lock:
@@ -130,7 +151,7 @@ class InputPool:
         return {item["key"] for item in self.items}
 
     def terminal_keys(self):
-        return self.completed | self.recovered_502 | self.recycled_502 | self.failed
+        return self.completed | self.recovered_502 | self.recycled_502 | self.interrupted_unused | self.failed
 
     def terminal_count(self):
         return len(self.terminal_keys())
@@ -155,6 +176,8 @@ class InputPool:
         self.write_dual_pending()
         self.write_dual_summary()
         self.write_recycled_502()
+        self.write_interrupted_unused()
+        write_json(self.progress_path, {"items": self.progress, "updated_at": time.time()})
 
     def write_cursor(self):
         write_json(self.cursor_path, {
@@ -171,6 +194,7 @@ class InputPool:
             "failed_count": len(self.failed),
             "failed_phones": sorted(self._phones_for_keys(self.failed)),
             "failed_keys": sorted(self.failed),
+            "interrupted_unused_keys": sorted(self.interrupted_unused),
             "input_file": str(self.input_path),
             "updated_at": time.time(),
         })
@@ -246,6 +270,14 @@ class InputPool:
             "policy": "search_page_final_502_not_consumed",
         })
 
+    def write_interrupted_unused(self):
+        payloads = [self.progress.get(key, {}) for key in sorted(self.interrupted_unused)]
+        write_json(self.interrupted_path, {"updated_at": _iso_now(local=False), "count": len(self.interrupted_unused),
+            "keys": sorted(self.interrupted_unused), "items": payloads})
+        self.interrupted_txt_path.parent.mkdir(parents=True, exist_ok=True)
+        phones = sorted(self._phones_for_keys(self.interrupted_unused))
+        self.interrupted_txt_path.write_text("".join(f"{phone}\n" for phone in phones), encoding="utf-8")
+
     def _discover_sources(self):
         a_path = self.root / "号码补齐父级input.txt"
         b_path = self.root / "裂变关联人父级input.txt"
@@ -288,6 +320,7 @@ class InputPool:
         self.completed = self._keys_from_state(state, "completed")
         self.recovered_502 = self._keys_from_state(state, "recovered_502")
         self.recycled_502 = self._keys_from_state(state, "recycled_502")
+        self.interrupted_unused = self._keys_from_state(state, "interrupted_unused")
         self.failed = self._keys_from_state(state, "failed")
 
     def _load_claims(self):
@@ -318,8 +351,25 @@ class InputPool:
         for other in remove_from:
             other.discard(key)
         self.claimed.pop(key, None)
+        self.progress.pop(key, None)
         self._refresh_cursors()
         self.write_all_state()
+
+    def _recover_interrupted_claims(self):
+        recovered = False
+        for key, claim in list(self.claimed.items()):
+            if key in self.terminal_keys():
+                continue
+            progress = self.progress.get(key, {})
+            marker = progress.get("marker", "CLAIMED")
+            kind = progress.get("reuse_kind") or claim.get("reuse_kind") or ""
+            used = (kind == "B" and marker == "SEARCH_SUCCEEDED") or (
+                kind == "A" and marker in {"FIRST_ASSOCIATE_SUCCEEDED", "NO_ASSOCIATES_COMPLETE"})
+            (self.completed if used else self.interrupted_unused).add(key)
+            self.claimed.pop(key, None)
+            recovered = True
+        if recovered:
+            self.write_all_state()
 
     def _refresh_cursors(self):
         terminal = self.terminal_keys()

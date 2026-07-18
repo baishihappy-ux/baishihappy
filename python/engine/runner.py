@@ -302,6 +302,14 @@ class EngineRunner:
                 session = self.pool.acquire()
         provider, provider_alias = self.provider_router.route(control_signal)
         try:
+            if self.input_pool and not task.is_session_bootstrap:
+                marker = {
+                    TaskStage.RESULTPHONE: "SEARCH_STARTED",
+                    TaskStage.PARENT: "PARENT_STARTED",
+                    TaskStage.ASSOCIATE: "FIRST_ASSOCIATE_STARTED" if task.associate_index == 1 else "ASSOCIATE_STARTED",
+                }.get(task.stage)
+                if marker:
+                    self.input_pool.mark_progress(task, marker)
             fetch_started = time.time()
             response = provider.fetch(task, session=session)
             fetch_elapsed_ms = int((time.time() - fetch_started) * 1000)
@@ -332,6 +340,14 @@ class EngineRunner:
                         with self.session_lock:
                             self.pool.release(session, ok=False, fatal=response.status_code in {401, 403}, chain_ok=chain_ok)
                     return outcome
+            if self.input_pool and not task.is_session_bootstrap:
+                marker = {
+                    TaskStage.RESULTPHONE: "SEARCH_SUCCEEDED",
+                    TaskStage.PARENT: "PARENT_SUCCEEDED",
+                    TaskStage.ASSOCIATE: "FIRST_ASSOCIATE_SUCCEEDED" if task.associate_index == 1 else "ASSOCIATE_SUCCEEDED",
+                }.get(task.stage)
+                if marker:
+                    self.input_pool.mark_progress(task, marker)
             if task.is_session_bootstrap:
                 self.session_lanes.entry_succeeded(lane)
                 item = self.input_pool.claim_next_item() if self.input_pool else None
@@ -391,6 +407,8 @@ class EngineRunner:
                 with self.session_lock:
                     self.pool.release(session, ok=True, chain_ok=True)
             if not submitted and task.stage in {TaskStage.PARENT, TaskStage.ASSOCIATE}:
+                if task.stage == TaskStage.PARENT and self.input_pool:
+                    self.input_pool.mark_progress(task, "NO_ASSOCIATES_COMPLETE")
                 self._schedule_next_lane_phone(task, task.url or task.referer)
             return "queued" if submitted else "success"
         except Exception as exc:
@@ -417,7 +435,8 @@ class EngineRunner:
         if task.stage == TaskStage.ASSOCIATE and task.remaining_associate_urls:
             urls = task.remaining_associate_urls
             self.scheduler.submit(Task(stage=TaskStage.ASSOCIATE, url=urls[0], referer=task.referer,
-                                        depth=task.depth, remaining_associate_urls=urls[1:],
+                                        depth=task.depth, associate_index=task.associate_index + 1,
+                                        remaining_associate_urls=urls[1:],
                                         not_before=time.time() + self._delay("smart_session_cooldown_between_associates_min_ms", "smart_session_cooldown_between_associates_max_ms"), **identity))
             return 1
         if task.depth >= max_depth:
@@ -429,7 +448,7 @@ class EngineRunner:
         if task.stage == TaskStage.PARENT and links["related_links"]:
             urls = links["related_links"][:int(self.config.get("processing", {}).get("max_related_per_seed", 100))]
             self.scheduler.submit(Task(stage=TaskStage.ASSOCIATE, url=urls[0], referer=task.url,
-                                        depth=task.depth + 1, remaining_associate_urls=urls[1:],
+                                        depth=task.depth + 1, associate_index=1, remaining_associate_urls=urls[1:],
                                         not_before=time.time() + self._delay("smart_session_cooldown_parent_associate_min_ms", "smart_session_cooldown_parent_associate_max_ms"), **identity))
             return 1
         return submitted

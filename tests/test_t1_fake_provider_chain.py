@@ -64,12 +64,16 @@ class FakeScheduler:
 class FakeInputPool:
     def __init__(self, items):
         self.items = list(items)
+        self.progress = []
 
     def claim_next_item(self):
         return self.items.pop(0) if self.items else None
 
     def remaining_count(self):
         return len(self.items)
+
+    def mark_progress(self, task, marker):
+        self.progress.append((task.phone, marker))
 
 
 def detail_html(name, associates=()):
