@@ -3,7 +3,6 @@ import json
 from pathlib import Path
 
 from python.auth.license import activate, status as license_status
-from python.auth.license_codec import generate_authorization_code
 from python.auth.machine import machine_code
 from python.engine.batch import batch_distribute, recover_remaining_inputs
 from python.engine.config import load_config
@@ -41,11 +40,6 @@ def build_parser():
     act = sub.add_parser("activate")
     act.add_argument("--root", default=".")
     act.add_argument("--code", required=True)
-    gen = sub.add_parser("generate-license")
-    gen.add_argument("--machine-code", required=True)
-    gen.add_argument("--valid-days", required=True, type=int)
-    gen.add_argument("--max-concurrency", required=True, type=int)
-    gen.add_argument("--do-token", required=True)
     run = sub.choices["run"]
     run.add_argument("--instance-id")
     run.add_argument("--input-file")
@@ -148,8 +142,6 @@ def main(argv=None):
         print_json(license_status(runtime_root(root), load_config(root)))
     elif args.command == "activate":
         print_json(activate(runtime_root(root), load_config(root), args.code))
-    elif args.command == "generate-license":
-        print(generate_authorization_code(args.machine_code, args.valid_days, args.max_concurrency, args.do_token))
     elif args.command == "runtime-info":
         print_json(runtime_info(root))
     elif args.command == "run-status":

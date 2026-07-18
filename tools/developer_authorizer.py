@@ -7,7 +7,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from python.auth.license_codec import generate_authorization_code
+from python.auth.license_issuer import generate_authorization_code
 
 
 AUTHORIZE_PASSWORD = "88888888"

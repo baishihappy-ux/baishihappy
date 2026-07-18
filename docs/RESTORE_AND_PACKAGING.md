@@ -20,6 +20,7 @@ These files define the current behavior rules, public repository rules, and reco
 - Python 3.9+.
 - Node.js and npm.
 - PyInstaller, for building the small Python developer authorizer executable.
+- `cryptography==49.0.0`, installed from `requirements-authorization.txt`.
 
 ## Clone And Prepare
 
@@ -27,6 +28,7 @@ These files define the current behavior rules, public repository rules, and reco
 git clone <public-repository-url> workspace-snapshot
 cd workspace-snapshot
 npm install --prefix electron
+python -m pip install -r requirements-authorization.txt
 ```
 
 The repository stores source and recovery context. Runtime data, local secrets, generated licenses,
@@ -48,6 +50,28 @@ python .\tools\developer_authorizer.py
 ```
 
 The developer authorizer must open with a password gate before showing the authorization generator.
+
+The visible generator fields and labels remain exactly:
+
+- `Machine Code`
+- `Valid Days`
+- `Max Windows`
+- `Provider Token`
+
+Authorization codes use Ed25519 public-key signatures. The customer engine contains only the public
+verification key and rejects all legacy `DF8-` codes. The issuer private key is external to source,
+Git, build artifacts, and customer packages.
+
+The local issuer key is stored under `.package-secrets/authorization/` and protected by Windows
+DPAPI for the current user. Create an encrypted offline recovery copy with:
+
+```powershell
+python .\tools\export_license_key_recovery.py
+```
+
+Store the recovery file and its passphrase separately. On a replacement Windows profile or machine,
+restore the DPAPI copy with `tools/import_license_key_recovery.py`. Key generation is a one-time
+operation; do not generate a replacement merely because the local DPAPI file is missing.
 
 Required behavior:
 
@@ -78,7 +102,9 @@ Before preparing a customer package:
 - Confirm runtime config uses public-safe defaults.
 - Confirm provider credentials enter through authorization, not source code.
 - Confirm developer authorizer and client UI are separate tools.
-- Confirm the client creates `license.dat` only after a valid authorization code is applied.
+- Confirm the customer engine contains no issuer module, private key, `.package-secrets`, or authorization-code generation command.
+- Confirm the client creates `license.dat` only after a valid Ed25519 authorization code is applied.
+- Confirm every startup verifies the stored authorization code again and public status output contains no provider token.
 - Confirm runtime state and output directories are generated at run time.
 
 ## Public Upload Checklist

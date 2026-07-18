@@ -120,6 +120,7 @@ function displayLicenseReason(reason, fallback = '授权无效，请输入新的
   }
   if (
     text.includes('DF8-') ||
+    text.includes('DF9-') ||
     text.includes('不是授权码') ||
     text.includes('有效授权码') ||
     text.includes('无法解析') ||

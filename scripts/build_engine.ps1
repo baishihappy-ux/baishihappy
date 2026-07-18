@@ -3,6 +3,8 @@ $ErrorActionPreference = "Stop"
 $root = Split-Path -Parent $PSScriptRoot
 Set-Location $root
 
+python -c "import cryptography; print('cryptography dependency ready')"
+
 $workspaceRoot = Split-Path -Parent $root
 $genderMapSource = Get-ChildItem -LiteralPath $workspaceRoot -Recurse -Filter "_gender_map.js" -File |
   Where-Object { $_.FullName -notlike "$root*" -and $_.Length -gt 1000000 } |

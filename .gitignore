@@ -17,6 +17,7 @@ runtime/state/
 runtime/temp/
 runtime/tmp_*.exe
 runtime/config/*.local.json
+.package-secrets/
 
 # Local test/generated files
 .tmp_*/
