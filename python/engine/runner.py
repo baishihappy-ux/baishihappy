@@ -161,14 +161,7 @@ class EngineRunner:
                 outcome = self.process_task(task)
                 if outcome in {"success", "failed", "final_502_recovered", "final_502_recycled"}:
                     self.complete_work()
-                if self.input_pool and outcome == "success":
-                    self.input_pool.mark_completed(task)
-                elif self.input_pool and outcome == "final_502_recycled":
-                    self.input_pool.mark_recycled_502(task)
-                elif self.input_pool and outcome == "final_502_recovered":
-                    self.input_pool.mark_recovered_502(task)
-                elif self.input_pool and outcome == "failed":
-                    self.input_pool.mark_failed(task)
+                self._finalize_input_outcome(task, outcome)
             finally:
                 self.mark_worker_active(-1)
                 self.runtime_control.release_inflight()
@@ -191,6 +184,20 @@ class EngineRunner:
     def complete_work(self):
         with self.stats_lock:
             self.processed += 1
+
+    def _finalize_input_outcome(self, task, outcome):
+        if not self.input_pool:
+            return
+        if outcome == "success":
+            self.input_pool.mark_completed(task)
+        elif outcome == "final_502_recycled":
+            self.input_pool.mark_recycled_502(task)
+            self._queue_replacement_entry()
+        elif outcome == "final_502_recovered":
+            self.input_pool.mark_recovered_502(task)
+            self._queue_replacement_entry()
+        elif outcome == "failed":
+            self.input_pool.mark_failed(task)
 
     def mark_worker_active(self, delta: int):
         with self.stats_lock:
@@ -475,7 +482,6 @@ class EngineRunner:
         else:
             if final_502 and self.session_lanes and task.session_id:
                 self.session_lanes.mark_dead_by_session(task.session_id, "final 502 after retries")
-                self._queue_replacement_entry()
             with self.stats_lock:
                 self.failed += 1
             self.writers.write_failure(task, reason, final_502=final_502)
