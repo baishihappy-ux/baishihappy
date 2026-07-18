@@ -1,8 +1,10 @@
 import tempfile
 import unittest
+import json
 from pathlib import Path
 
 from python.engine.input_pool import InputPool
+from python.queue.scheduler import StageScheduler
 from python.queue.tasks import Task, TaskStage
 
 
@@ -47,14 +49,21 @@ class T1InterruptionRecoveryTests(unittest.TestCase):
             input_path.write_text("2025550199\n", encoding="utf-8")
             pool = InputPool(root, state, {}, input_path, "T").load()
             task = Task(phone="2025550199", stage=TaskStage.RESULTPHONE, target_source="T",
-                        source_bucket="T", reuse_kind="A")
+                        source_bucket="T", reuse_kind="A", session_id=456)
             pool.mark_claimed(task)
             pool.mark_progress(task, "PARENT_SUCCEEDED")
+
+            claimed = json.loads((state / "input_claims.json").read_text(encoding="utf-8"))["claimed"]
+            self.assertEqual(456, claimed["T:2025550199"]["session_id"])
 
             reloaded = InputPool(root, state, {}, input_path, "T").load()
 
             self.assertEqual(0, reloaded.remaining_count())
             self.assertIsNone(reloaded.claim_next_item())
+
+            scheduler = StageScheduler({})
+            self.assertEqual(0, reloaded.seed_scheduler(scheduler))
+            self.assertEqual(0, scheduler.depth())
 
 
 if __name__ == "__main__":

@@ -63,7 +63,7 @@ class InputPool:
         count = 0
         if self.target_source == "T":
             lane_count = int(self.config.get("processing", {}).get("smart_session_session_lane_max", 160) or 160)
-            for _ in range(min(max(1, lane_count), len(self.items))):
+            for _ in range(min(max(1, lane_count), self.claimable_count())):
                 scheduler.submit(Task(phone="", stage=TaskStage.ENTRY, target_source="T", is_session_bootstrap=True, terminal_on_success=False))
                 count += 1
             self.write_all_state()
@@ -94,12 +94,14 @@ class InputPool:
         key = self.task_key(task)
         if key not in self.item_keys():
             return
+        if key in self.claimed:
+            return
         self.claimed[key] = {
             "phone": task.phone,
             "source": task.source_bucket or self.target_source,
             "source_name": task.source_name or "",
             "line_number": int(task.line_number or 0),
-            "session_id": 0,
+            "session_id": int(task.session_id or 0),
             "worker_id": 0,
             "claimed_at": _iso_now(),
             "run_id": self.config.get("runtime", {}).get("run_id", ""),
@@ -129,6 +131,19 @@ class InputPool:
                 self.reserved_keys.add(item["key"])
                 return dict(item)
             return None
+
+    def has_claimable_item(self):
+        return self.claimable_count() > 0
+
+    def claimable_count(self):
+        with self.lock:
+            terminal = self.terminal_keys()
+            return sum(
+                item["key"] not in terminal
+                and item["key"] not in self.reserved_keys
+                and item["key"] not in self.claimed
+                for item in self.items
+            )
 
     def mark_completed(self, task):
         self._mark_terminal(task, self.completed, remove_from=(self.recovered_502, self.failed))
@@ -181,7 +196,7 @@ class InputPool:
 
     def write_cursor(self):
         write_json(self.cursor_path, {
-            "cursor": min(self.cursor_by_source.values()) if self.cursor_by_source else 0,
+            "cursor": self._primary_cursor(),
             "total_unique_input": len(self.items),
             "completed_count": len(self.completed),
             "completed_phones": sorted(self._phones_for_keys(self.completed)),
@@ -207,7 +222,7 @@ class InputPool:
             "input_file": str(self.input_path),
             "total_rows": len(self.items),
             "imported_rows": len(self.items),
-            "cursor": min(self.cursor_by_source.values()) if self.cursor_by_source else 0,
+            "cursor": self._primary_cursor(),
             "completed_count": len(self.completed),
             "recovered_502_count": len(self.recovered_502),
             "failed_count": len(self.failed),
@@ -389,6 +404,12 @@ class InputPool:
             }
             for source in sorted({item["source"] for item in self.items})
         }
+
+    def _primary_cursor(self):
+        active_sources = [source["source"] for source in self.sources]
+        if not active_sources:
+            return 0
+        return min(self.cursor_by_source.get(source, 0) for source in active_sources)
 
     def _source_meta(self, source):
         return next((item for item in self.sources if item["source"] == source), None)

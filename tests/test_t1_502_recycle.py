@@ -17,6 +17,7 @@ class T1502RecycleTests(unittest.TestCase):
             input_path = root / "input.txt"
             input_path.write_text("2025550101\n", encoding="utf-8")
             pool = InputPool(root, state, {}, input_path, "T").load()
+            self.assertTrue(pool.has_claimable_item())
             task = Task(phone="2025550101", stage=TaskStage.RESULTPHONE, target_source="T", source_bucket="T")
 
             pool.mark_recycled_502(task)
@@ -28,6 +29,8 @@ class T1502RecycleTests(unittest.TestCase):
             reloaded = InputPool(root, state, {}, input_path, "T").load()
             self.assertEqual({"T:2025550101"}, reloaded.recycled_502)
             self.assertEqual(0, reloaded.remaining_count())
+            self.assertFalse(reloaded.has_claimable_item())
+            self.assertEqual(1, json.loads((state / "input_cursor.json").read_text(encoding="utf-8"))["cursor"])
 
     def test_associate_502_uses_discarded_terminal_set_not_recycle_set(self):
         with tempfile.TemporaryDirectory() as raw:

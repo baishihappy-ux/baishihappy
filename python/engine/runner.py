@@ -18,6 +18,7 @@ from python.queue.tasks import Task, TaskStage
 from python.session.pool import SessionPool
 from python.session.lane import SessionLaneManager
 from python.utils.paths import ensure_runtime_dirs, runtime_root
+from python.utils.logging import configure_logging
 from python.utils.runtime_state import append_event, update_status, write_json
 
 
@@ -26,6 +27,7 @@ class EngineRunner:
         self.root = root
         self.args = args
         self.paths = ensure_runtime_dirs(root)
+        self.logger = configure_logging(self.paths["logs"], console=False)
         self.config = apply_license_to_config(runtime_root(root), load_config(root))
         if getattr(args, "target_source", None):
             self.config.setdefault("runtime", {})["target_source"] = args.target_source
@@ -55,6 +57,7 @@ class EngineRunner:
         self.processed = 0
         self.started_count = 0
         self.active_workers = 0
+        self.worker_errors = []
         self.stats_lock = threading.RLock()
         self.control_lock = threading.RLock()
         self.session_lock = threading.RLock()
@@ -90,11 +93,12 @@ class EngineRunner:
             provider=self.provider_router.snapshot(),
         )
         append_event(self.paths["state"], "run_started", total_input=total, seeded=seeded)
+        self.logger.info("run_started total_input=%s seeded=%s workers=%s", total, seeded, self.worker_count)
         max_total = int(getattr(self.args, "max_total_records", None) or self.config.get("processing", {}).get("max_total_records", 0) or 0)
         workers = []
         try:
             for index in range(self.worker_count):
-                thread = threading.Thread(target=self.worker_loop, args=(index + 1, max_total), name=f"t1-worker-{index + 1}", daemon=True)
+                thread = threading.Thread(target=self._worker_entry, args=(index + 1, max_total), name=f"t1-worker-{index + 1}", daemon=True)
                 workers.append(thread)
                 thread.start()
             while any(thread.is_alive() for thread in workers):
@@ -117,7 +121,8 @@ class EngineRunner:
             for thread in workers:
                 thread.join(timeout=2.0)
             stats = self.stats_snapshot()
-            final_status = "CIRCUIT_BREAKER" if self.runtime_control.circuit_open else "FINISHED"
+            worker_errors = self.worker_error_snapshot()
+            final_status = "ERROR" if worker_errors else "CIRCUIT_BREAKER" if self.runtime_control.circuit_open else "FINISHED"
             update_status(
                 self.paths["state"],
                 status=final_status,
@@ -125,13 +130,30 @@ class EngineRunner:
                 pool=self.pool_snapshot(),
                 control_brain=self.brain.snapshot() if self.brain else None,
                 provider=self.provider_router.snapshot(),
+                worker_errors=worker_errors,
                 **self.runtime_control.metrics(),
             )
             append_event(self.paths["state"], "run_finished", processed=stats["processed"], status=final_status)
-            return {"ok": not self.runtime_control.circuit_open, "processed": stats["processed"], "total_input": total, "seeded": seeded, "status": final_status, "workers": self.worker_count}
+            self.logger.info("run_finished status=%s processed=%s saved=%s failed=%s", final_status, stats["processed"], stats["saved"], stats["failed"])
+            return {"ok": not self.runtime_control.circuit_open and not worker_errors, "processed": stats["processed"], "total_input": total, "seeded": seeded, "status": final_status, "workers": self.worker_count, "worker_errors": worker_errors}
         finally:
             self.stop_event.set()
             self.runtime_control.release_lock()
+
+    def _worker_entry(self, worker_id: int, max_total: int):
+        try:
+            self.worker_loop(worker_id, max_total)
+        except Exception as exc:
+            error = {"worker_id": worker_id, "type": type(exc).__name__, "message": str(exc)}
+            with self.stats_lock:
+                self.worker_errors.append(error)
+            append_event(self.paths["state"], "worker_crashed", **error)
+            self.logger.error("worker_crashed worker_id=%s type=%s message=%s", worker_id, error["type"], error["message"])
+            self.stop_event.set()
+
+    def worker_error_snapshot(self):
+        with self.stats_lock:
+            return [dict(item) for item in self.worker_errors]
 
     def worker_loop(self, worker_id: int, max_total: int):
         poll_seconds = self.config.get("processing", {}).get("queue_poll_seconds", 0.2)
@@ -283,7 +305,7 @@ class EngineRunner:
             task.session_id, task.chain_id = lane.session_id, lane.chain_id
             plan = self.t_entry_planner.choose()
             task.url, task.referer = plan.entry_url, plan.referer
-            task.entry_referer_key, task.entry_kind = plan.referer_key, plan.kind
+            task.entry_referer_key, task.entry_kind = plan.referer_key, plan.entry_kind
             self.session_lanes.begin_entry(lane)
         with self.control_lock:
             control_signal = self.control_signal
@@ -356,13 +378,15 @@ class EngineRunner:
                     return "success"
                 delay = self._delay("smart_session_cooldown_entry_result_min_ms", "smart_session_cooldown_entry_result_max_ms")
                 reuse_kind = lane.reuse_pattern.next_kind()
-                self.scheduler.submit(Task(
+                next_task = Task(
                     phone=item["phone"], stage=TaskStage.RESULTPHONE, target_source="T",
                     url=build_entry_url(self.config, "T", item["phone"]), seed_phone=item["phone"],
                     line_number=item["line_number"], source_bucket=item["source"], source_name=item["source_name"],
                     session_id=task.session_id, chain_id=task.chain_id, referer=response.url,
                     reuse_kind=reuse_kind, last_success_url=response.url,
-                    not_before=time.time() + delay, terminal_on_success=True))
+                    not_before=time.time() + delay, terminal_on_success=True)
+                self.input_pool.mark_claimed(next_task)
+                self.scheduler.submit(next_task)
                 return "queued"
             if task.stage == TaskStage.RESULTPHONE and task.reuse_kind == "B":
                 # Search-only slot: deliberately do not follow detail/associate links.
@@ -473,16 +497,18 @@ class EngineRunner:
             self.session_lanes.mark_dead(lane, "no remaining input")
             return False
         kind = lane.reuse_pattern.next_kind()
-        self.scheduler.submit(Task(phone=item["phone"], stage=TaskStage.RESULTPHONE, target_source="T",
+        next_task = Task(phone=item["phone"], stage=TaskStage.RESULTPHONE, target_source="T",
             url=build_entry_url(self.config, "T", item["phone"]), seed_phone=item["phone"],
             line_number=item["line_number"], source_bucket=item["source"], source_name=item["source_name"],
             session_id=task.session_id, chain_id=task.chain_id, referer=last_url,
             reuse_kind=kind, last_success_url=last_url,
-            not_before=time.time() + self._delay("smart_session_cooldown_next_parent_min_ms", "smart_session_cooldown_next_parent_max_ms")))
+            not_before=time.time() + self._delay("smart_session_cooldown_next_parent_min_ms", "smart_session_cooldown_next_parent_max_ms"))
+        self.input_pool.mark_claimed(next_task)
+        self.scheduler.submit(next_task)
         return True
 
     def _queue_replacement_entry(self):
-        if not self.input_pool or self.input_pool.remaining_count() <= 0:
+        if not self.input_pool or not self.input_pool.has_claimable_item():
             return False
         self.scheduler.submit(Task(phone="", stage=TaskStage.ENTRY, target_source="T",
                                    is_session_bootstrap=True, terminal_on_success=False))

@@ -10,6 +10,7 @@ class FakeInputPool:
     def __init__(self, items):
         self.items = list(items)
         self.claim_count = 0
+        self.claimed_tasks = []
 
     def claim_next_item(self):
         self.claim_count += 1
@@ -17,6 +18,12 @@ class FakeInputPool:
 
     def remaining_count(self):
         return len(self.items)
+
+    def has_claimable_item(self):
+        return bool(self.items)
+
+    def mark_claimed(self, task):
+        self.claimed_tasks.append(task)
 
 
 class FakeScheduler:
@@ -96,8 +103,8 @@ class T1ReuseDispatchTests(unittest.TestCase):
 
         self.assertTrue(runner._schedule_next_lane_phone(current, "https://target.invalid/associate/c"))
         self.assertEqual(1, runner.input_pool.claim_count)
+        self.assertEqual([next_task := runner.scheduler.tasks[0]], runner.input_pool.claimed_tasks)
         self.assertEqual(1, len(runner.scheduler.tasks))
-        next_task = runner.scheduler.tasks[0]
         self.assertEqual("B", next_task.reuse_kind)
         self.assertEqual(lane.session_id, next_task.session_id)
         self.assertEqual(lane.chain_id, next_task.chain_id)

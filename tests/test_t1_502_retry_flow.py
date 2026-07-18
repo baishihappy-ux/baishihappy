@@ -38,6 +38,9 @@ class FakeInputPool:
     def remaining_count(self):
         return self.remaining
 
+    def has_claimable_item(self):
+        return self.remaining > 0
+
     def mark_recycled_502(self, task):
         self.recycled.append(task.phone)
         self.remaining = max(0, self.remaining - 1)

@@ -65,12 +65,19 @@ class FakeInputPool:
     def __init__(self, items):
         self.items = list(items)
         self.progress = []
+        self.claimed = []
 
     def claim_next_item(self):
         return self.items.pop(0) if self.items else None
 
     def remaining_count(self):
         return len(self.items)
+
+    def has_claimable_item(self):
+        return bool(self.items)
+
+    def mark_claimed(self, task):
+        self.claimed.append(task.phone)
 
     def mark_progress(self, task, marker):
         self.progress.append((task.phone, marker))
