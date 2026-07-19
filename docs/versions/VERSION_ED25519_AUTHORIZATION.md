@@ -14,11 +14,12 @@ Replace the shared-secret offline authorization format with separated issuer sig
 - `license.dat` stores the original signed code; signature, machine binding, and expiry are checked on every startup.
 - Public license status does not return the provider token.
 
-## Key Recovery
+## Key Loss Policy
 
 - Daily signing uses a private key protected for the current Windows user with DPAPI.
-- A passphrase-encrypted offline recovery file must be created and stored separately from its passphrase.
-- Missing local DPAPI state is a recovery event, not permission to silently rotate the customer public key.
+- No disaster-recovery backup is required for the issuer private key.
+- If the private key is lost, generate a replacement keypair, update the customer public key, rebuild the customer application, and redistribute it.
+- Authorization codes signed by the lost key are not accepted by the rebuilt application.
 
 ## Validation
 
@@ -28,4 +29,3 @@ Replace the shared-secret offline authorization format with separated issuer sig
 - Expiry and machine mismatch rejection.
 - Opaque or editable JSON license rejection.
 - Provider-token isolation from public status.
-- Encrypted recovery export and DPAPI restore roundtrip.

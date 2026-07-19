@@ -63,15 +63,10 @@ verification key and rejects all legacy `DF8-` codes. The issuer private key is 
 Git, build artifacts, and customer packages.
 
 The local issuer key is stored under `.package-secrets/authorization/` and protected by Windows
-DPAPI for the current user. Create an encrypted offline recovery copy with:
-
-```powershell
-python .\tools\export_license_key_recovery.py
-```
-
-Store the recovery file and its passphrase separately. On a replacement Windows profile or machine,
-restore the DPAPI copy with `tools/import_license_key_recovery.py`. Key generation is a one-time
-operation; do not generate a replacement merely because the local DPAPI file is missing.
+DPAPI for the current user. No private-key disaster-recovery backup is required. If that protected
+key is lost, generate a new keypair, replace the customer verification key, rebuild the customer
+application, and redistribute it. The new application intentionally rejects codes signed by the
+lost key.
 
 Required behavior:
 

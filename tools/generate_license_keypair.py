@@ -35,7 +35,6 @@ def generate_keypair(private_key_file: Path):
         "key_id": key_id,
         "public_key": record["public_key"],
         "private_key_file": str(path),
-        "recovery_backup_required": True,
     }
 
 

@@ -12,9 +12,6 @@ from python.auth.license_codec import LICENSE_PREFIX, PUBLIC_KEYS, b64decode, b6
 from python.auth.license_issuer import generate_with_private_key
 from python.auth.license_public_keys import ACTIVE_KEY_ID, PUBLIC_KEYS as PRODUCTION_PUBLIC_KEYS
 from python.engine.cli import build_parser
-from python.auth.windows_dpapi import unprotect_current_user
-from tools.export_license_key_recovery import export_recovery
-from tools.import_license_key_recovery import import_recovery
 
 
 MACHINE = "A" * 32
@@ -109,21 +106,6 @@ class LicenseEd25519Tests(unittest.TestCase):
         source = (Path(__file__).parents[1] / "tools" / "developer_authorizer.py").read_text(encoding="utf-8")
         for label in ["Machine Code", "Valid Days", "Max Windows", "Provider Token"]:
             self.assertIn(f'"{label}"', source)
-
-    def test_encrypted_recovery_export_and_dpapi_restore_roundtrip(self):
-        with tempfile.TemporaryDirectory() as raw:
-            root = Path(raw)
-            recovery = export_recovery(self.private_key, b"long-offline-recovery-passphrase", root / "recovery.pem")
-            with patch("tools.import_license_key_recovery.ACTIVE_KEY_ID", self.key_id), patch.dict(
-                "tools.import_license_key_recovery.PUBLIC_KEYS", self.public_keys, clear=True
-            ):
-                restored, restored_key_id = import_recovery(
-                    recovery, b"long-offline-recovery-passphrase", root / "issuer.dpapi.json"
-                )
-            record = json.loads(restored.read_text(encoding="utf-8"))
-            self.assertEqual(self.key_id, restored_key_id)
-            self.assertEqual(self.private_key.private_bytes_raw(), unprotect_current_user(b64decode(record["protected_private_key"])))
-
 
 if __name__ == "__main__":
     unittest.main()

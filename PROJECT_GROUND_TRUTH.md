@@ -33,7 +33,7 @@ Chat history is not reliable for runtime behavior. Verify from files whenever po
 - Developer authorization form labels remain `Machine Code`, `Valid Days`, `Max Windows`, and `Provider Token`.
 - Customer authorization accepts only the Ed25519-signed `DF9-` format; legacy `DF8-` codes are invalid.
 - Customer engines contain public verification keys only. Issuer modules, private keys, `.package-secrets`, and authorization generation commands must stay out of customer packages.
-- The issuer private key is Windows-DPAPI protected for daily use and must also have a separately stored, passphrase-encrypted offline recovery copy.
+- The issuer private key is Windows-DPAPI protected for daily use. No disaster-recovery backup is required; if the key is lost, rotate the keypair, replace the customer public key, rebuild, and redistribute the customer application.
 - `license.dat` stores the signed authorization code. Every startup re-verifies signature, machine binding, and expiry; public status responses must never expose the provider token.
 - Public GitHub snapshots are generic editions. They must not contain product-specific branding strings, product-specific English identifiers, product-specific Chinese names, or product logo assets in Electron UI, authorization UI, docs, package metadata, filenames, buttons, icons, titles, or recovery notes.
 - Before pushing to GitHub, automatically run the public upload checklist: verify push mode, use an isolated publish tree, check required authorizer lockout, run privacy scans, check ignored files, run syntax checks, verify public config recovery, update version docs when needed, inspect `git status`/diff, push, confirm remote hash, and remove the temporary publish tree.
