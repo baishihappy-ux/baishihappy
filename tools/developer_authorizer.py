@@ -80,8 +80,6 @@ child_windows = []
 last_code = ""
 transitioning_window = False
 window_class_registered = False
-bg_brush = gdi32.CreateSolidBrush(COLOR_BG)
-panel_brush = gdi32.CreateSolidBrush(COLOR_PANEL)
 
 user32.CreateWindowExW.restype = wintypes.HWND
 user32.CreateWindowExW.argtypes = [
@@ -123,6 +121,38 @@ kernel32.GlobalUnlock.restype = wintypes.BOOL
 kernel32.GlobalUnlock.argtypes = [wintypes.HANDLE]
 kernel32.GetModuleHandleW.restype = wintypes.HMODULE
 kernel32.GetModuleHandleW.argtypes = [wintypes.LPCWSTR]
+user32.GetWindowTextLengthW.restype = ctypes.c_int
+user32.GetWindowTextLengthW.argtypes = [wintypes.HWND]
+user32.GetWindowTextW.restype = ctypes.c_int
+user32.GetWindowTextW.argtypes = [wintypes.HWND, wintypes.LPWSTR, ctypes.c_int]
+user32.SetWindowTextW.restype = wintypes.BOOL
+user32.SetWindowTextW.argtypes = [wintypes.HWND, wintypes.LPCWSTR]
+user32.DestroyWindow.restype = wintypes.BOOL
+user32.DestroyWindow.argtypes = [wintypes.HWND]
+user32.MessageBoxW.restype = ctypes.c_int
+user32.MessageBoxW.argtypes = [wintypes.HWND, wintypes.LPCWSTR, wintypes.LPCWSTR, wintypes.UINT]
+user32.GetClientRect.restype = wintypes.BOOL
+user32.GetClientRect.argtypes = [wintypes.HWND, ctypes.POINTER(wintypes.RECT)]
+user32.FillRect.restype = ctypes.c_int
+user32.FillRect.argtypes = [wintypes.HDC, ctypes.POINTER(wintypes.RECT), wintypes.HBRUSH]
+user32.PostQuitMessage.argtypes = [ctypes.c_int]
+user32.GetMessageW.restype = wintypes.BOOL
+user32.GetMessageW.argtypes = [ctypes.POINTER(wintypes.MSG), wintypes.HWND, wintypes.UINT, wintypes.UINT]
+user32.TranslateMessage.restype = wintypes.BOOL
+user32.TranslateMessage.argtypes = [ctypes.POINTER(wintypes.MSG)]
+user32.DispatchMessageW.restype = LRESULT
+user32.DispatchMessageW.argtypes = [ctypes.POINTER(wintypes.MSG)]
+gdi32.CreateSolidBrush.restype = wintypes.HBRUSH
+gdi32.CreateSolidBrush.argtypes = [wintypes.DWORD]
+gdi32.SetTextColor.restype = wintypes.DWORD
+gdi32.SetTextColor.argtypes = [wintypes.HDC, wintypes.DWORD]
+gdi32.SetBkColor.restype = wintypes.DWORD
+gdi32.SetBkColor.argtypes = [wintypes.HDC, wintypes.DWORD]
+gdi32.SetBkMode.restype = ctypes.c_int
+gdi32.SetBkMode.argtypes = [wintypes.HDC, ctypes.c_int]
+
+bg_brush = gdi32.CreateSolidBrush(COLOR_BG)
+panel_brush = gdi32.CreateSolidBrush(COLOR_PANEL)
 
 
 def lock_state_path():

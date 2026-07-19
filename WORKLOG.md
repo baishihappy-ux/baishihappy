@@ -159,3 +159,30 @@ It intentionally avoids public-facing product names, target-site names, secrets,
 - Calibrated T/P offline HTML handling: phone-search listing pages now queue detail links without writing result rows, while detail and associate pages remain exportable records.
 - Added fast local first-name gender lookup using `_gender_map.js`: returns `M/100` or `F/0` without per-record SSA count aggregation.
 - Engine packaging now bundles `_gender_map.js` under the packaged engine internal directory so every customer package carries the gender lookup data.
+
+## Current-Source Black/Gold Authorization Closure
+
+- Confirmed that the active monolithic renderer is the accepted black/gold client and includes its own authorization screen.
+- Identified the incorrect blue window as a packaged `app.asar` embedded inside the project's Electron dependency tree, not as the current renderer source.
+- Isolated source preview under ignored `.tmp_dev_electron/` and made the Windows launcher reject a development runtime containing packaged `app.asar`.
+- Permanently deleted the contaminated `electron/node_modules/` runtime, including its packaged blue archive and backup, after stopping only processes launched from that exact path.
+- Kept the current `electron/main.js`, `electron/preload.js`, black/gold renderer, current `python/main.py`, DF9 Ed25519 authorization, and restored T1 engine on one source path.
+- Removed the inactive modular blue renderer files from the active source tree.
+- Fixed 64-bit Windows ctypes declarations in the source developer authorizer; the visible four customer fields remain unchanged.
+- Automated verification: 66 unit tests passed, including T1 identity flow, 502 handling, interruption recovery, 160-session/32-inflight separation, DF9 signature checks, and development-entry isolation.
+- Manual verification completed with the user:
+  - opened the source developer authorizer;
+  - generated a DF9 authorization code;
+  - activated the source black/gold client;
+  - entered the black/gold home page;
+  - closed and restarted the client;
+  - confirmed authorization was recognized without entering the code again.
+- No customer package was built, no remote Git push was performed, and no live provider request was made.
+
+## Next Plan After Authorization Milestone
+
+1. Preserve this milestone as a local Git checkpoint after secret/runtime-data scanning.
+2. Continue source-only runtime acceptance from the black/gold client using offline fixtures.
+3. Validate UI controls against the restored T1 runtime state, pause/resume flow, and exported test data.
+4. Perform a live provider run only after explicit authorization and with a deliberately bounded request budget.
+5. Package a customer build only after explicit packaging approval.

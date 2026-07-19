@@ -28,6 +28,7 @@ These files define the current behavior rules, public repository rules, and reco
 git clone <public-repository-url> workspace-snapshot
 cd workspace-snapshot
 npm install --prefix electron
+npm install --prefix .tmp_dev_electron --no-audit --no-fund --save=false electron@31.7.7
 python -m pip install -r requirements-authorization.txt
 ```
 
@@ -40,6 +41,21 @@ logs, output, build artifacts, and customer data are intentionally excluded.
 npm --prefix electron start
 ```
 
+On Windows, `启动当前源码客户端.cmd` is the fixed double-click development entry. It resolves the
+workspace from the launcher's own directory, loads the current `electron/` files, and invokes the
+current `python/main.py` engine. Its runtime data is isolated under ignored `.tmp_dev_client/`.
+The Electron development runtime is separately isolated under ignored `.tmp_dev_electron/`. The
+launcher requires Electron's standard `default_app.asar` and rejects any development runtime that
+contains a packaged `app.asar`; this prevents a historical packaged UI from intercepting the source
+entry. It must never point to a copied "latest" directory, a historical customer package, or a
+packaged engine. Source changes are picked up on the next launch without packaging.
+
+Do not use `electron/node_modules/electron/dist/resources/app.asar` as a development entry. A prior
+local dependency tree had been overwritten by a packaged blue client, so passing a source path to
+that executable still launched the packaged UI. That contaminated local dependency tree was
+permanently deleted. The isolated development runtime is a hard boundary between source preview and
+customer-package archives.
+
 The client UI is a runtime mirror. It reads runtime state, events, logs, and configuration.
 It must not implement provider routing, parsing, scheduling, or authorization logic directly.
 
@@ -48,6 +64,10 @@ It must not implement provider routing, parsing, scheduling, or authorization lo
 ```powershell
 python .\tools\developer_authorizer.py
 ```
+
+On Windows, `启动开发者授权程序.cmd` directly executes that same current source file. It must never
+start a previously built authorizer executable. Packaging is a separate customer-delivery action,
+not a requirement for development preview.
 
 The developer authorizer must open with a password gate before showing the authorization generator.
 
