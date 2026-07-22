@@ -25,7 +25,7 @@ class DevelopmentLauncherTests(unittest.TestCase):
         self.assertIn(r"default_app.asar", source)
         self.assertIn('if exist "%DEV_ELECTRON_RESOURCES%\\app.asar"', source)
         self.assertIn(r'"%~dp0electron\main.js"', source)
-        self.assertIn(r"DINGFENG_RUNTIME_ROOT=%~dp0.tmp_dev_client", source)
+        self.assertIn(r"DINGFENG_RUNTIME_ROOT=%~dp0.tmp_dev_client\runtime", source)
         for forbidden in ["dingfeng_engine.exe", "客户包_", "示例kehubao"]:
             self.assertNotIn(forbidden, source)
 

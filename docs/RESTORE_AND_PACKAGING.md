@@ -43,12 +43,17 @@ npm --prefix electron start
 
 On Windows, `启动当前源码客户端.cmd` is the fixed double-click development entry. It resolves the
 workspace from the launcher's own directory, loads the current `electron/` files, and invokes the
-current `python/main.py` engine. Its runtime data is isolated under ignored `.tmp_dev_client/`.
+current `python/main.py` engine. Its shared UI/engine runtime root is isolated under ignored
+`.tmp_dev_client/runtime/`.
 The Electron development runtime is separately isolated under ignored `.tmp_dev_electron/`. The
 launcher requires Electron's standard `default_app.asar` and rejects any development runtime that
 contains a packaged `app.asar`; this prevents a historical packaged UI from intercepting the source
 entry. It must never point to a copied "latest" directory, a historical customer package, or a
 packaged engine. Source changes are picked up on the next launch without packaging.
+
+The launcher must pass `.tmp_dev_client/runtime/` as `DINGFENG_RUNTIME_ROOT`. Passing its parent
+directory makes Python append another `runtime/` layer while Electron continues reading the parent,
+which separates visible UI state from the engine's real configuration, logs, output, and controls.
 
 Do not use `electron/node_modules/electron/dist/resources/app.asar` as a development entry. A prior
 local dependency tree had been overwritten by a packaged blue client, so passing a source path to

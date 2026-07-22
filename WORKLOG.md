@@ -186,3 +186,33 @@ It intentionally avoids public-facing product names, target-site names, secrets,
 3. Validate UI controls against the restored T1 runtime state, pause/resume flow, and exported test data.
 4. Perform a live provider run only after explicit authorization and with a deliberately bounded request budget.
 5. Package a customer build only after explicit packaging approval.
+
+## Source UI And T1 Runtime-Root Alignment
+
+- Found a development-only path mismatch after the authorization milestone: the Electron UI read
+  configuration, state, logs, and output directly under `.tmp_dev_client/`, while the Python engine
+  normalized that root to `.tmp_dev_client/runtime/`.
+- Changed `启动当前源码客户端.cmd` so `DINGFENG_RUNTIME_ROOT` points directly to
+  `.tmp_dev_client/runtime/`. Electron and Python now resolve the same authorization file,
+  configuration, state, logs, output, and control files.
+- The already activated DF9 authorization remained valid at the aligned root.
+- Added a launcher regression assertion for the exact aligned runtime path.
+- Ran the real Python engine entry offline in an ignored acceptance directory with `local_fixture`,
+  one session lane, three synthetic reserved numbers, zero test cooldown, and network disabled.
+- Observed `FINISHED`, three completed inputs, zero remaining, zero failures, zero worker errors,
+  eight fixture requests, four saved/exported records, and no 502 results.
+- Observed the expected stage mix: one entry, three searches, one parent detail, and three associates.
+- Runtime log, CSV/TXT output, input cursor, claims, interruption state, recycle state, and status
+  files were all created in the same runtime tree.
+- Not yet manually verified after this path fix: reopen the black/gold client and confirm its visible
+  metrics, log view, result preview, pause/resume controls, and imported-input status against the
+  aligned runtime tree.
+
+## Next Plan After Runtime-Root Checkpoint
+
+1. Reopen the current-source black/gold client; persisted authorization must still be recognized.
+2. Run a bounded local-fixture T-channel job from the UI and compare visible metrics/logs/results
+   with the aligned runtime files.
+3. Exercise pause/resume and an actual interrupted run through the UI.
+4. Fix only confirmed UI-to-runtime discrepancies and create another local Git checkpoint.
+5. Keep live provider traffic and packaging disabled until explicitly approved.

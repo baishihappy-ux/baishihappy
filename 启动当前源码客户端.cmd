@@ -34,7 +34,7 @@ if not exist "%~dp0python\main.py" (
 )
 
 set "DINGFENG_HOME=%~dp0"
-set "DINGFENG_RUNTIME_ROOT=%~dp0.tmp_dev_client"
+set "DINGFENG_RUNTIME_ROOT=%~dp0.tmp_dev_client\runtime"
 set "PYTHON_EXECUTABLE=python"
 
 call "%DEV_ELECTRON_CMD%" "%~dp0electron\main.js"
