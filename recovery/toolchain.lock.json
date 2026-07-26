@@ -4,7 +4,8 @@
   "bundle": {
     "tag": "recovery-toolchain-v1",
     "file": "recovery-toolchain-win-x64-v1.zip",
-    "url": "https://github.com/baishihappy-ux/baishihappy/releases/download/recovery-toolchain-v1/recovery-toolchain-win-x64-v1.zip"
+    "url": "https://github.com/baishihappy-ux/baishihappy/releases/download/recovery-toolchain-v1/recovery-toolchain-win-x64-v1.zip",
+    "sha256": "22cb153973b8e182f1b3ba48ef177615592959d52ac67f1a8705c70dab28486e"
   },
   "python": {
     "version": "3.13.13",

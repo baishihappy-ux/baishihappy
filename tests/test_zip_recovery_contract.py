@@ -58,6 +58,7 @@ class ZipRecoveryContractTests(unittest.TestCase):
             (ROOT / "recovery/toolchain.lock.json").read_text(encoding="utf-8")
         )
         self.assertEqual("windows-x64", lock["platform"])
+        self.assertRegex(lock["bundle"]["sha256"], r"^[0-9a-f]{64}$")
         for tool in ["python", "node", "gitleaks"]:
             self.assertRegex(lock[tool]["sha256"], r"^[0-9a-f]{64}$")
             self.assertNotIn("latest", lock[tool]["url"].lower())

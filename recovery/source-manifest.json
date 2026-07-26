@@ -1,22 +1,22 @@
 ﻿{
     "schema":  1,
     "algorithm":  "sha256",
-    "sourceTree":  "1bb4424e6d37e86c389b21d2a24d1c61aef7647d",
+    "sourceTree":  "e869bf7b7f2afebfd822fb980d0f4f024b8584f5",
     "files":  [
                   {
                       "path":  ".gitattributes",
-                      "size":  144,
-                      "sha256":  "8b3f6de9d0b82e9366fa5940b3c2143d78195d57b520f40498bd76adde5ec228"
+                      "size":  155,
+                      "sha256":  "b8eff2485031dfa5d559a5af75b519fc35f3dfd6f824aac0898298a7d6927a77"
                   },
                   {
                       "path":  ".github/workflows/zip-recovery.yml",
-                      "size":  6879,
-                      "sha256":  "0fd1a47df8a90aeef85d8056d0f270b2c9144753c24472b4318c306a9e78f9ef"
+                      "size":  6733,
+                      "sha256":  "d42dd174b2c5d72c2af3ad71c0906de00fb082d0b9aa08e17897251593129078"
                   },
                   {
                       "path":  ".gitignore",
-                      "size":  673,
-                      "sha256":  "44cd74ce257ed062b63b29378e4fbf7897a41a756857dcca6b2bd2388ee5ba5d"
+                      "size":  632,
+                      "sha256":  "3b14e0fe199e9901d90c7bc1e5887b7c60e9accb03fe1913e798428a712f1a17"
                   },
                   {
                       "path":  "assets/build/gender/_gender_map.js",
@@ -30,13 +30,13 @@
                   },
                   {
                       "path":  "DingFengDeveloperAuthorizer.spec",
-                      "size":  741,
-                      "sha256":  "e54f4c7bf6c2073f4a9d5d5b95f18b16e79a39ec656a92d40474bfaf126ccf5b"
+                      "size":  703,
+                      "sha256":  "95db21ab1eb4e367044b535e6648ea10a1b1cef28312f0657c2316f21a6f8403"
                   },
                   {
                       "path":  "DingFengEngine.spec",
-                      "size":  963,
-                      "sha256":  "400202b7133975dbc559e53ff34d9141ed9c9d1a4532276d14c2ce9fdcf22f7a"
+                      "size":  913,
+                      "sha256":  "707c1e0fbbd5d4cc5fb360bdf049147444cfd65db5da76988c4ed3bc80493ffd"
                   },
                   {
                       "path":  "docs/ARCHITECTURE.md",
@@ -115,13 +115,13 @@
                   },
                   {
                       "path":  "electron/monitor/index.html",
-                      "size":  2380,
-                      "sha256":  "47c06631b76465775fb3668f1a0fee0c11fb50123fda164c68e0e50dab84236d"
+                      "size":  2316,
+                      "sha256":  "8a43ad767e7099c4407679fed8994c8e4f78ebd943359f4e0b066f28f17d706a"
                   },
                   {
                       "path":  "electron/monitor/monitor.css",
-                      "size":  2833,
-                      "sha256":  "800fbfc7f70452ec81d594027d82bcab25345fa8b5298c7e34551d3125b0d1b7"
+                      "size":  2690,
+                      "sha256":  "96395ca2e0e72a885f8430c391ede02d854c87bf2730a112b9c3c66e02a16f4c"
                   },
                   {
                       "path":  "electron/monitor/monitor.js",
@@ -165,8 +165,8 @@
                   },
                   {
                       "path":  "electron/renderer/index.html",
-                      "size":  9653,
-                      "sha256":  "282ae2df02931e2384efa18ea1791e5d0a0d5f31aa0d556230e418a7dbeac566"
+                      "size":  9438,
+                      "sha256":  "9e622c4e9ac81ad500e136cb1f8ca1596a3682083a7e2353a8e415095e6c927e"
                   },
                   {
                       "path":  "electron/renderer/renderer.js",
@@ -175,8 +175,8 @@
                   },
                   {
                       "path":  "electron/renderer/style.css",
-                      "size":  23496,
-                      "sha256":  "d90b258efab6937b1117acc094a55429b6df96cdccb662d372f97d1baf0ecaae"
+                      "size":  22326,
+                      "sha256":  "4e9035ba6bd45d4b240655f5b2c0b5b9329f924f46e7e81c15483466bb60b25a"
                   },
                   {
                       "path":  "PROJECT_GROUND_TRUTH.md",
@@ -540,18 +540,18 @@
                   },
                   {
                       "path":  "recovery/gitleaks.toml",
-                      "size":  286,
-                      "sha256":  "9a1dd7d3d7f4549fe27eeff8938c995725f34e66924ee133ca38dfd6b53a39e5"
+                      "size":  275,
+                      "sha256":  "744322b8895ad2d36dfdb980bf4c882edd69e01965de7d43ffa68e5fe5a4b535"
                   },
                   {
                       "path":  "recovery/python-lock.in",
-                      "size":  273,
-                      "sha256":  "af1ddee9fb5760e3d3918409b5ee4ab5e1ccfbdebb16ed6530b520a177b57c7e"
+                      "size":  260,
+                      "sha256":  "02e8f1b1974d76431f60452528a04ebdcc5300ed5ef03fb494746e8242b42743"
                   },
                   {
                       "path":  "recovery/python-lock.txt",
-                      "size":  1300,
-                      "sha256":  "e95fb8f2bf12e730e11d23395b2d0d2f1daad01fbfda20e0ad94a50a31c21da0"
+                      "size":  1287,
+                      "sha256":  "a12954eaab3952402fc43e44b73baf2f05db0736c4d2285f1a8ee01b5b738426"
                   },
                   {
                       "path":  "recovery/restore.ps1",
@@ -570,23 +570,23 @@
                   },
                   {
                       "path":  "recovery/toolchain.lock.json",
-                      "size":  969,
-                      "sha256":  "cc42bc6ed9e4b0b925ca6c57ff3ee8551c65642200787948f8f00412cf51ee07"
+                      "size":  1051,
+                      "sha256":  "4e9a2d71b95ca46cef1ef48133a69fc499f3b63bee6a12c411718d2b356bbf47"
                   },
                   {
                       "path":  "requirements-authorization.txt",
-                      "size":  22,
-                      "sha256":  "3c038ca3f396496b0ba4aa4a58bbda2f036e4796735aec74caa910a07b8b7ad7"
+                      "size":  21,
+                      "sha256":  "d5b937414245e4fb32db031c55333d8b10144cdde9e4b9ec2f4574a887eb9ec9"
                   },
                   {
                       "path":  "requirements-build.txt",
-                      "size":  50,
-                      "sha256":  "d3b186be32c3047b0b79ce576408b3b029e169d5d811bf40e7de99854338dd85"
+                      "size":  48,
+                      "sha256":  "0e99c80105862a49e4504bf197192eeeec14aeee5bab5e7f0640d2ef3e5afa6e"
                   },
                   {
                       "path":  "requirements-runtime.txt",
-                      "size":  46,
-                      "sha256":  "061257563ea63c9b680ef08364a0eda36214edaa6d92022bc177be2891521225"
+                      "size":  44,
+                      "sha256":  "ee2b3cf4aa1ecf091c58b4445eb31330ab771e04ed87bfd8a71a8bf6228db1e2"
                   },
                   {
                       "path":  "runtime/config/app_config.json",
@@ -715,8 +715,8 @@
                   },
                   {
                       "path":  "tests/test_zip_recovery_contract.py",
-                      "size":  3136,
-                      "sha256":  "78a9291ebc9af566fbac8f5236d60f1284f45c27322916261d13ada1883d79bb"
+                      "size":  3206,
+                      "sha256":  "f36ff98f4b54935671da7a08169c3c6830eec9682687c9106575a4f213cc1dcb"
                   },
                   {
                       "path":  "tools/developer_authorizer.py",
