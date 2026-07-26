@@ -35,7 +35,9 @@ Chat history is not reliable for runtime behavior. Verify from files whenever po
 - Customer engines contain public verification keys only. Issuer modules, private keys, `.package-secrets`, and authorization generation commands must stay out of customer packages.
 - The issuer private key is Windows-DPAPI protected for daily use. No disaster-recovery backup is required; if the key is lost, rotate the keypair, replace the customer public key, rebuild, and redistribute the customer application.
 - `license.dat` stores the signed authorization code. Every startup re-verifies signature, machine binding, and expiry; public status responses must never expose the provider token.
-- Public GitHub snapshots are generic editions. They must not contain product-specific branding strings, product-specific English identifiers, product-specific Chinese names, or product logo assets in Electron UI, authorization UI, docs, package metadata, filenames, buttons, icons, titles, or recovery notes.
+- The public GitHub project is the only disaster-recovery source. Project-specific source, UI assets, branding, and build assets required to reconstruct the development and production-build environment must be present in the public ZIP.
+- The only formal manual recovery path is GitHub `Code` -> `Download ZIP` -> extract into a new empty folder -> double-click root `恢复生产环境.cmd`.
+- Git clone, Git pull, and `.git` metadata are not recovery steps or recovery requirements. Recovery tests and security scans must work against the real GitHub ZIP with no `.git` directory.
 - Before pushing to GitHub, automatically run the public upload checklist: verify push mode, use an isolated publish tree, check required authorizer lockout, run privacy scans, check ignored files, run syntax checks, verify public config recovery, update version docs when needed, inspect `git status`/diff, push, confirm remote hash, and remove the temporary publish tree.
 - Separate local memory from public recovery:
   - `LOCAL_*.md` and `PRIVATE_*.md` may exist on this machine with full evidence.
@@ -65,7 +67,8 @@ Chat history is not reliable for runtime behavior. Verify from files whenever po
 
 When restoring from GitHub:
 
-1. Read this file.
-2. Read `WORKLOG.md`.
-3. Inspect relevant source files before answering behavior questions.
-4. Treat any missing runtime samples as unknown rather than guessing.
+1. Use only the procedure in `docs/唯一恢复方式.md`.
+2. Read this file.
+3. Read `WORKLOG.md`.
+4. Inspect relevant source files before answering behavior questions.
+5. Treat any missing runtime samples as unknown rather than guessing.

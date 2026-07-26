@@ -32,4 +32,4 @@ Initial public recovery snapshot of the reconstructed workspace.
 
 ## Restore Notes
 
-Clone the repository, restore local runtime secrets outside git, then read `PROJECT_GROUND_TRUTH.md` and `WORKLOG.md` before making behavior-sensitive changes.
+This historical instruction is superseded by `docs/唯一恢复方式.md`. Use the public GitHub ZIP and root recovery entry, then read `PROJECT_GROUND_TRUTH.md` and `WORKLOG.md` before making behavior-sensitive changes.

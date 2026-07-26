@@ -20,4 +20,4 @@ Require a developer password before opening the authorization tool.
 
 ## Restore Notes
 
-After cloning, the developer authorization tool password is required before generating authorization codes.
+After completing ZIP-only recovery, the developer authorization tool password is required before generating authorization codes.

@@ -216,3 +216,14 @@ It intentionally avoids public-facing product names, target-site names, secrets,
 3. Exercise pause/resume and an actual interrupted run through the UI.
 4. Fix only confirmed UI-to-runtime discrepancies and create another local Git checkpoint.
 5. Keep live provider traffic and packaging disabled until explicitly approved.
+
+## ZIP-Only Disaster Recovery Contract
+
+- The public GitHub project is now the authoritative disaster-recovery source.
+- The only formal manual recovery entry is GitHub `Code` -> `Download ZIP` -> a new empty folder -> root `恢复生产环境.cmd`.
+- Recovery, automated tests, and public-tree security scans must run without Git metadata or Git commands.
+- Added a manifest-defined public tree with path, size, and SHA-256 validation.
+- Moved the required gender mapping asset into `assets/build/gender/_gender_map.js`; production builds no longer search parent folders or reuse ignored generated copies.
+- Added pinned Python, Node.js, Electron, PyInstaller, and Gitleaks toolchain metadata.
+- Added project-local dependency preparation, source tests, JavaScript syntax checks, secret scans, and non-deliverable production validation builds.
+- Formal customer packaging, suite-ID consumption, authorization issuance, code signing, and live provider traffic remain outside disaster recovery.

@@ -69,7 +69,7 @@ Tier A must remain hard-isolated from control-brain and session-pool behavior.
 
 ## Recovery Notes
 
-After cloning:
+After completing the ZIP-only recovery:
 
 1. Read `PROJECT_GROUND_TRUTH.md`.
 2. Read `WORKLOG.md`.

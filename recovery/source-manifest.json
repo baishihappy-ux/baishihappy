@@ -1,0 +1,752 @@
+﻿{
+    "schema":  1,
+    "algorithm":  "sha256",
+    "sourceTree":  "e0b06917106cfbc0015cecc3ef51904a1e1109ec",
+    "files":  [
+                  {
+                      "path":  ".gitattributes",
+                      "size":  144,
+                      "sha256":  "8b3f6de9d0b82e9366fa5940b3c2143d78195d57b520f40498bd76adde5ec228"
+                  },
+                  {
+                      "path":  ".github/workflows/zip-recovery.yml",
+                      "size":  6443,
+                      "sha256":  "fb21cac7554b7dc65b3deb1674560a3cf294a740fe40aa97a487840466d72523"
+                  },
+                  {
+                      "path":  ".gitignore",
+                      "size":  673,
+                      "sha256":  "44cd74ce257ed062b63b29378e4fbf7897a41a756857dcca6b2bd2388ee5ba5d"
+                  },
+                  {
+                      "path":  "assets/build/gender/_gender_map.js",
+                      "size":  2046506,
+                      "sha256":  "20b0122a7be802b95e1c6ccb44854bfb4a55023c672dec0dbae348058a0859dc"
+                  },
+                  {
+                      "path":  "assets/build/gender/README.md",
+                      "size":  553,
+                      "sha256":  "cc352880a378eac57b926e012504fdd730c974556b0d51be421f40e43c9f7009"
+                  },
+                  {
+                      "path":  "DingFengDeveloperAuthorizer.spec",
+                      "size":  741,
+                      "sha256":  "e54f4c7bf6c2073f4a9d5d5b95f18b16e79a39ec656a92d40474bfaf126ccf5b"
+                  },
+                  {
+                      "path":  "DingFengEngine.spec",
+                      "size":  963,
+                      "sha256":  "400202b7133975dbc559e53ff34d9141ed9c9d1a4532276d14c2ce9fdcf22f7a"
+                  },
+                  {
+                      "path":  "docs/ARCHITECTURE.md",
+                      "size":  2231,
+                      "sha256":  "03ef06ec16c99e2f3fc347e59a8a141190e8565747f787b174663150fe3317d5"
+                  },
+                  {
+                      "path":  "docs/RESTORE_AND_PACKAGING.md",
+                      "size":  3290,
+                      "sha256":  "6ad899df1b729d283fa5866c94f29121ed340aac4f21faebe51ac83b2d60346c"
+                  },
+                  {
+                      "path":  "docs/versions/VERSION_AUTHORIZER_PASSWORD.md",
+                      "size":  919,
+                      "sha256":  "0a30dcc7db1fcb74652886c7cbbbfe9877f5b7d1a653e59f8707f846d1e1d471"
+                  },
+                  {
+                      "path":  "docs/versions/VERSION_ED25519_AUTHORIZATION.md",
+                      "size":  1512,
+                      "sha256":  "3b5827c525a28d78ec91b3742e3dfd44f596f66932364c61f460071b63d3f387"
+                  },
+                  {
+                      "path":  "docs/versions/VERSION_INITIAL.md",
+                      "size":  884,
+                      "sha256":  "e67e221b4d838319ab7d32c91e5a2eec826bf57199a56ade1be4c3fdfcb0f1a5"
+                  },
+                  {
+                      "path":  "docs/versions/VERSION_PUBLIC_PRIVACY.md",
+                      "size":  942,
+                      "sha256":  "3e17f28afc0a1ff0d44ef2d9ce3f8b5d2d7b6b1e535460e3efb3ee1063ba09f8"
+                  },
+                  {
+                      "path":  "docs/versions/VERSION_PYTHON_TK_AUTHORIZER.md",
+                      "size":  1131,
+                      "sha256":  "4854c7ba0a8e2a59ae1fec856d489afe53c4fe548bac0c3e429b3d2523f8aefe"
+                  },
+                  {
+                      "path":  "docs/versions/VERSION_RESTORE_PACKAGING_GUIDE.md",
+                      "size":  892,
+                      "sha256":  "f00263a9909c6841050f7c696cbefbafe1d2c0eeab91bbf19d7cb06ef20b9596"
+                  },
+                  {
+                      "path":  "docs/versions/VERSION_SOURCE_BLACK_GOLD_AUTH_CLOSURE.md",
+                      "size":  1853,
+                      "sha256":  "938e2901643074b7e0ec31bae97507ed3e97646cfed66db61d82505602996646"
+                  },
+                  {
+                      "path":  "docs/versions/VERSION_SOURCE_UI_T1_RUNTIME_ALIGNMENT.md",
+                      "size":  1396,
+                      "sha256":  "23a64b3105a36d960c2cff1b9330273c1929b9ad4a49af3dd86a9a69625e8f79"
+                  },
+                  {
+                      "path":  "docs/versions/VERSION_V9_1_1.md",
+                      "size":  1414,
+                      "sha256":  "19e4ee0a22deaa47655a2f5988fbfe39fec19eabc1de2949eb5316c5543e03c7"
+                  },
+                  {
+                      "path":  "docs/versions/VERSION_V9_1_2.md",
+                      "size":  1732,
+                      "sha256":  "077aa0e5d6702843d41ade30b69acff1bd399ef060ee28d4914dc06827654d6e"
+                  },
+                  {
+                      "path":  "docs/versions/VERSION_ZIP_ONLY_DISASTER_RECOVERY.md",
+                      "size":  1078,
+                      "sha256":  "0c132d2f760e155cedd7d22eef2bd93bf30a638622803d2355f8e8dffbf86d11"
+                  },
+                  {
+                      "path":  "docs/唯一恢复方式.md",
+                      "size":  1458,
+                      "sha256":  "297f77f77b485ebfee464e1da060a30e229a4f79808a1a5e23b33b8563cb9d4d"
+                  },
+                  {
+                      "path":  "electron/main.js",
+                      "size":  61126,
+                      "sha256":  "69ef54d8f55855ea5fa3828988d6c69b8a25675053d1f68a1f6c0fd2f8b70f08"
+                  },
+                  {
+                      "path":  "electron/monitor/index.html",
+                      "size":  2380,
+                      "sha256":  "47c06631b76465775fb3668f1a0fee0c11fb50123fda164c68e0e50dab84236d"
+                  },
+                  {
+                      "path":  "electron/monitor/monitor.css",
+                      "size":  2833,
+                      "sha256":  "800fbfc7f70452ec81d594027d82bcab25345fa8b5298c7e34551d3125b0d1b7"
+                  },
+                  {
+                      "path":  "electron/monitor/monitor.js",
+                      "size":  3625,
+                      "sha256":  "b1729a02c66b432ead55990f18e02ddb9257175850541ba15ba60d4ec38792ca"
+                  },
+                  {
+                      "path":  "electron/package.json",
+                      "size":  246,
+                      "sha256":  "f5ed21702ae02511fe9a9e8e3ffe26e7e0634060d0219991cc9cb507dcb25821"
+                  },
+                  {
+                      "path":  "electron/package-lock.json",
+                      "size":  19380,
+                      "sha256":  "628e7265c3cec6e1f538e8e68706ad6208fba117d6f0714e5faf4ed82e35f339"
+                  },
+                  {
+                      "path":  "electron/preload.js",
+                      "size":  1845,
+                      "sha256":  "b40de97c629400fc0210e27dfdd615ef72797612721b9a3d28b3649488a6cc8e"
+                  },
+                  {
+                      "path":  "electron/renderer/assets/app_icon.png",
+                      "size":  1561658,
+                      "sha256":  "b6635246f91f8fc5a68d5bd23ee609ff95efa893e788bf2d2da33a300ed1293c"
+                  },
+                  {
+                      "path":  "electron/renderer/assets/audio/scifi_canon_space_loop_90s_v3_climax_loud.wav",
+                      "size":  7938044,
+                      "sha256":  "2f062ee6f76dae165554f4778c731a90b6cad58ff6c0bb24db2c5a61b1e6f31f"
+                  },
+                  {
+                      "path":  "electron/renderer/assets/newfeichuan.png",
+                      "size":  1539561,
+                      "sha256":  "29d24a50ccd5e5956137c446877789f297e6adf6186358cfb550f781a10dc33e"
+                  },
+                  {
+                      "path":  "electron/renderer/assets/newlogo.png",
+                      "size":  1561658,
+                      "sha256":  "b6635246f91f8fc5a68d5bd23ee609ff95efa893e788bf2d2da33a300ed1293c"
+                  },
+                  {
+                      "path":  "electron/renderer/index.html",
+                      "size":  9653,
+                      "sha256":  "282ae2df02931e2384efa18ea1791e5d0a0d5f31aa0d556230e418a7dbeac566"
+                  },
+                  {
+                      "path":  "electron/renderer/renderer.js",
+                      "size":  63569,
+                      "sha256":  "b7bf2b636b2d21395247f3c9d12fd6466c4714f322087b25d4035cf62761aecd"
+                  },
+                  {
+                      "path":  "electron/renderer/style.css",
+                      "size":  23496,
+                      "sha256":  "d90b258efab6937b1117acc094a55429b6df96cdccb662d372f97d1baf0ecaae"
+                  },
+                  {
+                      "path":  "PROJECT_GROUND_TRUTH.md",
+                      "size":  5095,
+                      "sha256":  "8b6deca5835352ad42d70e7499df334302273dc3bfafb27dae67a0e8b6145d60"
+                  },
+                  {
+                      "path":  "python/__init__.py",
+                      "size":  46,
+                      "sha256":  "2dc02f774940e9555d05282e95ed5ed2924f07f039192f71c553dbf799e42200"
+                  },
+                  {
+                      "path":  "python/auth/__init__.py",
+                      "size":  49,
+                      "sha256":  "87d0a4f90db78466d11792d8240c3238ead383d2269db7ea1ddac7b2c88621b7"
+                  },
+                  {
+                      "path":  "python/auth/license.py",
+                      "size":  4158,
+                      "sha256":  "9c1e84a62ffcaf41a9b1c48932927f42131b2286741dfc8f79c30b05bbecf01e"
+                  },
+                  {
+                      "path":  "python/auth/license_codec.py",
+                      "size":  3691,
+                      "sha256":  "bc9f4dd75485ffc8e817497bb5a9095947fda6d43a9578ced766cc0ad5c276ba"
+                  },
+                  {
+                      "path":  "python/auth/license_issuer.py",
+                      "size":  3788,
+                      "sha256":  "25d155c06d09eb59fe137619eb7d30c99d5a1b1ddfc6d87cbdf305ed39e03df0"
+                  },
+                  {
+                      "path":  "python/auth/license_public_keys.py",
+                      "size":  237,
+                      "sha256":  "6eed0b00aa18e1145f6ad2d188fb74b66e3178f7aea4af8070aac16f0df1a8f9"
+                  },
+                  {
+                      "path":  "python/auth/machine.py",
+                      "size":  335,
+                      "sha256":  "09b2a47126592acac5f7f4d58b7259badce658a5edc7de420f98556a41f4fbec"
+                  },
+                  {
+                      "path":  "python/auth/windows_dpapi.py",
+                      "size":  1706,
+                      "sha256":  "9fa2eff43a3bb61f402b88dc2d449eb2c9e8d8c9fb1253acdc6d7d90b9dfc822"
+                  },
+                  {
+                      "path":  "python/challenge/__init__.py",
+                      "size":  125,
+                      "sha256":  "6a8767ecadf4b2579f9d14e8922f9ee394f9268964850d354fd2aeeab0d93c15"
+                  },
+                  {
+                      "path":  "python/challenge/detector.py",
+                      "size":  1593,
+                      "sha256":  "11581323c43fc08d0e53095a89d56ca60a8815112a2472c64b76d73a960a11fb"
+                  },
+                  {
+                      "path":  "python/control/__init__.py",
+                      "size":  33,
+                      "sha256":  "294d0e05bcb4ebba08f91f5c91a514041568f286fdf77f72d37f605da8a7aee3"
+                  },
+                  {
+                      "path":  "python/control/brain.py",
+                      "size":  6071,
+                      "sha256":  "958445653e3939d1dfab60f8fa749d50ec8a976d64d8aa9dfac8552ab9d52e87"
+                  },
+                  {
+                      "path":  "python/control/signals.py",
+                      "size":  354,
+                      "sha256":  "d4e013a7ebdcef8706c3f2fa85f25056504e34d02ee4b753632c66d954498133"
+                  },
+                  {
+                      "path":  "python/control/state_vector.py",
+                      "size":  1459,
+                      "sha256":  "ede968cd9083d595b6dfd1b8c41d578f86b5d950b9b44236ed1ba27d1bf0bd2c"
+                  },
+                  {
+                      "path":  "python/customer_privacy.py",
+                      "size":  934,
+                      "sha256":  "994c822721bdad367ac4e16fdf49a1cf118f0ce5deae6da0bd4347ddb03284c9"
+                  },
+                  {
+                      "path":  "python/do_tps_associate_harvest.py",
+                      "size":  878,
+                      "sha256":  "5953bdd83e901bf7e37fe6f94a40053f363befa8453e909e3ce9d7102256629b"
+                  },
+                  {
+                      "path":  "python/do_tps_session_flow.py",
+                      "size":  156,
+                      "sha256":  "7113ffa143c4f18415bad353efdf4c928f003f5c7ac44c50248447b5f24c3c1e"
+                  },
+                  {
+                      "path":  "python/do_tps_smart_session_manager.py",
+                      "size":  154,
+                      "sha256":  "ef01c4e14db1483d5b19590a2f7e99f01298e32a3a800351e9f8c85228a65eef"
+                  },
+                  {
+                      "path":  "python/engine/__init__.py",
+                      "size":  36,
+                      "sha256":  "fcdc26188853ad1cdc87fea326658927053605494b0b0b515dc62ddb156b2ef4"
+                  },
+                  {
+                      "path":  "python/engine/batch.py",
+                      "size":  6880,
+                      "sha256":  "f245631fcc3ea9b4ad6ce34af7d72bef6df05214d8b72f5382eae74a15d6f21d"
+                  },
+                  {
+                      "path":  "python/engine/cli.py",
+                      "size":  9919,
+                      "sha256":  "ac462b6656c3877bc69917d4d9b5967155b6d08fc81f098bf0ef8e117f877755"
+                  },
+                  {
+                      "path":  "python/engine/config.py",
+                      "size":  3797,
+                      "sha256":  "650a560371000b1eb5fcaac9184d846b90d9a1e5a60b0b92fccecce2bf981d54"
+                  },
+                  {
+                      "path":  "python/engine/input_pool.py",
+                      "size":  18177,
+                      "sha256":  "e760e2562dad4c80dd5da1de2bbba6208d351e157ebfff59eff308dac3195a3f"
+                  },
+                  {
+                      "path":  "python/engine/query_service.py",
+                      "size":  2014,
+                      "sha256":  "67336cb02d588ea0b73f5695df0d267931bd56827c5c848878cc1b15253eeb0d"
+                  },
+                  {
+                      "path":  "python/engine/runner.py",
+                      "size":  31397,
+                      "sha256":  "f58f51389afad128b35d84c15fc20983bab68237351d2af6e0035d8db901b9db"
+                  },
+                  {
+                      "path":  "python/engine/runtime_control.py",
+                      "size":  19195,
+                      "sha256":  "fac84d13336745d9d5e1542123a3e3edc4cd6ed8d127727cf028fc285d6083b3"
+                  },
+                  {
+                      "path":  "python/engine/smart_session.py",
+                      "size":  177,
+                      "sha256":  "67a7415688df7518d9f47a932165eb591615b3c29c57fa4e944f8518a7f5facd"
+                  },
+                  {
+                      "path":  "python/engine/status.py",
+                      "size":  4469,
+                      "sha256":  "2406bb273ec84a5be2fb886bb34bc9877299d9ee4f668d933d5c97692878d1c7"
+                  },
+                  {
+                      "path":  "python/engine/t_entry_plan.py",
+                      "size":  7996,
+                      "sha256":  "e5ee519400ce1014cf358ca871d5490103dae09b89260dd7edf09b5f7b708768"
+                  },
+                  {
+                      "path":  "python/export/__init__.py",
+                      "size":  22,
+                      "sha256":  "fb472d80e4ab89f04aa568b3a723d75c7325fce49214e4a9d522312bd5b92b23"
+                  },
+                  {
+                      "path":  "python/export/writers.py",
+                      "size":  3662,
+                      "sha256":  "6e0fdd070b27c87e2b9ff805c17b728db43bd7f6b046dd7cd4ac9c1307705722"
+                  },
+                  {
+                      "path":  "python/export_manager.py",
+                      "size":  291,
+                      "sha256":  "fdee0a1388d77fafc9f8ab87d254ec7fb54480e0c9c196a183ac7bbee4e048a6"
+                  },
+                  {
+                      "path":  "python/main.py",
+                      "size":  208,
+                      "sha256":  "8f1c52ecdd05d126d43215720b24a28d890f281ed90f6ffaae527ac5c5110ca9"
+                  },
+                  {
+                      "path":  "python/network/__init__.py",
+                      "size":  36,
+                      "sha256":  "59723ba7863c1784f3329694894e2f0820a6e65314c403cba48bcc3cd76d3220"
+                  },
+                  {
+                      "path":  "python/network/http_client.py",
+                      "size":  879,
+                      "sha256":  "0b60ca4e037667c1882e13bf550eef93aabec7501ac4b0e232321fe72fae80f2"
+                  },
+                  {
+                      "path":  "python/parser/__init__.py",
+                      "size":  31,
+                      "sha256":  "4f01a5d3eadd846edeb6cdea686c28da9456d1418497d8d95a682a231a8ea568"
+                  },
+                  {
+                      "path":  "python/parser/encoded_sources.py",
+                      "size":  2023,
+                      "sha256":  "b77b7789a701ac35e9a6c27e4149ba103fd3985d86b85bc2d2d63062de6cecb5"
+                  },
+                  {
+                      "path":  "python/parser/html_parser.py",
+                      "size":  27044,
+                      "sha256":  "7d59a8d5b41c4c8936599ddf8e1f6d6098f06159b120eeefed8ff47500b459e5"
+                  },
+                  {
+                      "path":  "python/parser/source_profiles.py",
+                      "size":  1051,
+                      "sha256":  "286599fbdc28b41c7ac42566e7dc0b2830cb232c9a8abd322f8809016c1a702d"
+                  },
+                  {
+                      "path":  "python/parser_manager.py",
+                      "size":  680,
+                      "sha256":  "18761635de317162c0d4540e32761ecfacb5f954cc4fc8248ecbbaf94739f721"
+                  },
+                  {
+                      "path":  "python/provider_shim/__init__.py",
+                      "size":  150,
+                      "sha256":  "21825e021cde66c0b43808141ad14d2c28dcc2d6a5a85f3adef18bff62bcf4d5"
+                  },
+                  {
+                      "path":  "python/provider_shim/response_adapter.py",
+                      "size":  150,
+                      "sha256":  "21825e021cde66c0b43808141ad14d2c28dcc2d6a5a85f3adef18bff62bcf4d5"
+                  },
+                  {
+                      "path":  "python/providers/__init__.py",
+                      "size":  30,
+                      "sha256":  "b5edb8b57a007d7ed965ed7c6967521ff47535c4ec76cb8d6abab8a19d3f1f5d"
+                  },
+                  {
+                      "path":  "python/providers/base_provider.py",
+                      "size":  824,
+                      "sha256":  "807e0d80c3979e63749c28af0e4d1f58031cd66db45a75b759fbf829046b47d3"
+                  },
+                  {
+                      "path":  "python/providers/do_provider.py",
+                      "size":  2951,
+                      "sha256":  "d9e125bbef5ca3ee74b3fb340b8b462b8a0862579c6941af5721e4faf223483b"
+                  },
+                  {
+                      "path":  "python/providers/local_provider.py",
+                      "size":  1453,
+                      "sha256":  "ebeb008a71b4b3f74f49dd9162b573c333ceacf41c19213e4d90a105850c3c1f"
+                  },
+                  {
+                      "path":  "python/providers/provider_manager.py",
+                      "size":  6224,
+                      "sha256":  "e937fc9450d93fa8645cf815e2016f9452de382828f1a59de0ce7cd48df849bf"
+                  },
+                  {
+                      "path":  "python/providers/provider_shim.py",
+                      "size":  2722,
+                      "sha256":  "50fd677f66014dd94e2dc49bdc3989b64b058db55a2a1f7cf3e882c1d05bc25f"
+                  },
+                  {
+                      "path":  "python/providers/semi_managed_provider.py",
+                      "size":  1163,
+                      "sha256":  "88ae4b2cb87fd07a26604bac72ed1d92f77f96fe9036b143e219276ee7f5beb3"
+                  },
+                  {
+                      "path":  "python/providers/unstable_provider.py",
+                      "size":  940,
+                      "sha256":  "e76856f44e00c6601e1627df6ea53a9a333f84e90c3a5a591ebc8f2be842ec3f"
+                  },
+                  {
+                      "path":  "python/queue/__init__.py",
+                      "size":  32,
+                      "sha256":  "cfae6333ac1fa45c3e344a9e350a1a0140ce3026f657d8f6d81a5e5c95830024"
+                  },
+                  {
+                      "path":  "python/queue/scheduler.py",
+                      "size":  2840,
+                      "sha256":  "927a2558a400c28f6ee54d4f4ea02e45d4286dca156784522ed712dd5f6da70e"
+                  },
+                  {
+                      "path":  "python/queue/tasks.py",
+                      "size":  1041,
+                      "sha256":  "b6e58e4d6cab3a666f9de56d96f43adf1aa1b21009600c3ba7eac173bbf085fb"
+                  },
+                  {
+                      "path":  "python/runtime_cli/__init__.py",
+                      "size":  90,
+                      "sha256":  "161c41b9960705f9b5c451306c503c61dfc1bdeb77420dad095629a41fba28c8"
+                  },
+                  {
+                      "path":  "python/runtime_cli/remaining_recovery.py",
+                      "size":  218,
+                      "sha256":  "aa3652c5d8e9dea6dea3d42ea15bc6f6e137ece93df33192bd6ccffb79b14ef6"
+                  },
+                  {
+                      "path":  "python/runtime_cli/run_analyzer.py",
+                      "size":  1673,
+                      "sha256":  "15f35889fe086fb6d53601977a35780b453406b727e9abff00583f9a7007f027"
+                  },
+                  {
+                      "path":  "python/runtime_cli/terminal_observer.py",
+                      "size":  734,
+                      "sha256":  "0eac75fd1c0361bae4dedb8a020a9a10b04920565bcf6087c7ba0872a3d7ff80"
+                  },
+                  {
+                      "path":  "python/session/__init__.py",
+                      "size":  36,
+                      "sha256":  "49c08d7104db2d99e1fcfa957a0f1c37153b81b0167953ffdcd7b9806a585ea0"
+                  },
+                  {
+                      "path":  "python/session/lane.py",
+                      "size":  6846,
+                      "sha256":  "114017cfc8082e40fba7bf67bc6c931ed18d21736d1b0fd39a31ec9e559f990a"
+                  },
+                  {
+                      "path":  "python/session/pool.py",
+                      "size":  4568,
+                      "sha256":  "0b72481a7f351ad01747530e1a867b85236200eeb3a9822a7682d66e5b27ad54"
+                  },
+                  {
+                      "path":  "python/session/reuse_pattern.py",
+                      "size":  1015,
+                      "sha256":  "73950c214809fa82c14ab8a1e580b381c287202884fbacb1e66538bcd26a072d"
+                  },
+                  {
+                      "path":  "python/session/state.py",
+                      "size":  135,
+                      "sha256":  "ee3e8a057e77e3ad9c3fa852a94f53eeb3159a654153432e44495d2827b3a1e8"
+                  },
+                  {
+                      "path":  "python/source_rules.py",
+                      "size":  725,
+                      "sha256":  "81233b670e8a57548b4afe04302740d778223f2ae83f99025ad23213530f5167"
+                  },
+                  {
+                      "path":  "python/tps_session_pool_manager.py",
+                      "size":  153,
+                      "sha256":  "b78e2923845f8ca80812c929f63fc6bbef54b1a7c2232010a50b57d77ac859b2"
+                  },
+                  {
+                      "path":  "python/utils/__init__.py",
+                      "size":  23,
+                      "sha256":  "bd3ce9cc0870670869f7177348df7949699fd36aa0c3b02c73450b5c6e1a1289"
+                  },
+                  {
+                      "path":  "python/utils/gender_lookup.py",
+                      "size":  2063,
+                      "sha256":  "a7a64bee949b2889311174b95169b8831983736ac32f03a0e96ad229c94c1be2"
+                  },
+                  {
+                      "path":  "python/utils/logging.py",
+                      "size":  736,
+                      "sha256":  "26547922e16297567a047af1bbf908159a7d23be759b8f8b5f9fc328080b59a6"
+                  },
+                  {
+                      "path":  "python/utils/paths.py",
+                      "size":  683,
+                      "sha256":  "abceff11170e4f99773662f2d887d51526dd3bc8a8c46fc84b1816dd89ea4146"
+                  },
+                  {
+                      "path":  "python/utils/phone.py",
+                      "size":  422,
+                      "sha256":  "550f61c1198720569f85ab92fe7d4a3238e5358b567a2cf1bce57062674b0bdf"
+                  },
+                  {
+                      "path":  "python/utils/runtime_state.py",
+                      "size":  1554,
+                      "sha256":  "2dfee2d3829bac793a3cddcb3aa8d319cbfb20d8301300b1dc9e2b72f4395ed7"
+                  },
+                  {
+                      "path":  "README.md",
+                      "size":  692,
+                      "sha256":  "4996ce13e93453e6180831a1578a150995c8f956028eec6cfcb4dde3208acf75"
+                  },
+                  {
+                      "path":  "recovery/gitleaks.toml",
+                      "size":  286,
+                      "sha256":  "9a1dd7d3d7f4549fe27eeff8938c995725f34e66924ee133ca38dfd6b53a39e5"
+                  },
+                  {
+                      "path":  "recovery/python-lock.in",
+                      "size":  273,
+                      "sha256":  "af1ddee9fb5760e3d3918409b5ee4ab5e1ccfbdebb16ed6530b520a177b57c7e"
+                  },
+                  {
+                      "path":  "recovery/python-lock.txt",
+                      "size":  1300,
+                      "sha256":  "e95fb8f2bf12e730e11d23395b2d0d2f1daad01fbfda20e0ad94a50a31c21da0"
+                  },
+                  {
+                      "path":  "recovery/restore.ps1",
+                      "size":  17871,
+                      "sha256":  "8de3bb301f23039e31f6d75ec750e9d27d7300e294e587381deb5bcea0458608"
+                  },
+                  {
+                      "path":  "recovery/security-policy.json",
+                      "size":  673,
+                      "sha256":  "cf54d9cb0403a479816da8bc402466fc4ce020c3c851c7037881dee7f2804ed6"
+                  },
+                  {
+                      "path":  "recovery/THIRD_PARTY_TOOLS.md",
+                      "size":  795,
+                      "sha256":  "df97db392878ab2ee2107896a4129f3939fcf19668a1a9b5ff966316a54d8ac7"
+                  },
+                  {
+                      "path":  "recovery/toolchain.lock.json",
+                      "size":  969,
+                      "sha256":  "cc42bc6ed9e4b0b925ca6c57ff3ee8551c65642200787948f8f00412cf51ee07"
+                  },
+                  {
+                      "path":  "requirements-authorization.txt",
+                      "size":  22,
+                      "sha256":  "3c038ca3f396496b0ba4aa4a58bbda2f036e4796735aec74caa910a07b8b7ad7"
+                  },
+                  {
+                      "path":  "requirements-build.txt",
+                      "size":  50,
+                      "sha256":  "d3b186be32c3047b0b79ce576408b3b029e169d5d811bf40e7de99854338dd85"
+                  },
+                  {
+                      "path":  "requirements-runtime.txt",
+                      "size":  46,
+                      "sha256":  "061257563ea63c9b680ef08364a0eda36214edaa6d92022bc177be2891521225"
+                  },
+                  {
+                      "path":  "runtime/config/app_config.json",
+                      "size":  6632,
+                      "sha256":  "43c3e8a0b4011b7c17f8c9df0536f7a07fe20e63f48205758ca8713753d32bec"
+                  },
+                  {
+                      "path":  "scripts/build_developer_authorizer.ps1",
+                      "size":  929,
+                      "sha256":  "6d32d8a10c675d259425d32d0a2abc498d7da33bdc794e07cc687bbf23923350"
+                  },
+                  {
+                      "path":  "scripts/build_engine.ps1",
+                      "size":  1324,
+                      "sha256":  "682256fc150237c9efc2d854bc4a618646b1ac9d43005cb6f67695463a0c8077"
+                  },
+                  {
+                      "path":  "scripts/build_production_validation.ps1",
+                      "size":  7081,
+                      "sha256":  "39a35019e21bedf8c88b88393d483dcfbb8267173bf2025dece6264ae694c50f"
+                  },
+                  {
+                      "path":  "scripts/scan_public_tree.ps1",
+                      "size":  6372,
+                      "sha256":  "b97431472dd1ba163b4a8819a1bffc2fd14ae6c9a56e4cd6c50e80c7c176b435"
+                  },
+                  {
+                      "path":  "scripts/update_source_manifest.ps1",
+                      "size":  2308,
+                      "sha256":  "6e31aa1973cb2c518b609f839882a873159a2e12d38e554ee447973dd3ed5abd"
+                  },
+                  {
+                      "path":  "scripts/verify_zip_recovery.ps1",
+                      "size":  2879,
+                      "sha256":  "58232295f49abdb87d2dc9cd8d34e438dd6ccd305a469aa2c00e9fbdfa7674bd"
+                  },
+                  {
+                      "path":  "tests/__init__.py",
+                      "size":  1,
+                      "sha256":  "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+                  },
+                  {
+                      "path":  "tests/test_development_launchers.py",
+                      "size":  4117,
+                      "sha256":  "b46024cb6b04e62738a5d4253a54bb7e394d21dc9e89ca75124ff76f99ae482b"
+                  },
+                  {
+                      "path":  "tests/test_do_provider_request.py",
+                      "size":  3002,
+                      "sha256":  "d7123f9c842fbd321f4219e3d61c732eef875ebbbd3b54afb96780bca55c1d9b"
+                  },
+                  {
+                      "path":  "tests/test_license_ed25519.py",
+                      "size":  5494,
+                      "sha256":  "d73500c226be39a64736d17cc4a2c358728d465ef42e768407ed81e86b087a98"
+                  },
+                  {
+                      "path":  "tests/test_local_fixture_provider.py",
+                      "size":  1660,
+                      "sha256":  "6e98bd67f23f0e6edeeb631bb7810fb690a8368015e2d930c36f00c03a3fc80d"
+                  },
+                  {
+                      "path":  "tests/test_runner_worker_failure.py",
+                      "size":  1234,
+                      "sha256":  "0ce718a59095d4af1ac5c5caec24c7e3658b842547a7a6f1a21c1d3177f2c90e"
+                  },
+                  {
+                      "path":  "tests/test_session_lane.py",
+                      "size":  2478,
+                      "sha256":  "53cb6300bd99860a591c53a161ab8e7145d7f851b4478438a34370f85a305fca"
+                  },
+                  {
+                      "path":  "tests/test_session_reuse_pattern.py",
+                      "size":  747,
+                      "sha256":  "00c6d92bbb7663efe4b4f321a55bd421fe29ad74856b515be46859ec1f2f04ee"
+                  },
+                  {
+                      "path":  "tests/test_t_entry_plan.py",
+                      "size":  6859,
+                      "sha256":  "b1bf96921706dfce0aa3e5bb12e47b1aeabe9a0c403b8e3f16fcccb64a097a1d"
+                  },
+                  {
+                      "path":  "tests/test_t1_502_recycle.py",
+                      "size":  2769,
+                      "sha256":  "8b675031339b71d5f0bfe312542c164425aac9ba1c3cefeeffe1b1a7c51ad081"
+                  },
+                  {
+                      "path":  "tests/test_t1_502_retry_flow.py",
+                      "size":  4502,
+                      "sha256":  "f30f37dc2f842c95f6d7bc48cb17701941fdd00d264906b51b933ed37c56aefa"
+                  },
+                  {
+                      "path":  "tests/test_t1_concurrency_model.py",
+                      "size":  990,
+                      "sha256":  "aea79e4151823e7f0bf480aa540ad14fa4621928b2185c49bff3c7e5214517b9"
+                  },
+                  {
+                      "path":  "tests/test_t1_entry_header_isolation.py",
+                      "size":  2671,
+                      "sha256":  "0cd03ae422ed0bed35917d9530ea86be0a190a20b4761853f8ead191ec3dbe80"
+                  },
+                  {
+                      "path":  "tests/test_t1_fake_provider_chain.py",
+                      "size":  6319,
+                      "sha256":  "27dcf3bca2946eb3ed3f688c9e7d13710697ea3c1a880ff478e02aa40b991dca"
+                  },
+                  {
+                      "path":  "tests/test_t1_inflight_stress.py",
+                      "size":  3632,
+                      "sha256":  "53ef7bf02c6c4951f419c3a506c13280078d50f39aea022c62cef9400e4b976d"
+                  },
+                  {
+                      "path":  "tests/test_t1_interruption_recovery.py",
+                      "size":  3228,
+                      "sha256":  "d801c66202f26078eff122996e9d8acd5264b8838bc93094c7f853666b5c007b"
+                  },
+                  {
+                      "path":  "tests/test_t1_reuse_dispatch.py",
+                      "size":  7483,
+                      "sha256":  "e9c46fd1a4be9a5be9a8b2280a4d0ddb836a7896725b8c2986f098b908ffb061"
+                  },
+                  {
+                      "path":  "tests/test_vip_stage_mixer.py",
+                      "size":  2502,
+                      "sha256":  "59e58a298951afc43afe0dce565ef742cf525c695f2c07069074a6698b8f8641"
+                  },
+                  {
+                      "path":  "tests/test_zip_recovery_contract.py",
+                      "size":  3136,
+                      "sha256":  "78a9291ebc9af566fbac8f5236d60f1284f45c27322916261d13ada1883d79bb"
+                  },
+                  {
+                      "path":  "tools/developer_authorizer.py",
+                      "size":  14990,
+                      "sha256":  "b54c63e0ee1549aac2c0a2aaf5161c95cc6f70f02740e04679185168baaea643"
+                  },
+                  {
+                      "path":  "tools/generate_license_keypair.py",
+                      "size":  1740,
+                      "sha256":  "e67301559ae7fc5a8ab0b9fb87d55ba0bacfe26396e01a1bdfb7a59801d2b69d"
+                  },
+                  {
+                      "path":  "WORKLOG.md",
+                      "size":  13004,
+                      "sha256":  "6daad827f05ca91b6501e5577d08927e49df39cd3375adcc318f6167a7690784"
+                  },
+                  {
+                      "path":  "恢复生产环境.cmd",
+                      "size":  608,
+                      "sha256":  "f531b88acafdcd66c262eba5f271c3112fe91b935cabdfaa0080171c1d486f3f"
+                  },
+                  {
+                      "path":  "启动当前源码客户端.cmd",
+                      "size":  1406,
+                      "sha256":  "4b9d1c9c8a63970d9734e23fe404adcb500cdfe24cb248ad51dafe761772f8a9"
+                  },
+                  {
+                      "path":  "启动开发者授权程序.cmd",
+                      "size":  518,
+                      "sha256":  "bf84a4f8da77e29c6b2d1cbeb69a4b9333411840cd81f4ebe56bbb99d35b0845"
+                  }
+              ]
+}

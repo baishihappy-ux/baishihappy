@@ -1,0 +1,11 @@
+title = "Public ZIP recovery secret policy"
+
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "Public Ed25519 verification keys and test-only generated keys are allowed."
+paths = [
+  '''python/auth/license_public_keys\.py''',
+  '''tests/test_license_ed25519\.py'''
+]

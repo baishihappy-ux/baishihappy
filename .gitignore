@@ -1,6 +1,7 @@
 # Dependencies
 node_modules/
 electron/node_modules/
+.recovery/
 __pycache__/
 *.py[cod]
 
@@ -8,6 +9,10 @@ __pycache__/
 build/
 dist/
 *.spec
+!assets/
+!assets/build/
+!assets/build/gender/
+!assets/build/gender/*
 
 # Runtime secrets and generated data
 runtime/license.dat

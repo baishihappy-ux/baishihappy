@@ -1,0 +1,136 @@
+name: ZIP disaster recovery
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  ensure-toolchain-release:
+    runs-on: windows-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check immutable recovery toolchain release
+        id: release
+        shell: powershell
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release view recovery-toolchain-v1 --repo "${{ github.repository }}" *> $null
+          if ($LASTEXITCODE -eq 0) {
+            "exists=true" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          } else {
+            "exists=false" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          }
+          exit 0
+
+      - uses: actions/setup-python@v5
+        if: steps.release.outputs.exists != 'true'
+        with:
+          python-version: "3.13.13"
+
+      - uses: actions/setup-node@v4
+        if: steps.release.outputs.exists != 'true'
+        with:
+          node-version: "24.14.1"
+
+      - name: Build checksum-verified recovery toolchain bundle
+        if: steps.release.outputs.exists != 'true'
+        shell: powershell
+        run: |
+          $ErrorActionPreference = "Stop"
+          $lock = Get-Content -Raw -LiteralPath "recovery/toolchain.lock.json" | ConvertFrom-Json
+          $bundle = Join-Path $env:RUNNER_TEMP "bundle"
+          $downloads = Join-Path $bundle "downloads"
+          $wheelhouse = Join-Path $bundle "wheelhouse"
+          $npmCache = Join-Path $bundle "npm-cache"
+          $electronCache = Join-Path $bundle "electron-cache"
+          New-Item -ItemType Directory -Force -Path $downloads, $wheelhouse, $npmCache, $electronCache | Out-Null
+
+          function Download-Verified($uri, $path, $sha256) {
+            Invoke-WebRequest -UseBasicParsing -Uri $uri -OutFile $path
+            $actual = (Get-FileHash -Algorithm SHA256 -LiteralPath $path).Hash.ToLowerInvariant()
+            if ($actual -ne $sha256.ToLowerInvariant()) {
+              throw "Hash mismatch: $path"
+            }
+          }
+
+          Download-Verified $lock.python.url (Join-Path $downloads "python-$($lock.python.version)-amd64.exe") $lock.python.sha256
+          Download-Verified $lock.node.url (Join-Path $downloads "node-v$($lock.node.version)-win-x64.zip") $lock.node.sha256
+          Download-Verified $lock.gitleaks.url (Join-Path $downloads "gitleaks-$($lock.gitleaks.version)-windows-x64.zip") $lock.gitleaks.sha256
+
+          python -m pip download --disable-pip-version-check --require-hashes --only-binary=:all: --dest $wheelhouse -r recovery/python-lock.txt
+          $env:ELECTRON_CACHE = $electronCache
+          npm.cmd ci --prefix electron --no-audit --no-fund --cache $npmCache
+          if ($LASTEXITCODE -ne 0) { throw "npm cache preparation failed." }
+
+          Get-ChildItem -LiteralPath $npmCache -Recurse -Directory -Filter "_logs" | Remove-Item -Recurse -Force
+          $files = Get-ChildItem -LiteralPath $bundle -Recurse -File | ForEach-Object {
+            [ordered]@{
+              path = $_.FullName.Substring($bundle.Length + 1).Replace("\", "/")
+              size = $_.Length
+              sha256 = (Get-FileHash -Algorithm SHA256 -LiteralPath $_.FullName).Hash.ToLowerInvariant()
+            }
+          }
+          [ordered]@{ schema = 1; files = $files } |
+            ConvertTo-Json -Depth 5 |
+            Set-Content -LiteralPath (Join-Path $bundle "bundle-manifest.json") -Encoding UTF8
+
+          $archive = Join-Path $env:RUNNER_TEMP $lock.bundle.file
+          Compress-Archive -Path (Join-Path $bundle "*") -DestinationPath $archive -CompressionLevel Optimal
+          "BUNDLE_ARCHIVE=$archive" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
+      - name: Publish immutable recovery toolchain release
+        if: steps.release.outputs.exists != 'true'
+        shell: powershell
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create recovery-toolchain-v1 "$env:BUNDLE_ARCHIVE" --repo "${{ github.repository }}" --target "${{ github.sha }}" --title "Recovery toolchain v1" --notes "Immutable Windows x64 recovery dependencies for the ZIP-only disaster recovery entry. Do not replace this asset; publish a new version tag instead."
+
+  recover-from-github-zip:
+    needs: ensure-toolchain-release
+    runs-on: windows-latest
+    timeout-minutes: 60
+    steps:
+      - name: Download exact GitHub source archive
+        shell: powershell
+        run: |
+          $ErrorActionPreference = "Stop"
+          $zip = Join-Path $env:RUNNER_TEMP "source.zip"
+          $extract = Join-Path $env:RUNNER_TEMP "fresh-empty"
+          New-Item -ItemType Directory -Path $extract | Out-Null
+          Invoke-WebRequest -UseBasicParsing -Uri "https://github.com/${{ github.repository }}/archive/${{ github.sha }}.zip" -OutFile $zip
+          Expand-Archive -LiteralPath $zip -DestinationPath $extract
+          $root = Get-ChildItem -LiteralPath $extract -Directory | Select-Object -First 1 -ExpandProperty FullName
+          if (-not $root) { throw "Archive root was not found." }
+          if (Test-Path -LiteralPath (Join-Path $root ".git")) { throw "Git metadata exists in the archive." }
+          "RECOVERY_ROOT=$root" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
+      - name: Poison accidental Git usage
+        shell: powershell
+        run: |
+          $ErrorActionPreference = "Stop"
+          $poison = Join-Path $env:RUNNER_TEMP "no-git"
+          New-Item -ItemType Directory -Path $poison | Out-Null
+          Set-Content -LiteralPath (Join-Path $poison "git.cmd") -Encoding ascii -Value "@echo Git is forbidden during recovery.& exit /b 97"
+          "$poison" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+
+      - name: Run the sole recovery entry
+        shell: cmd
+        working-directory: ${{ env.RECOVERY_ROOT }}
+        run: call "恢复生产环境.cmd" -NonInteractive -StrictArchive
+
+      - name: Upload recovery reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: zip-recovery-reports
+          path: |
+            ${{ env.RECOVERY_ROOT }}/.recovery/reports
+            ${{ env.RECOVERY_ROOT }}/dist/restore-validation/build-manifest.json

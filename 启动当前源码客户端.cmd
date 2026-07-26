@@ -1,5 +1,6 @@
 @echo off
 setlocal
+chcp 65001 >nul
 cd /d "%~dp0"
 
 if not exist "%~dp0electron\main.js" (
@@ -7,13 +8,13 @@ if not exist "%~dp0electron\main.js" (
   pause
   exit /b 1
 )
-set "DEV_ELECTRON_ROOT=%~dp0.tmp_dev_electron"
-set "DEV_ELECTRON_CMD=%~dp0.tmp_dev_electron\node_modules\.bin\electron.cmd"
-set "DEV_ELECTRON_RESOURCES=%~dp0.tmp_dev_electron\node_modules\electron\dist\resources"
+set "DEV_ELECTRON_ROOT=%~dp0electron"
+set "DEV_ELECTRON_CMD=%~dp0electron\node_modules\.bin\electron.cmd"
+set "DEV_ELECTRON_RESOURCES=%~dp0electron\node_modules\electron\dist\resources"
 
 if not exist "%DEV_ELECTRON_CMD%" (
-  echo ERROR: Clean Electron development runtime is missing.
-  echo Run: npm.cmd install --prefix "%DEV_ELECTRON_ROOT%" --offline --no-audit --no-fund --save=false electron@31.7.7
+  echo ERROR: Restored Electron development runtime is missing.
+  echo Run 恢复生产环境.cmd first.
   pause
   exit /b 1
 )
@@ -34,8 +35,15 @@ if not exist "%~dp0python\main.py" (
 )
 
 set "DINGFENG_HOME=%~dp0"
-set "DINGFENG_RUNTIME_ROOT=%~dp0.tmp_dev_client\runtime"
-set "PYTHON_EXECUTABLE=python"
+set "DINGFENG_RUNTIME_ROOT=%~dp0.recovery\development-runtime"
+set "PYTHON_EXECUTABLE=%~dp0.recovery\venv\Scripts\python.exe"
+
+if not exist "%PYTHON_EXECUTABLE%" (
+  echo ERROR: Restored Python environment is missing.
+  echo Run 恢复生产环境.cmd first.
+  pause
+  exit /b 1
+)
 
 call "%DEV_ELECTRON_CMD%" "%~dp0electron\main.js"
 if errorlevel 1 pause

@@ -3,7 +3,7 @@
 from pathlib import Path
 
 
-gender_map = Path('.tmp_build_assets/gender/_gender_map.js')
+gender_map = Path('assets/build/gender/_gender_map.js')
 datas = [(str(gender_map), '.')] if gender_map.exists() else []
 
 

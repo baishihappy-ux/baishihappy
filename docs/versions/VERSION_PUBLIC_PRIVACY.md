@@ -21,4 +21,4 @@ Keep the public repository useful for recovery while avoiding searchable operati
 
 ## Restore Notes
 
-After cloning from the public repository, restore local runtime config/secrets from private backup files before live network use.
+This historical note is superseded by `docs/唯一恢复方式.md`. Runtime secrets are not restored from a private source backup; operators re-enter or rotate required credentials outside the public repository before live network use.

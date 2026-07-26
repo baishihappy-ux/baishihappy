@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "forbiddenPathPatterns": [
+    "(^|/)\\.package-secrets(/|$)",
+    "(^|/)runtime/license\\.dat$",
+    "(^|/)runtime/(logs|output|state|temp|cache)(/|$)",
+    "(^|/)(customer-data|customer_data)(/|$)",
+    "\\.(pem|p12|pfx|key)$"
+  ],
+  "forbiddenContentPatterns": [
+    "-----BEGIN [A-Z ]*PRIVATE KEY-----",
+    "(?i)github_pat_[A-Za-z0-9_]{20,}",
+    "(?i)gh[pousr]_[A-Za-z0-9]{20,}",
+    "AKIA[0-9A-Z]{16}",
+    "(?i)(api[_-]?key|access[_-]?token|client[_-]?secret)\\s*[:=]\\s*['\\\"][^'\\\"]{12,}['\\\"]",
+    "(?i)[A-Z]:\\\\Users\\\\"
+  ],
+  "documentationPhonePattern": "(?<!\\d)(?:\\+?1[- .]?)?\\(?[2-9]\\d{2}\\)?[- .]?\\d{3}[- .]?\\d{4}(?!\\d)"
+}
