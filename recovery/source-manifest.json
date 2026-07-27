@@ -1,7 +1,7 @@
 ﻿{
     "schema":  1,
     "algorithm":  "sha256",
-    "sourceTree":  "7eb8c10b322a27907a9b156d69cadb8a9e922b7d",
+    "sourceTree":  "875924c032d33f5e36bef8ae5325047ec03e4d8b",
     "files":  [
                   {
                       "path":  ".gitattributes",
@@ -570,8 +570,8 @@
                   },
                   {
                       "path":  "recovery/toolchain.lock.json",
-                      "size":  1205,
-                      "sha256":  "09341e1e7106c557221eba52089aa89b869026cdb288201433c5ecc843dc86f8"
+                      "size":  1287,
+                      "sha256":  "68a62880ca7c825aa2a5d590057d60e734f60e5ff166b80fad7fdc27c9d97daf"
                   },
                   {
                       "path":  "requirements-authorization.txt",
@@ -715,8 +715,8 @@
                   },
                   {
                       "path":  "tests/test_zip_recovery_contract.py",
-                      "size":  3221,
-                      "sha256":  "6f70a386b420f54fcb871b7c282eaa482121fbd69543a09cadbdf0396cb486d3"
+                      "size":  3291,
+                      "sha256":  "d8d9b026a29d6d48a087745a537c62d95a8cbf13ed95feedd4c4d477ccd6a888"
                   },
                   {
                       "path":  "tools/developer_authorizer.py",
