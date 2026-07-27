@@ -575,7 +575,7 @@ function createWindow() {
     minHeight: 655,
     center: true,
     show: false,
-    title: '鼎丰智能裂变 V9.1',
+    title: '智能裂变 V9.1',
     icon: APP_ICON_PATH,
     backgroundColor: '#050505',
     autoHideMenuBar: true,
@@ -640,7 +640,7 @@ function createMonitorWindow() {
     minWidth: 360,
     minHeight: 340,
     show: false,
-    title: '鼎丰运行看板',
+    title: '运行看板',
     icon: APP_ICON_PATH,
     backgroundColor: '#050505',
     autoHideMenuBar: true,
@@ -1813,7 +1813,7 @@ ipcMain.handle('runtime:info', async () => {
       machine_code: '',
       runtime: loadRuntimeConfig().runtime || {},
       input_file: loadRuntimeConfig().input_file || 'input.txt',
-      app_name: loadRuntimeConfig().app_name || '鼎丰智能裂变 V9.1',
+      app_name: loadRuntimeConfig().app_name || '智能裂变 V9.1',
       preview_completion_modal: process.env.DINGFENG_PREVIEW_COMPLETION_MODAL === '1'
     };
   } else {

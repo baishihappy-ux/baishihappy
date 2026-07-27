@@ -1,7 +1,7 @@
 ﻿{
     "schema":  1,
     "algorithm":  "sha256",
-    "sourceTree":  "875924c032d33f5e36bef8ae5325047ec03e4d8b",
+    "sourceTree":  "ade6c825c999b6d43394184d6fc8ac5b0f1b49dc",
     "files":  [
                   {
                       "path":  ".gitattributes",
@@ -99,6 +99,11 @@
                       "sha256":  "077aa0e5d6702843d41ade30b69acff1bd399ef060ee28d4914dc06827654d6e"
                   },
                   {
+                      "path":  "docs/versions/VERSION_VISIBLE_BRAND_NAME_NEUTRALIZATION.md",
+                      "size":  800,
+                      "sha256":  "a7bbeda052188eef82c5cecfa45b4a137f15561d9186c59429483e28c231737c"
+                  },
+                  {
                       "path":  "docs/versions/VERSION_ZIP_ONLY_DISASTER_RECOVERY.md",
                       "size":  1078,
                       "sha256":  "0c132d2f760e155cedd7d22eef2bd93bf30a638622803d2355f8e8dffbf86d11"
@@ -110,13 +115,13 @@
                   },
                   {
                       "path":  "electron/main.js",
-                      "size":  61126,
-                      "sha256":  "69ef54d8f55855ea5fa3828988d6c69b8a25675053d1f68a1f6c0fd2f8b70f08"
+                      "size":  61108,
+                      "sha256":  "ce2d8f0beca7135aded50dac9b22cc68610eb40040daca841201a915fbd952a6"
                   },
                   {
                       "path":  "electron/monitor/index.html",
-                      "size":  2316,
-                      "sha256":  "8a43ad767e7099c4407679fed8994c8e4f78ebd943359f4e0b066f28f17d706a"
+                      "size":  2304,
+                      "sha256":  "7b47887ac68e0f8ed22cace472a421c23c23eb62947b231811b771e6cd6d26a6"
                   },
                   {
                       "path":  "electron/monitor/monitor.css",
@@ -165,13 +170,13 @@
                   },
                   {
                       "path":  "electron/renderer/index.html",
-                      "size":  9438,
-                      "sha256":  "9e622c4e9ac81ad500e136cb1f8ca1596a3682083a7e2353a8e415095e6c927e"
+                      "size":  9381,
+                      "sha256":  "a8c6db6658b24b6b167f69999951306cff3f75b675bb04e25da98fb8778f19b8"
                   },
                   {
                       "path":  "electron/renderer/renderer.js",
-                      "size":  63569,
-                      "sha256":  "b7bf2b636b2d21395247f3c9d12fd6466c4714f322087b25d4035cf62761aecd"
+                      "size":  63563,
+                      "sha256":  "304da8a27011145e8f0fbd08e1c83bcdb6b12e0e2b7c314a63227cd8288584a1"
                   },
                   {
                       "path":  "electron/renderer/style.css",
@@ -535,8 +540,8 @@
                   },
                   {
                       "path":  "README.md",
-                      "size":  692,
-                      "sha256":  "4996ce13e93453e6180831a1578a150995c8f956028eec6cfcb4dde3208acf75"
+                      "size":  683,
+                      "sha256":  "12ab8832b7b97267b9f86297cd3a05acacbd6216817689e48396b794eb56d1d0"
                   },
                   {
                       "path":  "recovery/gitleaks.toml",
@@ -630,8 +635,8 @@
                   },
                   {
                       "path":  "tests/test_development_launchers.py",
-                      "size":  4117,
-                      "sha256":  "b46024cb6b04e62738a5d4253a54bb7e394d21dc9e89ca75124ff76f99ae482b"
+                      "size":  5357,
+                      "sha256":  "e283e3d83e910cdb43a1d72be97cfca5c5c5ac102a84443eda54ef447b782100"
                   },
                   {
                       "path":  "tests/test_do_provider_request.py",

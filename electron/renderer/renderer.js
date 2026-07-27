@@ -590,7 +590,7 @@ function drawBronzeDingShip(width, height, t) {
   heroCtx.shadowBlur = 0;
   heroCtx.restore();
 
-  drawShipAnnotation('鼎丰V9', x, y, width, height, scale, visibility);
+  drawShipAnnotation('V9', x, y, width, height, scale, visibility);
 }
 
 function drawFeichuanBody(t) {

@@ -68,9 +68,9 @@ class DevelopmentLauncherTests(unittest.TestCase):
 
     def test_black_gold_visual_baseline_is_unchanged(self):
         expected = {
-            "electron/main.js": "69ef54d8f55855ea5fa3828988d6c69b8a25675053d1f68a1f6c0fd2f8b70f08",
+            "electron/main.js": "ce2d8f0beca7135aded50dac9b22cc68610eb40040daca841201a915fbd952a6",
             "electron/preload.js": "b40de97c629400fc0210e27dfdd615ef72797612721b9a3d28b3649488a6cc8e",
-            "electron/renderer/index.html": "9e622c4e9ac81ad500e136cb1f8ca1596a3682083a7e2353a8e415095e6c927e",
+            "electron/renderer/index.html": "a8c6db6658b24b6b167f69999951306cff3f75b675bb04e25da98fb8778f19b8",
             "electron/renderer/style.css": "4e9035ba6bd45d4b240655f5b2c0b5b9329f924f46e7e81c15483466bb60b25a",
         }
         for relative, digest in expected.items():
@@ -83,6 +83,33 @@ class DevelopmentLauncherTests(unittest.TestCase):
             encoding="utf-8"
         )
         self.assertIn("text.includes('DF9-')", source)
+
+    def test_customer_visible_brand_name_is_removed(self):
+        page = (ROOT / "electron/renderer/index.html").read_text(encoding="utf-8")
+        monitor = (ROOT / "electron/monitor/index.html").read_text(encoding="utf-8")
+        renderer = (ROOT / "electron/renderer/renderer.js").read_text(
+            encoding="utf-8"
+        )
+        main = (ROOT / "electron/main.js").read_text(encoding="utf-8")
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+
+        for relative, source in {
+            "electron/renderer/index.html": page,
+            "electron/monitor/index.html": monitor,
+            "electron/renderer/renderer.js": renderer,
+            "electron/main.js": main,
+            "README.md": readme,
+        }.items():
+            self.assertNotIn("鼎丰", source, relative)
+
+        self.assertNotIn("DINGFENG AUTHORIZATION", page)
+        self.assertNotIn("Dingfeng Production Workspace", readme)
+        self.assertIn("<title>智能裂变 V9.1</title>", page)
+        self.assertIn("<title>运行看板</title>", monitor)
+        self.assertIn("drawShipAnnotation('V9'", renderer)
+
+        self.assertIn("process.env.DINGFENG_RUNTIME_ROOT", main)
+        self.assertIn("window.dingfeng", renderer)
 
 
 if __name__ == "__main__":
