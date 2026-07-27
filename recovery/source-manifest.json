@@ -1,7 +1,7 @@
 ﻿{
     "schema":  1,
     "algorithm":  "sha256",
-    "sourceTree":  "e869bf7b7f2afebfd822fb980d0f4f024b8584f5",
+    "sourceTree":  "7eb8c10b322a27907a9b156d69cadb8a9e922b7d",
     "files":  [
                   {
                       "path":  ".gitattributes",
@@ -10,8 +10,8 @@
                   },
                   {
                       "path":  ".github/workflows/zip-recovery.yml",
-                      "size":  6733,
-                      "sha256":  "d42dd174b2c5d72c2af3ad71c0906de00fb082d0b9aa08e17897251593129078"
+                      "size":  7158,
+                      "sha256":  "d7d665452301614eb0843d5b56e818ed2ea70dd4ebfe0285a14021c6b95c34c8"
                   },
                   {
                       "path":  ".gitignore",
@@ -570,8 +570,8 @@
                   },
                   {
                       "path":  "recovery/toolchain.lock.json",
-                      "size":  1051,
-                      "sha256":  "4e9a2d71b95ca46cef1ef48133a69fc499f3b63bee6a12c411718d2b356bbf47"
+                      "size":  1205,
+                      "sha256":  "09341e1e7106c557221eba52089aa89b869026cdb288201433c5ecc843dc86f8"
                   },
                   {
                       "path":  "requirements-authorization.txt",
@@ -715,8 +715,8 @@
                   },
                   {
                       "path":  "tests/test_zip_recovery_contract.py",
-                      "size":  3206,
-                      "sha256":  "f36ff98f4b54935671da7a08169c3c6830eec9682687c9106575a4f213cc1dcb"
+                      "size":  3221,
+                      "sha256":  "6f70a386b420f54fcb871b7c282eaa482121fbd69543a09cadbdf0396cb486d3"
                   },
                   {
                       "path":  "tools/developer_authorizer.py",

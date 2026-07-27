@@ -2,10 +2,9 @@
   "schema": 1,
   "platform": "windows-x64",
   "bundle": {
-    "tag": "recovery-toolchain-v1",
-    "file": "recovery-toolchain-win-x64-v1.zip",
-    "url": "https://github.com/baishihappy-ux/baishihappy/releases/download/recovery-toolchain-v1/recovery-toolchain-win-x64-v1.zip",
-    "sha256": "22cb153973b8e182f1b3ba48ef177615592959d52ac67f1a8705c70dab28486e"
+    "tag": "recovery-toolchain-v2",
+    "file": "recovery-toolchain-win-x64-v2.zip",
+    "url": "https://github.com/baishihappy-ux/baishihappy/releases/download/recovery-toolchain-v2/recovery-toolchain-win-x64-v2.zip"
   },
   "python": {
     "version": "3.13.13",
@@ -23,6 +22,9 @@
     "sha256": "d29144deff3a68aa93ced33dddf84b7fdc26070add4aa0f4513094c8332afc4e"
   },
   "electron": {
-    "version": "31.7.7"
+    "version": "31.7.7",
+    "file": "electron-v31.7.7-win32-x64.zip",
+    "url": "https://github.com/electron/electron/releases/download/v31.7.7/electron-v31.7.7-win32-x64.zip",
+    "sha256": "e91986dd243d55947e6c5d3fad21795562ec21fa0eec5e95f7e28c830571467f"
   }
 }
